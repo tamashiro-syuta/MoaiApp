@@ -12,8 +12,15 @@ import Firebase
 class ChatRoomViewController: UIViewController {
     
     private let cellId = "cellId"
-    
     private var messages = [Message]()
+    private let accesoryHeight: CGFloat = 100
+    private let tableViewContentInset: UIEdgeInsets = .init(top: 60, left: 0, bottom: 0, right: 0)
+    private let tableViewIndicatorInset: UIEdgeInsets = .init(top: 60, left: 0, bottom: 0, right: 0)
+    private var safeAreabottom: CGFloat {
+        get {
+            self.view.safeAreaInsets.bottom
+        }
+    }
     
     var chatroom:ChatRoom?
     //ログインしているuser情報
@@ -32,18 +39,62 @@ class ChatRoomViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setupNotification()
+        setUpChatRoomView()
+        fetchMessages()
+    }
+    
+    private func setupNotification() {
+        //キーボードが出てきた時に受け取る処理
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        //キーボードを閉じた時に受け取る処理
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    private func setUpChatRoomView() {
         chatRoomTableView.delegate = self
         chatRoomTableView.dataSource = self
         chatRoomTableView.register(UINib(nibName: "ChatRoomTableViewCell", bundle: nil), forCellReuseIdentifier: cellId)
         //トークの背景色を水色に
         chatRoomTableView.backgroundColor = .rgb(red: 118, green: 140, blue: 180)
         //オートレイアウトでの制約後の微調整（オートレイアウトを保ったまま微調整できる）
-        chatRoomTableView.contentInset = .init(top: 0, left: 0, bottom: 45, right: 0)
-        chatRoomTableView.scrollIndicatorInsets = .init(top: 0, left: 0, bottom: 45, right: 0)
+        chatRoomTableView.contentInset = tableViewContentInset
+        chatRoomTableView.scrollIndicatorInsets = tableViewIndicatorInset
+        //スクロールするとキーボードが閉じる処理
+        chatRoomTableView.keyboardDismissMode = .interactive
         
-        fetchMessages()
+        //画面を反転
+        chatRoomTableView.transform = CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: 0)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        print("keyboardWillShow")
+        guard let userInfo = notification.userInfo else {return}
         
+        if let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as AnyObject).cgRectValue {
+            
+            if keyboardFrame.height <= accesoryHeight {return}
+            print("keyboardFrame :",keyboardFrame)
+            
+            let top = keyboardFrame.height - safeAreabottom
+            var moveY = -(top - chatRoomTableView.contentOffset.y)
+            //最下部以外の時は少しずれるので微調整
+            if chatRoomTableView.contentOffset.y != -60 {moveY += 60}
+            let contentInset = UIEdgeInsets(top: top, left: 0, bottom: 0, right: 0)
+            
+            //キーボードが出ててもスクロールできる状態にする処理
+            chatRoomTableView.contentInset = contentInset
+            chatRoomTableView.scrollIndicatorInsets = contentInset
+            
+            //チャットを移動させる処理
+            chatRoomTableView.contentOffset = CGPoint(x: 0, y: moveY)
+        }
+    }
+    
+    @objc func keyboardWillHide() {
+        print("keyboardWillHide")
+        chatRoomTableView.contentInset = tableViewContentInset
+        chatRoomTableView.scrollIndicatorInsets = tableViewIndicatorInset
     }
     
     //inputAccessoryViewというviewを貼り付ける用のviewのようなものにchatInputAccessoryViewをセット
@@ -82,12 +133,12 @@ class ChatRoomViewController: UIViewController {
                     self.messages.sort { (m1, m2) -> Bool in
                         let m1Date = m1.createdAt.dateValue()
                         let m2Date = m2.createdAt.dateValue()
-                        return m1Date < m2Date
+                        return m1Date > m2Date
                     }
                     
                     self.chatRoomTableView.reloadData()
                     //最新のものから表示（1番下にスクロール済みにする）
-                    self.chatRoomTableView.scrollToRow(at: IndexPath(row: self.messages.count - 1, section: 0), at: .bottom, animated: true)
+//                    self.chatRoomTableView.scrollToRow(at: IndexPath(row: self.messages.count - 1, section: 0), at: .bottom, animated: true)
                     
                     
                 case .modified, .removed:
@@ -183,6 +234,7 @@ extension ChatRoomViewController: UITableViewDelegate, UITableViewDataSource {
         //as! ChatRoomTableViewCellとすることで messageTextView を参照できるようになる
         let cell = chatRoomTableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ChatRoomTableViewCell
         cell.message = messages[indexPath.row]
+        cell.transform = CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: 0)
         return cell
     }
     

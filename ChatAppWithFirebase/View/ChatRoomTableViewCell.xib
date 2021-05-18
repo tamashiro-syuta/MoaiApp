@@ -33,8 +33,8 @@
                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     </textView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="12:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F8h-0M-uem">
-                        <rect key="frame" x="340" y="87" width="50" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F8h-0M-uem">
+                        <rect key="frame" x="340" y="91" width="36" height="17"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
@@ -59,11 +59,11 @@
                 <constraints>
                     <constraint firstItem="psn-Qe-Cpw" firstAttribute="leading" secondItem="egN-Zt-9cY" secondAttribute="leading" constant="15" id="12N-No-DMc"/>
                     <constraint firstItem="XYW-Dr-HKS" firstAttribute="top" secondItem="egN-Zt-9cY" secondAttribute="top" constant="25" id="14J-Fa-9rz"/>
-                    <constraint firstItem="XYW-Dr-HKS" firstAttribute="bottomMargin" secondItem="F8h-0M-uem" secondAttribute="bottom" constant="13" id="Hwi-ZH-9Kc"/>
                     <constraint firstItem="XYW-Dr-HKS" firstAttribute="leading" secondItem="psn-Qe-Cpw" secondAttribute="trailing" constant="10" id="Kgo-KE-lkG"/>
                     <constraint firstItem="psn-Qe-Cpw" firstAttribute="centerY" secondItem="egN-Zt-9cY" secondAttribute="centerY" id="LtN-0D-EWY"/>
                     <constraint firstItem="xSO-QW-WwB" firstAttribute="top" secondItem="egN-Zt-9cY" secondAttribute="top" constant="25" id="XGL-hJ-c8q"/>
                     <constraint firstAttribute="bottomMargin" secondItem="xpm-KL-k3k" secondAttribute="bottom" constant="20" id="hQo-3x-TK9"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="F8h-0M-uem" secondAttribute="bottom" constant="20" id="ime-IJ-4CW"/>
                     <constraint firstAttribute="trailing" secondItem="xSO-QW-WwB" secondAttribute="trailing" constant="24" id="iry-YS-Vv6"/>
                     <constraint firstAttribute="bottom" secondItem="XYW-Dr-HKS" secondAttribute="bottom" constant="25" id="kEo-d4-l0j"/>
                     <constraint firstItem="F8h-0M-uem" firstAttribute="leading" secondItem="XYW-Dr-HKS" secondAttribute="trailing" constant="5" id="lEQ-m0-iQX"/>

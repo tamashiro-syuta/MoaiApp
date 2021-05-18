@@ -9,6 +9,7 @@ import UIKit
 import Firebase
 import FirebaseFirestore
 import FirebaseAuth
+import PKHUD
 
 class SignUpViewController: UIViewController {
     
@@ -68,9 +69,11 @@ class SignUpViewController: UIViewController {
     
     @IBAction func tappedRegisterButton(_ sender: Any) {
         //画像をfirebaseに保存
-        guard let image = profileImageButton.imageView?.image else {return}
+        let image = profileImageButton.imageView?.image ?? UIImage(named: "niwatori")
         //画像のクオリティを0.3倍に変更
-        guard let uploadImage = image.jpegData(compressionQuality: 0.3) else {return}
+        guard let uploadImage = image?.jpegData(compressionQuality: 0.3) else {return}
+        
+        HUD.show(.progress)
         
         //ファイルネームを任意で設定して保存するための定数
         let fileName = NSUUID().uuidString
@@ -81,6 +84,7 @@ class SignUpViewController: UIViewController {
         storageRef.putData(uploadImage, metadata: nil) { (metadate, err) in
             if let err = err {
                 print("Firestorageへの情報の保存に失敗しました。\(err)")
+                HUD.hide()
                 return
             }
             
@@ -90,6 +94,7 @@ class SignUpViewController: UIViewController {
             storageRef.downloadURL { (url, err) in
                 if let err = err {
                     print("FireStorgaeからのダウンロードに失敗しました。")
+                    HUD.hide()
                     return
                 }
                 //URLを文字列に変換
@@ -111,6 +116,7 @@ class SignUpViewController: UIViewController {
         Auth.auth().createUser(withEmail: email, password: password) { [self] (res, err) in
             if let err = err {
                 print("認証情報の保存に失敗しました。\(err)")
+                HUD.hide()
                 return
             }
             guard let uid = res?.user.uid else {return}
@@ -126,17 +132,24 @@ class SignUpViewController: UIViewController {
             Firestore.firestore().collection("users").document(uid).setData(docData) {
                 (err) in
                 if let err = err {
-                    print("データベースへの保存に失敗しました。\(err)")
+                    print("FireStoreへの情報に保存に失敗しました。\(err)")
+                    HUD.hide()
                     return
                 }
                 
                 print("FireStoreへの情報に保存に成功しました。")
+                HUD.hide()
                 //トーク画面に戻る
                 self.dismiss(animated: true, completion: nil)
                 
             }
         }
         
+    }
+    
+    //画面をタップするとテキストフィールドの編集を終わらせてくれる処理
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
     
