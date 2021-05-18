@@ -32,7 +32,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nyG-yk-ycB">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="80" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nyG-yk-ycB">
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
@@ -44,14 +44,14 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Dxu-TJ-uDN">
-                                                    <rect key="frame" x="10" y="15" width="50" height="50"/>
+                                                    <rect key="frame" x="10" y="7.5" width="65" height="65"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="Dxu-TJ-uDN" secondAttribute="height" multiplier="1:1" id="DRL-rV-WF0"/>
-                                                        <constraint firstAttribute="width" constant="50" id="bFU-lf-QXc"/>
+                                                        <constraint firstAttribute="width" constant="65" id="bFU-lf-QXc"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="太郎" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2W3-LR-JKZ">
-                                                    <rect key="frame" x="75" y="29.5" width="35" height="21"/>
+                                                    <rect key="frame" x="90" y="29.5" width="35" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -82,11 +82,6 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="eo1-ac-vrM">
-                        <barButtonItem key="leftBarButtonItem" title="閉じる" id="Lhm-nk-PNw">
-                            <connections>
-                                <action selector="tappedCloseButton:" destination="0hu-Ug-9IT" id="zTn-ek-9Qz"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="feP-Gi-yqD">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="cv8-oz-oIn">
                                 <rect key="frame" x="302" y="7" width="92" height="30"/>
