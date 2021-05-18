@@ -13,6 +13,7 @@ class ChatListViewController: UIViewController {
     
     private let cellId = "cellId"
     private var chatrooms = [ChatRoom]()
+    private var chatRoomLinstener: ListenerRegistration?
     private var user: User? {
         didSet {
             //ユーザーの情報がセットされた時点でナビゲーションバーのタイトルに名前を設定
@@ -24,18 +25,26 @@ class ChatListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
         setUpViews()
         confirmLoginUser()
-        fetchLoginUserInfo()
+        //chatListViewが呼ばれる度にchatroomの情報を更新していると無駄に通信して良くないので、viewWillAppearではなく、viewDidLoadに記載
         fetchChatroomsInfoFromFireStore()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super .viewWillAppear(animated)
+        fetchLoginUserInfo()
+    }
+    
     //FireStoreからチャットルーム情報を取得
-    private func fetchChatroomsInfoFromFireStore() {
+    func fetchChatroomsInfoFromFireStore() {
         //  addSnapshotListener　がリアルタイム処理をしてくれる
-        Firestore.firestore().collection("chatRooms").addSnapshotListener { [self] (snapshots, err) in
+        //　chatRoomLinstener　というプロパティの中に処理の情報を入れて、呼ばれる度にremoveするのでデータが重複することがない。
+        chatRoomLinstener?.remove()
+        chatrooms.removeAll()
+        chatListTableView.reloadData()
+        
+        chatRoomLinstener = Firestore.firestore().collection("chatRooms").addSnapshotListener { [self] (snapshots, err) in
 
             if let err = err {
                 print("chatRoom情報の取得に失敗しました。\(err)")
@@ -126,22 +135,40 @@ class ChatListViewController: UIViewController {
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
         let rightBarButton = UIBarButtonItem(title: "新規チャット", style: .plain, target: self, action: #selector(tappedNavRightBarButton))
+        let logoutBarButton = UIBarButtonItem(title: "ログアウト", style: .plain, target: self, action: #selector(tappedLogoutButton))
         //navigationBarの右側にボタンをコードで追加
         navigationItem.rightBarButtonItem = rightBarButton
         navigationItem.rightBarButtonItem?.tintColor = .white
+        navigationItem.leftBarButtonItem = logoutBarButton
+        navigationItem.leftBarButtonItem?.tintColor = .white
+    }
+    
+    
+    @objc private func tappedLogoutButton() {
+        //ログアウトは、必ずdo catch構文で書かないといけない
+        do {
+            try Auth.auth().signOut()
+            pushLoginViewController()
+        } catch {
+            print("ログアウトに失敗しました。\(error)")
+        }
     }
     
     
     private func confirmLoginUser() {
         if Auth.auth().currentUser?.uid == nil {
             //立ち上がった時にSignUpViewControllerを表示する処理
-            let storyboard = UIStoryboard(name: "SignUp", bundle: nil)
-            let signUpViewController = storyboard.instantiateViewController(withIdentifier: "SignUpViewController") as! SignUpViewController
-            signUpViewController.modalPresentationStyle = .fullScreen
-            self.present(signUpViewController, animated: true, completion: nil)
+            pushLoginViewController()
         }
     }
     
+    private func pushLoginViewController() {
+        let storyboard = UIStoryboard(name: "SignUp", bundle: nil)
+        let signUpViewController = storyboard.instantiateViewController(withIdentifier: "SignUpViewController")
+        let nav = UINavigationController(rootViewController: signUpViewController)
+        nav.modalPresentationStyle = .fullScreen
+        self.present(nav, animated: true, completion: nil)
+    }
     
     //controlから引っ張ってくる以外のアクションの作り方(上のlet rightBarButtoの部分のセレクターとセット)
     @objc private func tappedNavRightBarButton() {
