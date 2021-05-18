@@ -13,13 +13,16 @@ class User {
     let email: String
     let username: String
     let createdAt: Timestamp
-    let ProfileImageUrl: String
+    let profileImageUrl: String
+    
+    //chatを開始する時に使うため
+    var uid: String?
     
     init(dic: [String: Any]) {
         self.email = dic["email"] as? String ?? ""
         self.username = dic["username"] as? String ?? ""
         self.createdAt = dic["createdAt"] as? Timestamp ?? Timestamp()
-        self.ProfileImageUrl = dic["ProfileImageUrl"] as? String ?? ""
+        self.profileImageUrl = dic["profileImageUrl"] as? String ?? ""
     }
     
 }

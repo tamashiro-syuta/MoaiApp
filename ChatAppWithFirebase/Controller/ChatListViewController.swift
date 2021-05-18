@@ -7,23 +7,88 @@
 
 import UIKit
 import Firebase
+import Nuke
 
 class ChatListViewController: UIViewController {
     
     private let cellId = "cellId"
-    private var users = [User]()
+    private var chatrooms = [ChatRoom]()
+    private var user: User? {
+        didSet {
+            //ユーザーの情報がセットされた時点でナビゲーションバーのタイトルに名前を設定
+            navigationItem.title = user?.username
+        }
+    }
     
     @IBOutlet weak var chatListTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        setUpViews()
+        confirmLoginUser()
+        fetchLoginUserInfo()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        fetchChatroomsInfoFromFireStore()
+        
+    }
+    
+    //FireStoreからチャットルーム情報を取得
+    private func fetchChatroomsInfoFromFireStore() {
+        Firestore.firestore().collection("chatRooms").getDocuments { (snapshots, err) in
+            if let err = err {
+                print("chatRoom情報の取得に失敗しました。\(err)")
+            }
+            snapshots?.documents.forEach({ (snapshot) in
+                let dic = snapshot.data()
+                let chatroom = ChatRoom(dic: dic)
+                
+                //相手側のユーザー情報を持ってくる
+                guard let uid = Auth.auth().currentUser?.uid else {return}
+                //メンバーの確認
+                chatroom.menbers.forEach { (menberUid) in
+                    if menberUid != uid {
+                        Firestore.firestore().collection("users").document(menberUid!).getDocument { (snapshot, err) in
+                            if let err = err {
+                                print("ユーザー情報の取得に失敗しました。\(err)")
+                                return
+                            }
+                            
+                            guard let dic = snapshot?.data() else {return}
+                            let user = User(dic: dic)
+                            
+                            chatroom.partnerUser = user
+                            self.chatrooms.append(chatroom)
+                            print("self.chatrooms :",self.chatrooms)
+                            self.chatListTableView.reloadData()
+                        }
+                    }
+                }
+            })
+        }
+    }
+    
+    
+    private func setUpViews() {
         chatListTableView.delegate = self
         chatListTableView.dataSource = self
         navigationController?.navigationBar.barTintColor = .rgb(red: 39, green: 49, blue: 69)
         navigationItem.title = "トーク"
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
+        let rightBarButton = UIBarButtonItem(title: "新規チャット", style: .plain, target: self, action: #selector(tappedNavRightBarButton))
+        //navigationBarの右側にボタンをコードで追加
+        navigationItem.rightBarButtonItem = rightBarButton
+        navigationItem.rightBarButtonItem?.tintColor = .white
+    }
+    
+    
+    private func confirmLoginUser() {
         if Auth.auth().currentUser?.uid == nil {
             //立ち上がった時にSignUpViewControllerを表示する処理
             let storyboard = UIStoryboard(name: "SignUp", bundle: nil)
@@ -31,38 +96,37 @@ class ChatListViewController: UIViewController {
             signUpViewController.modalPresentationStyle = .fullScreen
             self.present(signUpViewController, animated: true, completion: nil)
         }
-        
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        fetchUserInfoFromFirestore()
+    //controlから引っ張ってくる以外のアクションの作り方(上のlet rightBarButtoの部分のセレクターとセット)
+    @objc private func tappedNavRightBarButton() {
+        //新規チャット画面への画面遷移
+        let storyborad = UIStoryboard.init(name: "UserList", bundle: nil)
+        let userListViewController = storyborad.instantiateViewController(withIdentifier: "UserListViewController")
+        //画面遷移先のuserListViewControllerにナビゲーションバーを追加
+        let nav = UINavigationController(rootViewController: userListViewController)
+        nav.modalPresentationStyle = .fullScreen
+        self.present(nav, animated: true, completion: nil)
     }
-
-    private func fetchUserInfoFromFirestore() {
-        Firestore.firestore().collection("users").getDocuments { [self] (snapshots, err) in
+    
+    
+    private func fetchLoginUserInfo() {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        //ログインしているユーザーの情報だけを取得
+        Firestore.firestore().collection("users").document(uid).getDocument { (snapshot, err) in
             if let err = err {
                 print("ユーザー情報の取得に失敗しました。\(err)")
                 return
             }
-            snapshots?.documents.forEach({ (snapshot) in
-                let dic = snapshot.data()
-                //上で定義したデータをUserクラスでインスタンス化
-                let user = User.init(dic: dic)
-                //usersという配列に追加
-                self.users.append(user)
-                self.chatListTableView.reloadData()
-                
-                users.forEach { (user) in
-                    print("user.username:", user.username)
-                }
-                
-                //print("date :",data)
-            })
+            
+            //snapshotのnilチェック
+            guard let snapshot = snapshot,let dic = snapshot.data() else {return}
+            
+            let user = User(dic: dic)
+            //上で宣言した16行目で宣言したuserにuser(ログインしているユーザー)を入れる
+            self.user = user
         }
     }
-    
 }
 
 extension ChatListViewController:  UITableViewDelegate, UITableViewDataSource {
@@ -73,13 +137,16 @@ extension ChatListViewController:  UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //userの分だけトークを作成
-        return users.count
+        return chatrooms.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = chatListTableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ChatListTableViewCell
-        cell.user = users[indexPath.row]
-        
+//        cell.user = users[indexPath.row]
+//        cell.userImageView.layer.masksToBounds = true
+        cell.userImageView.layer.cornerRadius = 35
+        cell.chatroom = chatrooms[indexPath.row]
+
         return cell
     }
     
@@ -101,16 +168,37 @@ extension ChatListViewController:  UITableViewDelegate, UITableViewDataSource {
 
 class ChatListTableViewCell: UITableViewCell {
     
-    var user: User? {
+    //user6@mail.com
+//    var user: User? {
+//        didSet {
+//            partnerLabel.text = user?.username
+//            guard let urlData = user?.profileImageUrl else {
+//                print("失敗したお1")
+//                return
+//            }
+//            print("urlData:",urlData)
+//            guard let url = URL(string: urlData) else {
+//                print("失敗したお2",user!.email)
+//                print("失敗したお3",user?.profileImageUrl)
+//                return
+//            }
+//            Nuke.loadImage(with: url, into: userImageView)
+//        }
+//    }
+    
+    var chatroom: ChatRoom? {
         didSet {
-            if let user = user {
-                partnerLabel.text = user.username
-                //userImageView.image = user?.ProfileImageUrl
-                dateLabel.text = dateFormatterForDateLabel(date: user.createdAt.dateValue())
-                latestMessageLabel.text = user.email
+            if let chatroom = chatroom{
+                partnerLabel.text = chatroom.partnerUser?.username
+                
+                guard let url = URL(string: chatroom.partnerUser?.profileImageUrl ?? "") else {return}
+                Nuke.loadImage(with: url, into: userImageView)
+                
+                dateLabel.text = dateFormatterForDateLabel(date: chatroom.createdAt.dateValue())
             }
         }
     }
+    
     
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var latestMessageLabel: UILabel!
@@ -132,7 +220,7 @@ class ChatListTableViewCell: UITableViewCell {
     private func dateFormatterForDateLabel(date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .full
-        formatter.timeStyle = .short
+        formatter.timeStyle = .none
         formatter.locale = Locale(identifier:  "ja_JP")
         return formatter.string(from: date)
     }
