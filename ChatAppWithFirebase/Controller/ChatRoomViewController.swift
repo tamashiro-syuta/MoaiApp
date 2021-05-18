@@ -16,6 +16,7 @@ class ChatRoomViewController: UIViewController {
     private var messages = [Message]()
     
     var chatroom:ChatRoom?
+    //ログインしているuser情報
     var user: User?
     
     //ChatInputAccessoryViewのインスタンスを生成
@@ -71,6 +72,8 @@ class ChatRoomViewController: UIViewController {
                     //メッセージ情報を取得
                     let dic = documentChange.document.data()
                     let message = Message(dic: dic)
+                    message.partnerUser = self.chatroom?.partnerUser
+                    
                     self.messages.append(message)
                     self.chatRoomTableView.reloadData()
                     

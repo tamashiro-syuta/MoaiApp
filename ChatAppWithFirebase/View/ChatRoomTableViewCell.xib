@@ -23,19 +23,35 @@
                             <constraint firstAttribute="width" constant="60" id="q6d-j3-DFU"/>
                         </constraints>
                     </imageView>
-                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="メッセージがここに入ります。" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XYW-Dr-HKS">
+                    <textView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="メッセージがここに入ります。" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XYW-Dr-HKS">
                         <rect key="frame" x="85" y="25" width="250" height="89"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="250" id="3FK-kJ-IkX"/>
                         </constraints>
                         <color key="textColor" systemColor="labelColor"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     </textView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="12:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F8h-0M-uem">
                         <rect key="frame" x="340" y="87" width="50" height="21"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <textView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="ここにメッセージが入ります。" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xSO-QW-WwB">
+                        <rect key="frame" x="135" y="25" width="255" height="89"/>
+                        <color key="backgroundColor" red="0.60392156862745094" green="0.8784313725490196" blue="0.38039215686274508" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="255" id="Qc0-Y4-cxe"/>
+                        </constraints>
+                        <color key="textColor" systemColor="labelColor"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                    </textView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xpm-KL-k3k">
+                        <rect key="frame" x="89" y="91" width="36" height="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -46,14 +62,23 @@
                     <constraint firstItem="XYW-Dr-HKS" firstAttribute="bottomMargin" secondItem="F8h-0M-uem" secondAttribute="bottom" constant="13" id="Hwi-ZH-9Kc"/>
                     <constraint firstItem="XYW-Dr-HKS" firstAttribute="leading" secondItem="psn-Qe-Cpw" secondAttribute="trailing" constant="10" id="Kgo-KE-lkG"/>
                     <constraint firstItem="psn-Qe-Cpw" firstAttribute="centerY" secondItem="egN-Zt-9cY" secondAttribute="centerY" id="LtN-0D-EWY"/>
+                    <constraint firstItem="xSO-QW-WwB" firstAttribute="top" secondItem="egN-Zt-9cY" secondAttribute="top" constant="25" id="XGL-hJ-c8q"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="xpm-KL-k3k" secondAttribute="bottom" constant="20" id="hQo-3x-TK9"/>
+                    <constraint firstAttribute="trailing" secondItem="xSO-QW-WwB" secondAttribute="trailing" constant="24" id="iry-YS-Vv6"/>
                     <constraint firstAttribute="bottom" secondItem="XYW-Dr-HKS" secondAttribute="bottom" constant="25" id="kEo-d4-l0j"/>
                     <constraint firstItem="F8h-0M-uem" firstAttribute="leading" secondItem="XYW-Dr-HKS" secondAttribute="trailing" constant="5" id="lEQ-m0-iQX"/>
+                    <constraint firstAttribute="bottom" secondItem="xSO-QW-WwB" secondAttribute="bottom" constant="25" id="uQE-hd-UBJ"/>
+                    <constraint firstItem="xSO-QW-WwB" firstAttribute="leading" secondItem="xpm-KL-k3k" secondAttribute="trailing" constant="10" id="ujG-Fe-yMY"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
-                <outlet property="dateLabel" destination="F8h-0M-uem" id="G4v-06-B6w"/>
-                <outlet property="messageTextView" destination="XYW-Dr-HKS" id="VJc-Gy-B8N"/>
                 <outlet property="messageTextViewWidthConstraint" destination="3FK-kJ-IkX" id="12p-bZ-MQl"/>
+                <outlet property="myDateLabel" destination="xpm-KL-k3k" id="Qh9-WB-eGD"/>
+                <outlet property="myMessageTextView" destination="xSO-QW-WwB" id="fQd-Ra-4jq"/>
+                <outlet property="myMessageTextViewWidthConstraint" destination="Qc0-Y4-cxe" id="PZE-2X-CCK"/>
+                <outlet property="partnerDateLabel" destination="F8h-0M-uem" id="G4v-06-B6w"/>
+                <outlet property="partnerMessageTextView" destination="XYW-Dr-HKS" id="VJc-Gy-B8N"/>
                 <outlet property="userImageView" destination="psn-Qe-Cpw" id="lsg-a8-TjN"/>
             </connections>
             <point key="canvasLocation" x="-139.13043478260872" y="80.691964285714278"/>

@@ -63,6 +63,10 @@ class ChatListViewController: UIViewController {
         
         //相手側のユーザー情報を持ってくる
         guard let uid = Auth.auth().currentUser?.uid else {return}
+        
+        let isContain = chatroom.menbers.contains(uid)
+        if !isContain { return }
+        
         //メンバーの確認
         chatroom.menbers.forEach { (menberUid) in
             if menberUid != uid {
