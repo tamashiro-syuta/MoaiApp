@@ -59,6 +59,7 @@ class ChatListViewController: UIViewController {
     private func handleAddedDocumentChange(documentChange: DocumentChange) {
         let dic = documentChange.document.data()
         let chatroom = ChatRoom(dic: dic)
+        chatroom.documentId = documentChange.document.documentID
         
         //相手側のユーザー情報を持ってくる
         guard let uid = Auth.auth().currentUser?.uid else {return}
@@ -110,6 +111,7 @@ class ChatListViewController: UIViewController {
         }
     }
     
+    
     //controlから引っ張ってくる以外のアクションの作り方(上のlet rightBarButtoの部分のセレクターとセット)
     @objc private func tappedNavRightBarButton() {
         //新規チャット画面への画面遷移
@@ -119,6 +121,7 @@ class ChatListViewController: UIViewController {
         let nav = UINavigationController(rootViewController: userListViewController)
         self.present(nav, animated: true, completion: nil)
     }
+    
     
     
     private func fetchLoginUserInfo() {
@@ -153,8 +156,6 @@ extension ChatListViewController:  UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = chatListTableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ChatListTableViewCell
-//        cell.user = users[indexPath.row]
-//        cell.userImageView.layer.masksToBounds = true
         cell.userImageView.layer.cornerRadius = 30
         cell.chatroom = chatrooms[indexPath.row]
 
@@ -165,7 +166,11 @@ extension ChatListViewController:  UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //"ChatRoom"という名前のストーリボードを初期化
         let storyboard = UIStoryboard.init(name: "ChatRoom", bundle: nil)
-        let chatRoomViewController = storyboard.instantiateViewController(withIdentifier: "ChatRoomViewController")
+        let chatRoomViewController = storyboard.instantiateViewController(withIdentifier: "ChatRoomViewController") as! ChatRoomViewController
+        
+        chatRoomViewController.user = user
+        //ChatRoomViewcontrollerに選択されたchatroomの情報を渡してる
+        chatRoomViewController.chatroom = chatrooms[indexPath.row]
         
         //画面遷移
         navigationController?.pushViewController(chatRoomViewController, animated: true)

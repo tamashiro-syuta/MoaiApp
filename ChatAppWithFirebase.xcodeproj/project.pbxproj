@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		48231783265375F200257189 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48231782265375F200257189 /* Message.swift */; };
 		48538EE2264ADAB700871BB0 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48538EE1264ADAB700871BB0 /* User.swift */; };
 		48538EE5264B81A600871BB0 /* UserList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48538EE4264B81A600871BB0 /* UserList.storyboard */; };
 		48538EE8264B82D400871BB0 /* UserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48538EE7264B82D400871BB0 /* UserListViewController.swift */; };
@@ -32,6 +33,7 @@
 
 /* Begin PBXFileReference section */
 		0A47746F34EA0457A401A8A8 /* Pods-ChatAppWithFirebase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatAppWithFirebase.release.xcconfig"; path = "Target Support Files/Pods-ChatAppWithFirebase/Pods-ChatAppWithFirebase.release.xcconfig"; sourceTree = "<group>"; };
+		48231782265375F200257189 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		48538EE1264ADAB700871BB0 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		48538EE4264B81A600871BB0 /* UserList.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = UserList.storyboard; sourceTree = "<group>"; };
 		48538EE7264B82D400871BB0 /* UserListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListViewController.swift; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 				48ABEA052647E27500B40323 /* UIColorExtension.swift */,
 				48538EE1264ADAB700871BB0 /* User.swift */,
 				48B8B6A2264F917A00E863A1 /* ChatRoom.swift */,
+				48231782265375F200257189 /* Message.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -286,6 +289,7 @@
 				48538EE2264ADAB700871BB0 /* User.swift in Sources */,
 				48C608542647828E002D1258 /* SceneDelegate.swift in Sources */,
 				4858385E2649474200274507 /* ChatRoomTableViewCell.swift in Sources */,
+				48231783265375F200257189 /* Message.swift in Sources */,
 				48ABEA062647E27500B40323 /* UIColorExtension.swift in Sources */,
 				48B8B6A3264F917A00E863A1 /* ChatRoom.swift in Sources */,
 			);
