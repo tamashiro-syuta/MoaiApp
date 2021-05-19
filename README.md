@@ -15,9 +15,9 @@
 ## アカウント作成画面（トップ画面）
 <img width="438" alt="スクリーンショット 2021-05-19 10 38 32" src="https://user-images.githubusercontent.com/69576936/118745653-96850200-b891-11eb-8024-5e781c7f7be8.png">
 
-### 新規でユーザー登録を行う場合、email、password、usernameの必須項目を入力し、registerボタンをタップ。
-### 任意でアイコン用の画像をつけることも可能。
-### ログインする場合は、画面下部の「既にアカウントをお持ちの方」をタップをするとログイン画面へ遷移。
+・新規でユーザー登録を行う場合、email、password、usernameの必須項目を入力し、registerボタンをタップ。
+・任意でアイコン用の画像をつけることも可能。
+・ログインする場合は、画面下部の「既にアカウントをお持ちの方」をタップをするとログイン画面へ遷移。
 
 ## ログイン画面
 <img width="442" alt="スクリーンショット 2021-05-19 11 03 31" src="https://user-images.githubusercontent.com/69576936/118745775-e6fc5f80-b891-11eb-9d4d-f1f27d38fe40.png">
@@ -37,8 +37,7 @@
 ### 全ユーザーデータを表示され、その中からチャットを開始したいユーザーを選択し、「会話を開始」ボタンをタップするとチャットを開始できる。
 
 ## チャット画面
-<img width="437" alt="スクリーンショット 2021-05-19 11 07 59" src="https://user-images.githubusercontent.com/69576936/118746100-86215700-b892-11eb-9011-fe04d583196a.png">
-<img width="440" alt="スクリーンショット 2021-05-19 11 09 22" src="https://user-images.githubusercontent.com/69576936/118746204-bc5ed680-b892-11eb-933c-b53418e4f5e0.png">
+<img width="437" alt="スクリーンショット 2021-05-19 11 07 59" src="https://user-images.githubusercontent.com/69576936/118746100-86215700-b892-11eb-9011-fe04d583196a.png"><img width="440" alt="スクリーンショット 2021-05-19 11 09 22" src="https://user-images.githubusercontent.com/69576936/118746204-bc5ed680-b892-11eb-933c-b53418e4f5e0.png">
 
 ### 自分の送信したメッセージを右側に緑の吹き出しで、相手の送信したメッセージを左側に白の吹き出しで表示
 ### 表示内容は、メッセージ文と日付
