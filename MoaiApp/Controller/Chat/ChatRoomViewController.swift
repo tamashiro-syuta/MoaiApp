@@ -44,7 +44,7 @@ class ChatRoomViewController: UIViewController {
         fetchMessages()
     }
     
-    private func setupNotification() {
+    func setupNotification() {
         //キーボードが出てきた時に受け取る処理
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         //キーボードを閉じた時に受け取る処理

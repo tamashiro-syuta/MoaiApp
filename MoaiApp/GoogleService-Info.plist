@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>742999786482-lh90naqlorok0ug6lcn12k4g1g9cm9i7.apps.googleusercontent.com</string>
+	<string>814559855191-4mbr565ius0a74cl4fkhko835abq1ftj.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.742999786482-lh90naqlorok0ug6lcn12k4g1g9cm9i7</string>
+	<string>com.googleusercontent.apps.814559855191-4mbr565ius0a74cl4fkhko835abq1ftj</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBZ5-lLoeDBSlUiFYIOooGiamPO_2Ie85Q</string>
+	<string>AIzaSyDtdqAHTY_xyfcm1f5Z0LeI8TUFE6Iulbw</string>
 	<key>GCM_SENDER_ID</key>
-	<string>742999786482</string>
+	<string>814559855191</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.syuta.ChatAppWithFirebase</string>
+	<string>com.syuta.MoaiApp</string>
 	<key>PROJECT_ID</key>
-	<string>chatwithfirebaseapp-5493c</string>
+	<string>moaiapp-4614e</string>
 	<key>STORAGE_BUCKET</key>
-	<string>chatwithfirebaseapp-5493c.appspot.com</string>
+	<string>moaiapp-4614e.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:742999786482:ios:b35b25f2f73a012a9da16b</string>
+	<string>1:814559855191:ios:3e375abe1734004dcd5912</string>
 </dict>
 </plist>

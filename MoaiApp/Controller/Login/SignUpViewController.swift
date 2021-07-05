@@ -9,7 +9,7 @@ import UIKit
 import Firebase
 import FirebaseFirestore
 import FirebaseAuth
-import PKHUD
+import PKHUD  //インジケーターの表示
 
 class SignUpViewController: UIViewController {
     

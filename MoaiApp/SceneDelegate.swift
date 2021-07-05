@@ -18,9 +18,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window = window
         window.makeKeyAndVisible()
         
-        let storyboard = UIStoryboard(name: "ChatList", bundle: nil )
-        let chatListViewController = storyboard.instantiateViewController(identifier: "ChatListViewController")
-        let nav = UINavigationController(rootViewController: chatListViewController)
+//        let storyboard = UIStoryboard(name: "ChatList", bundle: nil )
+//        let chatListViewController = storyboard.instantiateViewController(identifier: "ChatListViewController")
+//        let nav = UINavigationController(rootViewController: chatListViewController)
+        
+        let storyboard = UIStoryboard(name: "FirstView", bundle: nil )
+        let firstViewController = storyboard.instantiateViewController(identifier: "MainTabBarController")
+        let nav = UINavigationController(rootViewController: firstViewController)
+        
+//        let storyboard = UIStoryboard(name: "ChatList", bundle: nil )
+//        let firstViewController = storyboard.instantiateViewController(identifier: "ChatListViewController")
+//        let nav = UINavigationController(rootViewController: firstViewController)
         
         window.rootViewController = nav
         

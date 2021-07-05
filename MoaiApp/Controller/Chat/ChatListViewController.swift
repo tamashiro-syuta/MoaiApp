@@ -23,8 +23,12 @@ class ChatListViewController: UIViewController {
     
     @IBOutlet weak var chatListTableView: UITableView!
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        if navigationController?.navigationBar.isHidden == false {
+            //print("navBarは表示されてますよ")
+        }
         setUpViews()
         confirmLoginUser()
         //chatListViewが呼ばれる度にchatroomの情報を更新していると無駄に通信して良くないので、viewWillAppearではなく、viewDidLoadに記載
@@ -127,6 +131,7 @@ class ChatListViewController: UIViewController {
     
     
     private func setUpViews() {
+        navigationController?.isNavigationBarHidden = false
         chatListTableView.delegate = self
         chatListTableView.dataSource = self
         chatListTableView.tableFooterView = UIView()
@@ -136,15 +141,21 @@ class ChatListViewController: UIViewController {
         
         let rightBarButton = UIBarButtonItem(title: "新規チャット", style: .plain, target: self, action: #selector(tappedNavRightBarButton))
         let logoutBarButton = UIBarButtonItem(title: "ログアウト", style: .plain, target: self, action: #selector(tappedLogoutButton))
+        
+//        navigationController?.setNavigationBarHidden(false, animated: true)
         //navigationBarの右側にボタンをコードで追加
         navigationItem.rightBarButtonItem = rightBarButton
         navigationItem.rightBarButtonItem?.tintColor = .white
         navigationItem.leftBarButtonItem = logoutBarButton
         navigationItem.leftBarButtonItem?.tintColor = .white
+        
+        //tabbarの設定
+        tabBarController?.tabBar.barTintColor = .rgb(red: 39, green: 49, blue: 69)
+        
+        
     }
     
-    
-    @objc private func tappedLogoutButton() {
+    @IBAction func tappedLogoutButton(_ sender: Any) {
         //ログアウトは、必ずdo catch構文で書かないといけない
         do {
             try Auth.auth().signOut()
@@ -153,6 +164,36 @@ class ChatListViewController: UIViewController {
             print("ログアウトに失敗しました。\(error)")
         }
     }
+    
+//    @objc private func tappedLogoutButton2() {
+//        //ログアウトは、必ずdo catch構文で書かないといけない
+//        do {
+//            try Auth.auth().signOut()
+//            pushLoginViewController()
+//        } catch {
+//            print("ログアウトに失敗しました。\(error)")
+//        }
+//    }
+    
+    //controlから引っ張ってくる以外のアクションの作り方(上のlet rightBarButtoの部分のセレクターとセット)
+//    @objc private func tappedNavRightBarButton2() {
+//        //新規チャット画面への画面遷移
+//        let storyborad = UIStoryboard.init(name: "UserList", bundle: nil)
+//        let userListViewController = storyborad.instantiateViewController(withIdentifier: "UserListViewController")
+//        //画面遷移先のuserListViewControllerにナビゲーションバーを追加
+//        let nav = UINavigationController(rootViewController: userListViewController)
+//        self.present(nav, animated: true, completion: nil)
+//    }
+    
+    @IBAction func tappedNavRightBarButton(_ sender: Any) {
+        //新規チャット画面への画面遷移
+        let storyborad = UIStoryboard.init(name: "UserList", bundle: nil)
+        let userListViewController = storyborad.instantiateViewController(withIdentifier: "UserListViewController")
+        //画面遷移先のuserListViewControllerにナビゲーションバーを追加
+        let nav = UINavigationController(rootViewController: userListViewController)
+        self.present(nav, animated: true, completion: nil)
+    }
+    
     
     
     private func confirmLoginUser() {
@@ -165,20 +206,12 @@ class ChatListViewController: UIViewController {
     private func pushLoginViewController() {
         let storyboard = UIStoryboard(name: "SignUp", bundle: nil)
         let signUpViewController = storyboard.instantiateViewController(withIdentifier: "SignUpViewController")
+        //signUpViewControllerをナビゲーションの最初の画面にし、それを定数navに格納
         let nav = UINavigationController(rootViewController: signUpViewController)
         nav.modalPresentationStyle = .fullScreen
         self.present(nav, animated: true, completion: nil)
     }
     
-    //controlから引っ張ってくる以外のアクションの作り方(上のlet rightBarButtoの部分のセレクターとセット)
-    @objc private func tappedNavRightBarButton() {
-        //新規チャット画面への画面遷移
-        let storyborad = UIStoryboard.init(name: "UserList", bundle: nil)
-        let userListViewController = storyborad.instantiateViewController(withIdentifier: "UserListViewController")
-        //画面遷移先のuserListViewControllerにナビゲーションバーを追加
-        let nav = UINavigationController(rootViewController: userListViewController)
-        self.present(nav, animated: true, completion: nil)
-    }
     
     
     
@@ -200,6 +233,7 @@ class ChatListViewController: UIViewController {
         }
     }
 }
+
 
 extension ChatListViewController:  UITableViewDelegate, UITableViewDataSource {
     
