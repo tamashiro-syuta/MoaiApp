@@ -10,6 +10,15 @@ import Firebase
 
 class ManagementViewController: UIViewController {
     
+    let db = Firestore.firestore()
+    let userID = Auth.auth().currentUser?.uid
+    
+    //============= 非同期通信用にディスパッチグループおよびディスパッチキューの作成 ============= //
+    let dispatchGroup = DispatchGroup()
+    let queue1 = DispatchQueue(label: "キュー1")
+    let queue2 = DispatchQueue(label: "キュー2", attributes: .concurrent)
+    
+    
     //pastMoaisButtonの横のアイコンで使用
     let downImage = UIImage(systemName: "arrowtriangle.down.fill")
     let upImage = UIImage(systemName: "arrowtriangle.up.fill")
@@ -29,7 +38,7 @@ class ManagementViewController: UIViewController {
             navigationItem.title = user?.username
         }
     }
-    var usersMoaiArray: [Moai]?
+    var moai: Moai?
     let today = Date()
     
 
@@ -42,11 +51,176 @@ class ManagementViewController: UIViewController {
     //viewが初めて呼ばれた１回目だけ呼ばれるメソッド
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //ユーザーが模合に入っているか確認
+        confirmUserInMoai()
+        
+        //ユーザーの模合情報から模合情報を取得
+        fetchLoginUserInfo()
+        
+        
+        //模合の情報を元に画面に表示
         getMoneyPersonTableView.dataSource = self
         getMoneyPersonTableView.delegate = self
-        
         setupView()
+        
+        
+        
+        
+//        fetchLoginUserInfo { (currentUser) in
+//            self.user = currentUser
+//            print("あいうえお\(self.user?.moais[0])")
+//        }
+        //通信前に呼ばれてるからnilになる
+        //print(user?.moais[0])
+
     }
+    
+    //ログインしてないとログイン画面に飛ばすやつ(これをユーザーが模合に入っていないと模合の作成、参加画面に飛ばすように変更する)
+    private func confirmUserInMoai() {
+        db.collection("users").document(userID ?? "").getDocument { (snapshots, err) in
+            if let err = err {
+                print("なんか知らんけど、ユーザー情報取れないんですけど~~(\(err))")
+                return
+            }else {
+                let moaiArray = snapshots?.data()?["moais"] as! Array<Any>
+                print(moaiArray.count)
+                //ユーザー登録の時点では、moaisには、空の文字型""が入っているので、カウントが１＝模合に所属していないことになる
+                if moaiArray.count == 1 {
+                    //Moai.storyboardに画面遷移
+                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    //    画面遷移できない（直しが必要）
+                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    self.pushMoaiViewController()
+                }
+            }
+        }
+    }
+    
+    //Moai.storyboardに画面遷移
+    private func pushMoaiViewController() {
+        print("画面遷移しまーーーーーーーーーーーーーーーす")
+        let storyboard = UIStoryboard(name: "Moai", bundle: nil)
+        let MoaiVC = storyboard.instantiateViewController(withIdentifier: "Moai")
+        //signUpViewControllerをナビゲーションの最初の画面にし、それを定数navに格納
+//        let nav = UINavigationController(rootViewController: MoaiVC)
+//        nav.modalPresentationStyle = .fullScreen
+//        self.present(MoaiVC, animated: true, completion: nil)
+        navigationController?.pushViewController(MoaiVC, animated: true)
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //　〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜　次 や る こ と　〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+    // ①複雑化した処理を簡潔に直す。（DBからデータを取得する処理は、一つのメソッドで繋げてやる方向にした。）
+    //
+    // ②既存のコードには、模合の配列を作り、そこに模合のデータを全て入れることで一回で処理を終わらそうとしているが、模合のデータを表示するところは、２箇所のみ（１箇所は日時固定で表示し、もう１箇所は、選択した日時のものを表示する）ので、そこまで負荷はかからないと判断し、毎回メソッドを用いて、データを取得してくることにした。
+    //  なので、moaiArrayなどのコードは、削除する。
+    //　（もう一つの理由は、非同期処理が理由でUI表示に苦戦しているので、一度に全部の模合のデータを取得することは、さらに非同期処理の時間を増やすことになるので、毎回メソッドを用いて取得することにした。）
+    //
+    //
+    //　【案①】
+    //　viewDidLoadで、初めにの数秒間は、インジケーターを回し、その間、ブラーなどで画面を曇らせ、動作できないようにする。（その間にDB処理）
+    //
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    func doMultiAsyncProcess() {
+        let dispatchGroup = DispatchGroup()
+        // 直列キュー / attibutes指定なし
+        let dispatchQueue = DispatchQueue(label: "queue")
+
+        // 5つの非同期処理を実行(ここにDB系の処理を入れる)
+        for i in 1...5 {
+            let dispatchSemaphore = DispatchSemaphore(value: 0)
+            
+            dispatchQueue.async(group: dispatchGroup) {
+                [weak self] in
+                dispatchGroup.enter()
+                
+                self?.asyncProcess(number: i) {
+                    (number: Int) -> Void in
+                    print("#\(number) End")
+                    
+                    dispatchGroup.leave()
+                    dispatchSemaphore.signal()
+                }
+                
+                dispatchSemaphore.wait()
+            }
+        }
+
+        // 全ての非同期処理完了後にメインスレッドで処理
+        dispatchGroup.notify(queue: .main) {
+            print("All Process Done!")
+        }
+    }
+
+    // 非同期処理
+    func asyncProcess(number: Int, completion: @escaping (_ number: Int) -> Void) {
+        print("#\(number) Start")
+        let interval  = TimeInterval(arc4random() % 100 + 1) / 100
+        DispatchQueue.global().asyncAfter(deadline: .now() + interval) {
+            completion(number)
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     //viewが更新された度に呼ばれる
     override func viewWillAppear(_ animated: Bool) {
@@ -56,6 +230,7 @@ class ManagementViewController: UIViewController {
     
     //「次回の模合は」の部分のview
     private func setupView() {
+        navigationController?.navigationBar.barTintColor = .rgb(red: 39, green: 49, blue: 69)
         //ボタンに文字と画像を設置
         pastMoaisButton.setTitle("過去の模合", for: .normal)
         pastMoaisButton.setImage(downImage, for: .normal)
@@ -88,14 +263,14 @@ class ManagementViewController: UIViewController {
                 
                 guard let snapshot = snapshot,let dic = snapshot.data() else {return}
                 let moai = Moai(dic: dic)
-                self.usersMoaiArray?.append(moai)
+                //self.usersMoaiArray?.append(moai)
                 //DBから取得した値を使ってGetNextMoaiDateで正しい次の模合の日付を取得できるようにする（moaisテーブルのdateを二つに分けて（date1,date2など）それぞれをswitch文でInt型で返すようにしたいので、moaisテーブルにデータをセットする時の処理もそれ用に書き換える必要あり。）
                 let moaiDateMaterial = self.switchMoaiDate(weekNum: moai.week, weekDay: moai.day)
                 let moaiDate = self.GetNextMoaiDate(weekNum: moaiDateMaterial.0, weekDay: moaiDateMaterial.1)
                 
                 self.nextMoaiDateLabel.text = moaiDate
             }
-            let latesPastRecord = self.fetchPastRecord(usersMoai: user.moais[0], backNumber: 0)
+            let latesPastRecord = self.fetchPastRecord(moaisDocumentID: user.moais[0], backNumber: 0)
         }
         
     }
@@ -111,11 +286,7 @@ class ManagementViewController: UIViewController {
         detailsPastMoaiButton.titleLabel?.font = UIFont.systemFont(ofSize: 25) //フォントサイズ
 
     }
-    
-    //「受取人確認ボタン」の部分のview
-    private func setupRecipientConfirmView() {
-        
-    }
+
     
     
     @IBAction func pickOneOfPastMoais(_ sender: Any) {
@@ -138,48 +309,105 @@ class ManagementViewController: UIViewController {
     
     //ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
     
-    private func fetchLoginUserInfo() {
-        guard let uid = Auth.auth().currentUser?.uid else {return}
-        //ログインしているユーザーの情報だけを取得
-        Firestore.firestore().collection("users").document(uid).getDocument { (snapshot, err) in
+    //これを元にDB系のメソッドをやってみる
+    //引数completionにクロージャを指定
+    func getDocuments(completion: @escaping (Int) -> () ){
+        db.collection("aaa").document("bbb").collection("ccc").getDocuments() { (querySnapshot, err) in
             if let err = err {
-                print("ユーザー情報の取得に失敗しました。\(err)")
-                return
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+                    // countに取得したデータの数を入れる
+                    if let count = querySnapshot?.documents.count {
+                        //
+                        DispatchQueue.main.async {
+                            //以降のgetDocuments()のクロージャの処理でcountが使用できるようになる
+                            completion(count)
+                        }
+                    }
+                }
             }
-            
-            //ユーザー情報の取得成功時
-            //snapshotのnilチェック
-            guard let snapshot = snapshot,let dic = snapshot.data() else {return}
-            
-            let user = User(dic: dic)
-            //上で宣言したuserにuser(ログインしているユーザー)を入れる
-            self.user = user
         }
     }
 
-    private func fetchUsersMoaiInfo() {
-        guard let moaiID = self.user?.moais.first else {return}
-        Firestore.firestore().collection("moais").document(moaiID).getDocument { (snapshot, err) in
+//    getDocuments() { count in
+//        //ここでDBからの情報を変数に格納したりする
+//        self.aNumber = Double(count)
+//        self.amountNumber.text = "\(count)" // 20
+//        print(self.aNumber)
+//    }
+    
+//    private func fetchLoginUserInfo(completion: @escaping (User) -> () ) {
+//        guard let uid = Auth.auth().currentUser?.uid else {return}
+//        //ログインしているユーザーの情報だけを取得
+//        Firestore.firestore().collection("users").document(uid).getDocument { (snapshot, err) in
+//            if let err = err {
+//                print("ユーザー情報の取得に失敗しました。\(err)")
+//                return
+//            }
+//            DispatchQueue.main.async {
+//                //以降の関数呼び出し時のクロージャの処理でcountが使用できるようになる
+//                guard let snapshot = snapshot,let dic = snapshot.data() else {return}
+//                let currentUser = User(dic: dic)
+//                completion(currentUser)
+//            }
+//            //上で宣言したuserにuser(ログインしているユーザー)を入れる
+//        }
+//    }
+    
+    private func fetchLoginUserInfo() {
+        self.db.collection("users").document(self.userID ?? "").getDocument { (snapshots, err) in
             if let err = err {
-                print("ユーザーの模合情報の取得に失敗しました。\(err)")
+                print("エラーでした~~\(err)")
                 return
+            }else {
+                let dic = snapshots?.data()
+                self.user = User(dic: dic ?? ["":""])
+                
+                //user情報から模合情報を取得
+                self.fetchUsersMoaiInfo(user: self.user!)
             }
-            
-            guard let snapshot = snapshot,let dic = snapshot.data() else {return}
-            let moai = Moai(dic: dic)
-            self.usersMoaiArray?.append(moai)
-            
-            //DBから取得した値を使ってGetNextMoaiDateで正しい次の模合の日付を取得できるようにする（moaisテーブルのdateを二つに分けて（date1,date2など）それぞれをswitch文でInt型で返すようにしたいので、moaisテーブルにデータをセットする時の処理もそれ用に書き換える必要あり。）
-            let moaiDateMaterial = self.switchMoaiDate(weekNum: moai.week, weekDay: moai.day)
-            let moaiDate = self.GetNextMoaiDate(weekNum: moaiDateMaterial.0, weekDay: moaiDateMaterial.1)
         }
     }
     
+    //ユーザーの模合情報の取得(後々は、複数入っている場合の模合情報を取れるようにする（配列の番号指定の部分を変数に置き換えして）)
+    private func fetchUsersMoaiInfo(user: User) {
+        self.db.collection("moais").document(user.moais[1]).getDocument { (snpashots, err) in
+            if let err = err {
+                print("エラーでした~~\(err)")
+                return
+            }else {
+                let dic = snpashots?.data()
+                self.moai = Moai(dic: dic ?? ["":""] )
+            }
+        }
+    }
+    
+
+//    private func fetchUsersMoaiInfo() {
+//        guard let moaiID = self.user?.moais.first else {return}
+//        Firestore.firestore().collection("moais").document(moaiID).getDocument { (snapshot, err) in
+//            if let err = err {
+//                print("ユーザーの模合情報の取得に失敗しました。\(err)")
+//                return
+//            }
+//
+//            guard let snapshot = snapshot,let dic = snapshot.data() else {return}
+//            let moai = Moai(dic: dic)
+//            self.usersMoaiArray?.append(moai)
+//
+//            //DBから取得した値を使ってGetNextMoaiDateで正しい次の模合の日付を取得できるようにする（moaisテーブルのdateを二つに分けて（date1,date2など）それぞれをswitch文でInt型で返すようにしたいので、moaisテーブルにデータをセットする時の処理もそれ用に書き換える必要あり。）
+//            let moaiDateMaterial = self.switchMoaiDate(weekNum: moai.week, weekDay: moai.day)
+//            let moaiDate = self.GetNextMoaiDate(weekNum: moaiDateMaterial.0, weekDay: moaiDateMaterial.1)
+//        }
+//    }
+    
+    
     //過去の模合データを取得するメソッド(引数は、模合のDocumentIDと、何回目の模合を取得するかの数(Int型) )
-    //viewDidLoadで直近のデータを取り出し、viewWillApearで選択された時の模合データを取り出し、複数回利用するのでメソッド化
-    private func fetchPastRecord(usersMoai: String, backNumber:Int) -> Array<Any> {
+    //viewDidLoadでは直近のデータを取り出し、viewWillApearで選択された時の模合データを取り出す。複数回利用するのでメソッド化
+    private func fetchPastRecord(moaisDocumentID: String, backNumber:Int) -> Array<Any> {
         var pastRecordsArray:Array<Any> = []
-        Firestore.firestore().collection("moais").document(usersMoai).collection("pastRecords").getDocuments { (querySnapshot, err) in
+        Firestore.firestore().collection("moais").document(moaisDocumentID).collection("pastRecords").getDocuments { (querySnapshot, err) in
             if let err = err {
                 print("サブコレクション(pastRecords)の取得に失敗しました。\(err)")
                 return

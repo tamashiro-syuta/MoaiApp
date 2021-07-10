@@ -11,7 +11,7 @@ class MainTabBarController: UITabBarController {
 //        if navigationController?.navigationBar.isHidden == false {
 //            print("navBarは表示されてますよ")
 //        }
-        navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.isHidden = true
         
         tabBarController?.tabBar.barTintColor = .rgb(red: 39, green: 49, blue: 69)
         
@@ -20,24 +20,28 @@ class MainTabBarController: UITabBarController {
         
         //各ViewContorllerのインスタンスを作成（viewとcontrollerを紐付けて生成）
         let chatListStoryBoard = UIStoryboard(name: "ChatList", bundle: nil )
-        let chatListViewController = chatListStoryBoard.instantiateViewController(identifier: "ChatListViewController")
+        let chatListVC = chatListStoryBoard.instantiateViewController(identifier: "Chat")
         
         let moaiStoryBoard = UIStoryboard(name: "Moai", bundle: nil )
-        let moaiBaseViewController = moaiStoryBoard.instantiateViewController(identifier: "MoaiBaseViewController")
+        let moaiBaseVC = moaiStoryBoard.instantiateViewController(identifier: "Moai")
         
         let sampleMoaiStoryBoard = UIStoryboard(name: "Management", bundle: nil )
-        let sampleMoaiViewController = sampleMoaiStoryBoard.instantiateViewController(identifier: "ManagementViewController")
+        let sampleMoaiVC = sampleMoaiStoryBoard.instantiateViewController(identifier: "Management")
 
+        let mapStoryBoard = UIStoryboard(name: "Map", bundle: nil )
+        let mapVC = mapStoryBoard.instantiateViewController(identifier: "MapViewController") 
         
         //各インスタンスのViewConrollerに対して、アイコンなどのTabBarItemを設定
-        chatListViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 1)
-        moaiBaseViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 2)
-        sampleMoaiViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 3)
+        chatListVC.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 1)
+        moaiBaseVC.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 2)
+        sampleMoaiVC.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 3)
+        mapVC.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 4)
         
         //配列に各ViewContollerをアペンド
-        viewControllers.append(chatListViewController)
-        viewControllers.append(moaiBaseViewController)
-        viewControllers.append(sampleMoaiViewController)
+        viewControllers.append(chatListVC)
+        viewControllers.append(moaiBaseVC)
+        viewControllers.append(sampleMoaiVC)
+        viewControllers.append(mapVC)
 
         //selectedTabBar1()
         

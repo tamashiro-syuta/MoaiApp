@@ -4,7 +4,6 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -19,6 +18,7 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="u7j-xc-53m">
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cellId" rowHeight="80" id="btG-mj-5N1" customClass="ChatListTableViewCell" customModule="MoaiApp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="80"/>
@@ -65,6 +65,7 @@
                                                 <constraint firstItem="lFO-sp-mqb" firstAttribute="top" secondItem="cp1-82-CrW" secondAttribute="bottom" constant="8" id="xOd-Ya-9zT"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="dateLabel" destination="RNF-e9-WnN" id="TXN-Ni-m4D"/>
                                             <outlet property="latestMessageLabel" destination="cp1-82-CrW" id="5pq-cY-wNp"/>
@@ -76,7 +77,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="7xw-ar-VEJ"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="u7j-xc-53m" firstAttribute="leading" secondItem="7xw-ar-VEJ" secondAttribute="leading" id="7Ae-5P-rfv"/>
                             <constraint firstItem="u7j-xc-53m" firstAttribute="trailing" secondItem="7xw-ar-VEJ" secondAttribute="trailing" id="K9Z-O6-lEJ"/>
@@ -102,12 +103,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yek-5b-bpx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2700" y="473"/>
+            <point key="canvasLocation" x="2687" y="473"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="5TM-Vj-9qe">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bdF-RZ-CIF" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="Chat" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="bdF-RZ-CIF" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="pencil" catalog="system" id="kKQ-JE-XEe">
                         <color key="badgeColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-40"/>
@@ -133,8 +134,5 @@
     <resources>
         <image name="niwatori" width="1200" height="800"/>
         <image name="pencil" catalog="system" width="128" height="113"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>

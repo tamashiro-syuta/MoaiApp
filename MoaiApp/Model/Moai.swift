@@ -11,6 +11,7 @@ import Firebase
 class Moai {
     
     let groupName:String
+    let menbers:[String]
     let week: String
     let day: String
     let amount: String
@@ -19,6 +20,7 @@ class Moai {
     
     init(dic: [String: Any]) {
         self.groupName = dic["groupName"] as? String ?? ""
+        self.menbers = dic["menbers"] as? [String] ?? [""]
         self.week = dic["week"] as? String ?? ""
         self.day = dic["day"] as? String ?? ""
         self.amount = dic["amount"] as? String ?? ""

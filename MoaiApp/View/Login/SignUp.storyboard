@@ -4,14 +4,13 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Sign Up View Controller-->
         <scene sceneID="oGz-Cd-OcP">
             <objects>
-                <viewController storyboardIdentifier="SignUpViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="01i-Sj-Hc9" customClass="SignUpViewController" customModule="ChatAppWithFirebase" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SignUpViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="01i-Sj-Hc9" customClass="SignUpViewController" customModule="MoaiApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="z3w-Fg-Xsz">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -111,7 +110,7 @@
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="fgg-D2-91g"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="s0p-yS-M1g" firstAttribute="top" secondItem="1PG-eW-eI0" secondAttribute="bottom" constant="30" id="4Wb-tm-oMR"/>
                             <constraint firstItem="1PG-eW-eI0" firstAttribute="centerX" secondItem="z3w-Fg-Xsz" secondAttribute="centerX" id="Gqu-m7-ueu"/>
@@ -137,9 +136,4 @@
             <point key="canvasLocation" x="92.753623188405811" y="150.66964285714286"/>
         </scene>
     </scenes>
-    <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-    </resources>
 </document>

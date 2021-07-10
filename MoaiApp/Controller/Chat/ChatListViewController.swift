@@ -131,7 +131,6 @@ class ChatListViewController: UIViewController {
     
     
     private func setUpViews() {
-        navigationController?.isNavigationBarHidden = false
         chatListTableView.delegate = self
         chatListTableView.dataSource = self
         chatListTableView.tableFooterView = UIView()
@@ -142,7 +141,6 @@ class ChatListViewController: UIViewController {
         let rightBarButton = UIBarButtonItem(title: "新規チャット", style: .plain, target: self, action: #selector(tappedNavRightBarButton))
         let logoutBarButton = UIBarButtonItem(title: "ログアウト", style: .plain, target: self, action: #selector(tappedLogoutButton))
         
-//        navigationController?.setNavigationBarHidden(false, animated: true)
         //navigationBarの右側にボタンをコードで追加
         navigationItem.rightBarButtonItem = rightBarButton
         navigationItem.rightBarButtonItem?.tintColor = .white

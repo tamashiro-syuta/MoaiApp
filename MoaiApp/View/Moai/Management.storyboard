@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Rmz-ii-xuY">
-                                <rect key="frame" x="30" y="74" width="354" height="230"/>
+                                <rect key="frame" x="30" y="118" width="354" height="230"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="Pbn-fx-7L1">
                                         <rect key="frame" x="0.0" y="0.0" width="354" height="105"/>
@@ -100,7 +100,7 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="GeX-29-s4N">
-                                <rect key="frame" x="30" y="334" width="354" height="150"/>
+                                <rect key="frame" x="30" y="378" width="354" height="150"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h5U-JB-edY">
                                         <rect key="frame" x="0.0" y="0.0" width="354" height="30"/>
@@ -181,7 +181,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="g9o-0s-9zc"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="hvl-45-jxH" firstAttribute="centerX" secondItem="VxJ-WH-Koa" secondAttribute="centerX" id="3tu-y5-ocI"/>
                             <constraint firstItem="hvl-45-jxH" firstAttribute="leading" secondItem="g9o-0s-9zc" secondAttribute="leading" constant="30" id="4w3-iO-eJt"/>
@@ -197,6 +197,7 @@
                             <constraint firstItem="hvl-45-jxH" firstAttribute="top" secondItem="GeX-29-s4N" secondAttribute="bottom" constant="30" id="tCc-Nc-joO"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="lOT-ag-cdN"/>
                     <connections>
                         <outlet property="detailsPastMoaiButton" destination="Vqe-OU-HLF" id="9sb-me-9RF"/>
                         <outlet property="getMoneyPersonTableView" destination="hvl-45-jxH" id="M9A-Is-ig2"/>
@@ -206,14 +207,29 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="orS-PW-wmj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="644.92753623188412" y="150"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Trp-3B-058">
+            <objects>
+                <navigationController storyboardIdentifier="Management" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="A8k-rm-9cr" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="5bU-4M-MkP">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="unW-r0-2vK" kind="relationship" relationship="rootViewController" id="MFz-UJ-eQk"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ihx-71-NID" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
             <point key="canvasLocation" x="-265.21739130434787" y="150"/>
         </scene>
     </scenes>
     <resources>
         <image name="arrowtriangle.up.fill" catalog="system" width="128" height="124"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

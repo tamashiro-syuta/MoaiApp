@@ -13,12 +13,15 @@ import FirebaseAuth
 class FirstJoinViewController: UIViewController {
     
     let db = Firestore.firestore()
+    let userID = Auth.auth().currentUser?.uid
     var myPassword = ""
+    var selectedMoai: Moai?
     
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var textField: UITextField!
     
-
+    var selectedMoaiID:String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -48,7 +51,7 @@ class FirstJoinViewController: UIViewController {
 
         //mypasswodに入れた値と同じパスワードを持つ模合を探し出す
         db.collection("moais").whereField("password", isEqualTo: myPassword).getDocuments { (snaps, err) in
-            if err != nil {
+            if let err = err {
                 print("エラーでした~~\(err)")
             }else {
                 for document in snaps!.documents {
@@ -56,6 +59,10 @@ class FirstJoinViewController: UIViewController {
                     print("取れたデータがこちら！！！！！\n\(document.documentID) => \(document.data())")
                     //下のようにするとデータの中の値まで取得できる
                     //print(document.data()["password"]!)
+                    
+                    let dic = document.data()
+                    self.selectedMoai = Moai(dic: dic)
+                    self.selectedMoaiID = document.documentID
                     
                     //アラートで「この模合で良いですか？」と確認させる
                     self.ConfirmationAlert(groupName: document.data()["groupName"] as! String)
@@ -85,6 +92,47 @@ class FirstJoinViewController: UIViewController {
         let joinAction: UIAlertAction = UIAlertAction(title: "参加", style: UIAlertAction.Style.default, handler:{
             // ボタンが押された時の処理を書く（クロージャ実装）
             (action: UIAlertAction!) -> Void in
+            
+            
+            //模合にユーザーを追加
+            var newMenbers = self.selectedMoai?.menbers
+            if self.userID != nil {
+                newMenbers?.append(self.userID ?? "")
+            }
+            let moaiData = ["menbers":newMenbers]
+            self.db.collection("moais").document(self.selectedMoaiID ?? "").updateData(moaiData) { (err) in
+                if let err = err {
+                    print("エラーでした~~\(err)")
+                    return
+                }
+            }
+            
+            //ユーザーに模合を追加
+            self.db.collection("users").document(self.userID ?? "").getDocument { (snapshot, err) in
+                if let err = err {
+                    print("エラーでした~~\(err)")
+                    return
+                }else {
+                    //変数userにDBから取得してきた情報を格納
+                    let dic = snapshot?.data()
+                    let user = User(dic: dic ?? ["":""])
+                    
+                    //user情報からmoai情報のみの配列を作成し、そこに新しい模合の情報を追加
+                    var newMoaiArray = user.moais
+                    newMoaiArray.append(self.selectedMoaiID ?? "")
+                    let usersNewMoaiData = ["moais":newMoaiArray]
+                    self.db.collection("users").document(self.userID ?? "").updateData(usersNewMoaiData) { (err) in
+                        if let err = err {
+                            print("エラーでした~~\(err)")
+                            return
+                        }
+                    }
+                }
+            }
+            //management.storyboardに遷移
+            self.dismiss(animated: true, completion: nil)
+            
+            
             print("OK")
         })
         let cancelAction: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler:{

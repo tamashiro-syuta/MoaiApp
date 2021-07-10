@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Map View Controller-->
+        <scene sceneID="rLy-Ju-9F8">
+            <objects>
+                <viewController storyboardIdentifier="MapViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="tMi-Uv-pkx" customClass="MapViewController" customModule="MoaiApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Xc9-oT-iQT">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="jxr-VS-8qH">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                            </mapView>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nkC-6r-dCm">
+                                <rect key="frame" x="20" y="84" width="374" height="40"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="GT0-6l-aWI"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="0AG-wP-yYv"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="jxr-VS-8qH" firstAttribute="top" secondItem="0AG-wP-yYv" secondAttribute="top" id="4xY-WP-p8D"/>
+                            <constraint firstItem="0AG-wP-yYv" firstAttribute="bottom" secondItem="jxr-VS-8qH" secondAttribute="bottom" id="Eq9-zN-ppL"/>
+                            <constraint firstItem="jxr-VS-8qH" firstAttribute="leading" secondItem="0AG-wP-yYv" secondAttribute="leading" id="M9j-IT-jeO"/>
+                            <constraint firstItem="0AG-wP-yYv" firstAttribute="trailing" secondItem="nkC-6r-dCm" secondAttribute="trailing" constant="20" id="XnL-2r-obV"/>
+                            <constraint firstItem="jxr-VS-8qH" firstAttribute="trailing" secondItem="0AG-wP-yYv" secondAttribute="trailing" id="ebs-K8-l8d"/>
+                            <constraint firstItem="nkC-6r-dCm" firstAttribute="top" secondItem="0AG-wP-yYv" secondAttribute="top" constant="40" id="sQF-sE-mTy"/>
+                            <constraint firstItem="nkC-6r-dCm" firstAttribute="leading" secondItem="0AG-wP-yYv" secondAttribute="leading" constant="20" id="tEA-q2-xUA"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="map" destination="jxr-VS-8qH" id="A7v-VV-bRf"/>
+                        <outlet property="searchTextField" destination="nkC-6r-dCm" id="341-0d-alS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="O8k-9f-BxN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1300" y="-415.17857142857139"/>
+        </scene>
+    </scenes>
+</document>
