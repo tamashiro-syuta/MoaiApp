@@ -14,9 +14,6 @@ class ManagementViewController: UIViewController {
     let db = Firestore.firestore()
     let userID = Auth.auth().currentUser?.uid
     
-    //============= 非同期通信用にディスパッチグループおよびディスパッチキューの作成 ============= //
-    
-    
     //pastMoaisButtonの横のアイコンで使用
     let downImage = UIImage(systemName: "arrowtriangle.down.fill")
     let upImage = UIImage(systemName: "arrowtriangle.up.fill")
@@ -47,12 +44,16 @@ class ManagementViewController: UIViewController {
     @IBOutlet weak var pastMoaisButton: UIButton!
     @IBOutlet weak var detailsPastMoaiButton: UIButton!
     @IBOutlet weak var getMoneyPersonTableView: UITableView!
+    @IBOutlet weak var blurView: UIVisualEffectView!
+    
     
     
     //viewが初めて呼ばれた１回目だけ呼ばれるメソッド
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        self.blurView.alpha = 1
+        
         //ユーザーが模合に入っているか確認
         confirmUserInMoai()
         
@@ -67,6 +68,7 @@ class ManagementViewController: UIViewController {
             self.makeGetMoneyPersonList()
             self.getMoneyPersonTableView.dataSource = self
             self.getMoneyPersonTableView.delegate = self
+            self.blurView.alpha = 0
         }
     }
     

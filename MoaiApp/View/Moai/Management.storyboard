@@ -183,12 +183,24 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <visualEffectView opaque="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cum-Q0-COI">
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="hBa-e2-vsH">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                                <blurEffect style="regular"/>
+                            </visualEffectView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="g9o-0s-9zc"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="cum-Q0-COI" firstAttribute="top" secondItem="g9o-0s-9zc" secondAttribute="top" id="17l-HP-9zp"/>
+                            <constraint firstItem="cum-Q0-COI" firstAttribute="leading" secondItem="g9o-0s-9zc" secondAttribute="leading" id="1c2-w9-0wo"/>
                             <constraint firstItem="RHk-Z5-X0K" firstAttribute="top" secondItem="NUQ-QX-HyU" secondAttribute="bottom" id="35E-7e-Faj"/>
                             <constraint firstItem="Rmz-ii-xuY" firstAttribute="centerX" secondItem="VxJ-WH-Koa" secondAttribute="centerX" id="AUm-o8-D9U"/>
+                            <constraint firstItem="g9o-0s-9zc" firstAttribute="bottom" secondItem="cum-Q0-COI" secondAttribute="bottom" id="FfX-y4-ler"/>
+                            <constraint firstItem="g9o-0s-9zc" firstAttribute="trailing" secondItem="cum-Q0-COI" secondAttribute="trailing" id="Jdn-Tl-D2I"/>
                             <constraint firstItem="g9o-0s-9zc" firstAttribute="trailing" secondItem="RHk-Z5-X0K" secondAttribute="trailing" constant="30" id="Kid-Mg-amN"/>
                             <constraint firstItem="Rmz-ii-xuY" firstAttribute="leading" secondItem="g9o-0s-9zc" secondAttribute="leading" constant="30" id="L95-5G-llH"/>
                             <constraint firstItem="g9o-0s-9zc" firstAttribute="trailing" secondItem="Rmz-ii-xuY" secondAttribute="trailing" constant="30" id="LDa-Ki-xEG"/>
@@ -206,6 +218,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="lOT-ag-cdN"/>
                     <connections>
+                        <outlet property="blurView" destination="cum-Q0-COI" id="sFf-NL-DyP"/>
                         <outlet property="detailsPastMoaiButton" destination="Vqe-OU-HLF" id="9sb-me-9RF"/>
                         <outlet property="getMoneyPersonTableView" destination="RHk-Z5-X0K" id="CL4-d6-mRk"/>
                         <outlet property="nextMoaiDateLabel" destination="a5h-lW-ZZz" id="U4Q-tj-niP"/>
