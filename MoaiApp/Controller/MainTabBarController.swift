@@ -29,7 +29,7 @@ class MainTabBarController: UITabBarController {
         let sampleMoaiVC = sampleMoaiStoryBoard.instantiateViewController(identifier: "Management")
 
         let mapStoryBoard = UIStoryboard(name: "Map", bundle: nil )
-        let mapVC = mapStoryBoard.instantiateViewController(identifier: "MapViewController") 
+        let mapVC = mapStoryBoard.instantiateViewController(identifier: "Map") 
         
         //各インスタンスのViewConrollerに対して、アイコンなどのTabBarItemを設定
         chatListVC.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 1)

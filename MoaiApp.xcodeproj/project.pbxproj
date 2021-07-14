@@ -12,6 +12,7 @@
 		482317892653EF4B00257189 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482317882653EF4B00257189 /* LoginViewController.swift */; };
 		4823182F2657FCD100257189 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4823182E2657FCD100257189 /* GoogleService-Info.plist */; };
 		4823184F2660B65C00257189 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4823184E2660B65B00257189 /* FirstViewController.swift */; };
+		483BBEF9269E930500832A01 /* sampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483BBEF8269E930500832A01 /* sampleViewController.swift */; };
 		484388922684F4AD00175415 /* FirstJoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484388912684F4AD00175415 /* FirstJoinViewController.swift */; };
 		484388952684F6B600175415 /* CreateRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484388942684F6B600175415 /* CreateRoomViewController.swift */; };
 		484388982684FF5300175415 /* Management.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 484388972684FF5300175415 /* Management.storyboard */; };
@@ -55,6 +56,7 @@
 		482317882653EF4B00257189 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		4823182E2657FCD100257189 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4823184E2660B65B00257189 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
+		483BBEF8269E930500832A01 /* sampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sampleViewController.swift; sourceTree = "<group>"; };
 		484388912684F4AD00175415 /* FirstJoinViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstJoinViewController.swift; sourceTree = "<group>"; };
 		484388942684F6B600175415 /* CreateRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomViewController.swift; sourceTree = "<group>"; };
 		484388972684FF5300175415 /* Management.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Management.storyboard; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 			children = (
 				48DE010C26830FFF00B4E62E /* Moai.storyboard */,
 				484388972684FF5300175415 /* Management.storyboard */,
+				483BBEF8269E930500832A01 /* sampleViewController.swift */,
 			);
 			path = Moai;
 			sourceTree = "<group>";
@@ -423,6 +426,7 @@
 				484388B72686F6E800175415 /* sample1ViewController.swift in Sources */,
 				48B8B6A3264F917A00E863A1 /* ChatRoom.swift in Sources */,
 				4823184F2660B65C00257189 /* FirstViewController.swift in Sources */,
+				483BBEF9269E930500832A01 /* sampleViewController.swift in Sources */,
 				48DE0149268327D500B4E62E /* MainTabBarController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -15,9 +15,6 @@ class ManagementViewController: UIViewController {
     let userID = Auth.auth().currentUser?.uid
     
     //============= 非同期通信用にディスパッチグループおよびディスパッチキューの作成 ============= //
-    let dispatchGroup = DispatchGroup()
-    let queue1 = DispatchQueue(label: "キュー1")
-    let queue2 = DispatchQueue(label: "キュー2", attributes: .concurrent)
     
     
     //pastMoaisButtonの横のアイコンで使用
@@ -27,11 +24,13 @@ class ManagementViewController: UIViewController {
     //模合代を誰が徴収したかの確認(誰が何日にもらって的なやつ)のための辞書型の変数
     //FireBaseからデータを取得して入れる
     //ex) let dic = ["Aさん":"12/5","Bさん":"×"]
-    var GetMoneyPersonList = [
+    var GetMoneyPersonList: Array = [
         ["A","7/1"],
         ["B","×"],
         ["C","なんでテーブルビューが表示されないんだよ"]
     ]
+    
+    var moaiMenbersNameList = [""]
     
     //ログインしているユーザー情報を入れる
     var user: User? {
@@ -53,7 +52,7 @@ class ManagementViewController: UIViewController {
     //viewが初めて呼ばれた１回目だけ呼ばれるメソッド
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         //ユーザーが模合に入っているか確認
         confirmUserInMoai()
         
@@ -64,9 +63,10 @@ class ManagementViewController: UIViewController {
         HUD.flash(.progress, onView: view, delay: 1.5) {_ in
             //非表示にした後の処理
             //模合の情報を元に画面に表示
+            self.setupView()
+            self.makeGetMoneyPersonList()
             self.getMoneyPersonTableView.dataSource = self
             self.getMoneyPersonTableView.delegate = self
-            self.setupView()
         }
     }
     
@@ -150,7 +150,7 @@ class ManagementViewController: UIViewController {
             let date = selectedPastRecode.date
             let getPerson = selectedPastRecode.getMoneyPerson
             let location = selectedPastRecode.location
-            let title = "  開催日：\(date)" + "\n" + "  受け取り：\(date)" + "\n" + "  場所：\(location)"
+            let title = "  開催日：\(date)" + "\n" + "  受け取り：\(getPerson)" + "\n" + "  場所：\(location)"
             detailsPastMoaiButton.titleLabel?.numberOfLines = 0
             detailsPastMoaiButton.titleLabel?.sizeToFit()
             detailsPastMoaiButton.setTitle(title, for: .normal)
@@ -167,9 +167,9 @@ class ManagementViewController: UIViewController {
     @IBAction func detailsMoai(_ sender: Any) {
         //選択されている模合の詳細情報を表示（表示形式は、今のところ画面遷移）
     }
-    
-    //これを元にDB系のメソッドをやってみる
 
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DB操作 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         
     //ユーザー情報の取得
     private func fetchLoginUserInfo() {
@@ -180,8 +180,7 @@ class ManagementViewController: UIViewController {
             }else {
                 let dic = snapshots?.data()
                 self.user = User(dic: dic ?? ["":""])
-                
-                //print("あいうえおあいうえおあいうえお\(self.user?.moais[1])")
+
                 //user情報から模合情報を取得
                 self.fetchUsersMoaiInfo(user: self.user!)
                 self.fetchPastRecord()
@@ -199,6 +198,7 @@ class ManagementViewController: UIViewController {
                 let dic = snpashots?.data()
                 self.moai = Moai(dic: dic ?? ["":""] )
             }
+            self.makeMoaiMenbersNameList()
         }
     }
 
@@ -212,7 +212,6 @@ class ManagementViewController: UIViewController {
             }else {
                 var array = [PastMoaiRecord]()
                 guard let querySnapshots = querySnapshots else {return}
-                //print(type(of: querySnapshots))
                 for document in querySnapshots.documents {
                     let dic = document.data()
                     let recode = PastMoaiRecord(dic: dic)
@@ -299,6 +298,46 @@ class ManagementViewController: UIViewController {
         
         return nextMoaiDate
     }
+    
+    //模合のメンバーをIDでなく、名前で配列に入れる
+    private func makeMoaiMenbersNameList() {
+        guard let moaiMenbers = self.moai?.menbers else {return}
+        self.moaiMenbersNameList.removeFirst()
+        for menber in moaiMenbers {
+            print("menberに格納されている値はこちら　\(menber)")
+            self.db.collection("users").document(menber).getDocument { (snapshots, err) in
+                if let err = err {
+                    print("模合に所属するユーザー情報の取得に失敗しました。\(err)")
+                    return
+                }
+                let dic = snapshots?.data()
+                self.moaiMenbersNameList.append(dic?["username"] as! String)
+            }
+        }
+    }
+    
+    private func makeGetMoneyPersonList() {
+        //配列の値を一旦、全て削除する
+        self.GetMoneyPersonList.removeAll()
+        guard let pastRecodeArray = self.pastRecodeArray else {return}
+        
+        for menberName in self.moaiMenbersNameList {
+            var count = 0
+            for pastRecode in pastRecodeArray {
+                if menberName == pastRecode.getMoneyPerson {
+                    self.GetMoneyPersonList.append([menberName,pastRecode.date])
+                    print(self.GetMoneyPersonList.last)
+                }else {
+                    count += 1
+                    //countが配列の数と同じ＝１回ももらってない
+                    if count == pastRecodeArray.count {
+                        self.GetMoneyPersonList.append([menberName,"    ×    "])
+                    }
+                }
+            }
+        }
+    }
+    
 }
 
 
@@ -309,37 +348,16 @@ extension ManagementViewController: UITableViewDelegate,UITableViewDataSource {
         return GetMoneyPersonList.count
     }
     
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = getMoneyPersonTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
         let label1 = cell.contentView.viewWithTag(1) as! UILabel
         let label2 = cell.contentView.viewWithTag(2) as! UILabel
+        label1.frame.size.width = cell.frame.size.width / 2
+        label2.frame.size.width = cell.frame.size.width / 2
         
-        print("なんでテーブルビューが表示されねぇんだよ3")
-        
-        // Labelにテキストを設定する
         label1.text = GetMoneyPersonList[indexPath.row][0]
         label2.text = GetMoneyPersonList[indexPath.row][1]
         
         return cell
     }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        print("なんでテーブルビューが表示されねぇんだよ1")
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return view.frame.size.height / 6
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "タイトル"
-    }
-    
-    
 }

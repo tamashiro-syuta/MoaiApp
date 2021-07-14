@@ -12,12 +12,14 @@ class PastMoaiRecord {
     
     let date:String
     let getMoneyPerson: String
+    let getMoneyPersonID: String
     let location: String
     let createdAt: Timestamp
     
     init(dic: [String: Any]) {
         self.date = dic["date"] as? String ?? ""
         self.getMoneyPerson = dic["getMoneyPerson"] as? String ?? ""
+        self.getMoneyPersonID = dic["getMoneyPersonID"] as? String ?? ""
         self.location = dic["location"] as? String ?? ""
         self.createdAt = dic["createdAt"] as? Timestamp ?? Timestamp()
     }
