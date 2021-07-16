@@ -11,6 +11,7 @@ import PKHUD
 
 class ManagementViewController: UIViewController {
     
+    
     let db = Firestore.firestore()
     let userID = Auth.auth().currentUser?.uid
     
@@ -30,19 +31,18 @@ class ManagementViewController: UIViewController {
     var moaiMenbersNameList = [""]
     
     //ログインしているユーザー情報を入れる
-    var user: User? {
-        didSet {
-            navigationItem.title = user?.username
-        }
-    }
+    var user: User?
     var moai: Moai?
     var pastRecodeArray: [PastMoaiRecord]?  //古いデータが「0番目」、新しいのが「n番目」になってる
+    var pastRecodeIDStringArray: [String]?  // 20210417みたいな形で取り出してる
+    var pastRecodeIDDateArray: [String]?  //◯月◯日みたいな形で取り出してる
     let today = Date()
     
+    var vi: UIView?
 
     @IBOutlet weak var nextMoaiDateLabel: UILabel!
     @IBOutlet weak var pastMoaisButton: UIButton!
-    @IBOutlet weak var detailsPastMoaiButton: UIButton!
+    @IBOutlet weak var pastMoaiLabel: UILabel!
     @IBOutlet weak var getMoneyPersonTableView: UITableView!
     @IBOutlet weak var blurView: UIVisualEffectView!
     
@@ -137,6 +137,9 @@ class ManagementViewController: UIViewController {
         let pastTotalTimes = pastRecodeArrayCount - 1
         self.setupPastMoaisView(backnumber: pastTotalTimes)
         
+        self.navigationItem.title = self.moai?.groupName
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        
     }
 
     //過去の模合の情報からn番目の情報をUIに移すメソッド
@@ -153,10 +156,9 @@ class ManagementViewController: UIViewController {
             let getPerson = selectedPastRecode.getMoneyPerson
             let location = selectedPastRecode.location
             let title = "  開催日：\(date)" + "\n" + "  受け取り：\(getPerson)" + "\n" + "  場所：\(location)"
-            detailsPastMoaiButton.titleLabel?.numberOfLines = 0
-            detailsPastMoaiButton.titleLabel?.sizeToFit()
-            detailsPastMoaiButton.setTitle(title, for: .normal)
-            detailsPastMoaiButton.titleLabel?.font = UIFont.systemFont(ofSize: 25) //フォントサイズ
+            
+            pastMoaiLabel.text = title
+            pastMoaiLabel.font = UIFont.systemFont(ofSize: 25)
         }
     }
 
@@ -164,10 +166,46 @@ class ManagementViewController: UIViewController {
     
     @IBAction func pickOneOfPastMoais(_ sender: Any) {
         //ダウンスクロールメニューを表示し、その中から過去の模合を選択し、し終わると、その詳細を表示する
+
+        //self.pickerView.isHidden = false
+        let pickerView = UIPickerView()
+        pickerView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: pickerView.bounds.size.height + 80)
+                // Connect data:
+        pickerView.delegate   = self
+        pickerView.dataSource = self
+        pickerView.tag = 1
+        
+        self.vi = UIView(frame: pickerView.bounds)
+        vi?.backgroundColor = UIColor.white
+        vi?.addSubview(pickerView)
+        
+        let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 150))
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = true
+        toolBar.tintColor = UIColor.black
+        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.donePressed))
+        //let cancel = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancelPressed))
+        toolBar.setItems([space, done ], animated: true)
+        toolBar.isUserInteractionEnabled = true
+        toolBar.sizeToFit()
+        
+        vi?.addSubview(toolBar)
+        view.addSubview(vi!)
+        let screenSize = UIScreen.main.bounds.size
+        vi?.frame.origin.y = screenSize.height
+        UIView.animate(withDuration: 0.3) {
+            self.vi?.frame.origin.y = screenSize.height - (self.vi?.bounds.size.height)!
+        }
+        print("push")
     }
     
-    @IBAction func detailsMoai(_ sender: Any) {
-        //選択されている模合の詳細情報を表示（表示形式は、今のところ画面遷移）
+    @objc func donePressed() {
+        self.vi?.isHidden = true
+    }
+    @objc func cancelPressed() {
+        //ピッカービューとツールバーを非表示にする
+        self.vi?.isHidden = true
     }
 
 
@@ -212,16 +250,23 @@ class ManagementViewController: UIViewController {
                 print("過去の模合情報の取得でエラーが出ました。\(err)")
                 return
             }else {
-                var array = [PastMoaiRecord]()
+                var array1 = [PastMoaiRecord]()
+                var array2 = [String]()
                 guard let querySnapshots = querySnapshots else {return}
                 for document in querySnapshots.documents {
                     let dic = document.data()
                     let recode = PastMoaiRecord(dic: dic)
                     print("\(document.documentID) => \(document.data())")
-                    array.append(recode)
+                    array1.append(recode)
+                    
+                    let moaiID = document.documentID
+                    array2.append(moaiID)
+                    
                 }
                 //古いデータが「0番目」、新しいのが「n番目」になってる
-                self.pastRecodeArray = array
+                self.pastRecodeArray = array1
+                self.pastRecodeIDStringArray = array2
+                self.makePastRecodeIDArray(array: self.pastRecodeIDStringArray!)
             }
         }
     }
@@ -340,7 +385,102 @@ class ManagementViewController: UIViewController {
         }
     }
     
+    //文字列型で入ってる配列を、読みやすい形に直すためのメソッド
+    private func makePastRecodeIDArray(array: Array<Any>) {
+        
+        //これ入れないと、配列に値を入れれなくなって、空になるから消さない。
+        self.pastRecodeIDDateArray = ["◯年◯月◯日みたいな形で取り出すよ"]
+        self.pastRecodeIDDateArray?.removeFirst()
+        
+        let dateFormatter1 = DateFormatter()
+        dateFormatter1.dateFormat = "yyyyMMdd"  //"E, d MMM yyyy HH:mm:ss Z"
+//        dateFormatter.dateStyle = .long
+//        dateFormatter.timeStyle = .none
+//        dateFormatter.locale = Locale(identifier: "ja_JP")
+        
+        let dateFormatter2 = DateFormatter()
+        dateFormatter2.dateStyle = .long
+        dateFormatter2.timeStyle = .none
+        dateFormatter2.locale = Locale(identifier: "ja_JP")
+        
+        for item in array {
+            //DateFormatterで文字列を◯年◯月◯日に直す。必要なら、DBのIDの形も変えてよし
+            //arrayには、20210409の形でデータが入っている
+            let pastDate1 = dateFormatter1.date(from: item as! String)
+            let pastDate2 = dateFormatter2.string(from: pastDate1!)
+            self.pastRecodeIDDateArray?.append(pastDate2)
+        }
+        print(self.pastRecodeIDDateArray)
+        print(self.pastRecodeIDStringArray)
+    }
+    
 }
+
+
+extension ManagementViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    // UIViewPickerの列(横方向)数を指定
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    // UIViewPickerの行(縦方向)数を指定
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        self.pastRecodeArray!.count
+    }
+    
+    // UIViewPickerの幅のサイズを返すメソッド
+        func pickerView(_ pickerView: UIPickerView, widthForComponent component:Int) -> CGFloat {
+            switch component {
+            //1列目の幅
+            case 0:
+                return (UIScreen.main.bounds.size.width-20)/2
+            //2列目の幅
+            case 1:
+                return (UIScreen.main.bounds.size.width-20)/2
+            default:
+                return (UIScreen.main.bounds.size.width-20)/2
+            }
+        }
+    
+    //各行のタイトル
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return self.pastRecodeIDDateArray?[row]
+    }
+    
+    // UIViewPickerのrowが選択された時のメソッド
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        //選択されたものに応じて、引数を指定し、ラベルのUI更新のメソッドを呼び出す。
+        self.setupPastMoaisView(backnumber: row)
+    }
+}
+
+
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~ 明日やること ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~ 参加不参加を押すことで、メンバーが参加予定かそうでないかを判別 ~~~~~~~~
+// ~~~~~~~~ 右上の詳細ボタンから、次の模合は誰が参加予定か確認できるようにする ~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
