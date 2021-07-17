@@ -96,16 +96,26 @@ class FirstJoinViewController: UIViewController {
             
             //模合にユーザーを追加
             var newMenbers = self.selectedMoai?.menbers
+            var newNext = self.selectedMoai!.next //模合管理機能で使うため
             if self.userID != nil {
                 newMenbers?.append(self.userID ?? "")
+                newNext.append(false)
             }
-            let moaiData = ["menbers":newMenbers]
-            self.db.collection("moais").document(self.selectedMoaiID ?? "").updateData(moaiData) { (err) in
+            let newMenberData = ["menbers":newMenbers]
+            let newNextData = ["next":newNext]
+            self.db.collection("moais").document(self.selectedMoaiID ?? "").updateData(newMenberData) { (err) in
                 if let err = err {
                     print("エラーでした~~\(err)")
                     return
                 }
             }
+            self.db.collection("moais").document(self.selectedMoaiID ?? "").updateData(newNextData) { (err) in
+                if let err = err {
+                    print("エラーです \(err)")
+                    return
+                }
+            }
+            print("模合にユーザー情報の保存完了！！")
             
             //ユーザーに模合を追加
             self.db.collection("users").document(self.userID ?? "").getDocument { (snapshot, err) in
@@ -129,6 +139,7 @@ class FirstJoinViewController: UIViewController {
                     }
                 }
             }
+            print("ユーザーに模合の保存完了！！")
             //management.storyboardに遷移
             self.dismiss(animated: true, completion: nil)
             

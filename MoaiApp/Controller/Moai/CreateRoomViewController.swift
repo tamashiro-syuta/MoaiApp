@@ -13,6 +13,9 @@ import FirebaseAuth
 class CreateRoomViewController: UIViewController {
     
     let db = Firestore.firestore()
+    let userID = Auth.auth().currentUser!.uid as String
+    
+    var user: User?
     
     var groupName:String?
     var week:String = ""
@@ -86,21 +89,60 @@ class CreateRoomViewController: UIViewController {
                 "day": day,
                 "amount": amount,
                 "createdAt": Timestamp(),
-                "password": password
+                "password": password,
+                "menbers": [userID],
+                "next": [false]
             ] as [String : Any]
             
-            db.collection("moais").document().setData(docData) { (err) in
+            //新規模合グループ作成
+            self.db.collection("moais").document().setData(docData) { (err) in
                 if err != nil {
                     print("moaisコレクションに情報が保存されませんでした。\(err)")
                     return
                 }else {
-                    //firebaseに保存された時の処理(画面遷移)
+                    //エラーがでない＝保存完了？だから、たぶん、ID引っ張ってきて大丈夫？
+                    self.db.collection("moais").whereField("password", isEqualTo: self.password).whereField("menbers", isEqualTo: [self.userID]).getDocuments { (querySnapshot, err) in
+                        if let err = err {
+                            print("エラーでましたあああああ　\(err)")
+                            return
+                        }
+                        let data = querySnapshot?.documents.first
+                        guard let moaiID = data?.documentID else {
+                            print("模合のID取れんかった")
+                            return
+                        }
+                        //ユーザー情報から模合情報を取得し、新しい模合情報を追加後、DBに戻す
+                        self.fetchAndResetUserMoaiInfo(moaiID: moaiID)
+                    }
+                    
+                    // ~~~~~~~~~~~~~~~~~~~~~~ firebaseに保存された時の処理(画面遷移) ~~~~~~~~~~~~~~~~~~~~~~~
                 }
             }
             
         }else {
             pushAlert()
             return
+        }
+    }
+    
+    //ユーザー情報から模合情報を取得し、新しい模合情報を追加後、DBに戻す
+    private func fetchAndResetUserMoaiInfo(moaiID: String) {
+        self.db.collection("users").document(self.userID).getDocument { (snapshot, err) in
+            if let err = err {
+                print("エラーが出ました \(err)")
+                return
+            }
+            let dic = snapshot?.data()
+            self.user = User(dic: dic!)
+            var moaisArray: [String] = self.user!.moais
+            moaisArray.append(moaiID)
+            self.db.collection("users").document(self.userID).updateData(["moais":moaisArray]) { (err) in
+                if let err = err {
+                    print("エラーでっせ　\(err)")
+                    return
+                }
+                print("DBに保存成功！！")
+            }
         }
     }
     
