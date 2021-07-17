@@ -28,7 +28,7 @@ class ManagementViewController: UIViewController {
         ["C","なんでテーブルビューが表示されないんだよ"]
     ]
     
-    var moaiMenbersNameList = [""]
+    var moaiMenbersNameList: [String] = [] //模合メンバーの名前の配列
     
     //ログインしているユーザー情報を入れる
     var user: User?
@@ -36,11 +36,16 @@ class ManagementViewController: UIViewController {
     var pastRecodeArray: [PastMoaiRecord]?  //古いデータが「0番目」、新しいのが「n番目」になってる
     var pastRecodeIDStringArray: [String]?  // 20210417みたいな形で取り出してる
     var pastRecodeIDDateArray: [String]?  //◯月◯日みたいな形で取り出してる
+    var nextMoaiEntryArray: [Bool]? // ブーリアン型の配列
     let today = Date()
+    var nextMoaiDate: String?
+    
     
     var vi: UIView?
 
     @IBOutlet weak var nextMoaiDateLabel: UILabel!
+    @IBOutlet weak var entryButton: UIButton!
+    @IBOutlet weak var notEntryButton: UIButton!
     @IBOutlet weak var pastMoaisButton: UIButton!
     @IBOutlet weak var pastMoaiLabel: UILabel!
     @IBOutlet weak var getMoneyPersonTableView: UITableView!
@@ -128,9 +133,9 @@ class ManagementViewController: UIViewController {
         guard let weekNum = self.moai?.week else {return}
         guard let weekDay = self.moai?.day else {return}
         let moaiDate = self.switchMoaiDate(weekNum: weekNum, weekDay: weekDay)
-        let nextMoaiDate = self.GetNextMoaiDate(weekNum: moaiDate.0, weekDay: moaiDate.1)
+        self.nextMoaiDate = self.GetNextMoaiDate(weekNum: moaiDate.0, weekDay: moaiDate.1)
         
-        self.nextMoaiDateLabel.text = nextMoaiDate
+        self.nextMoaiDateLabel.text = self.nextMoaiDate
         
         //このタイトルは、DBから値を持ってくる前のサンプル的な用途で置いてるだけのやつ
         guard let pastRecodeArrayCount = self.pastRecodeArray?.count else {return}
@@ -140,7 +145,30 @@ class ManagementViewController: UIViewController {
         self.navigationItem.title = self.moai?.groupName
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
+        //配列の順番をDBのmoaiのmenbersの順番と同じにするため
+        self.moaiMenbersNameList.reverse()
     }
+    
+    //参加ボタン
+    @IBAction func entry(_ sender: Any) {
+        entryOrNot(Bool: true)
+    }
+    
+    @IBAction func notEntry(_ sender: Any) {
+        entryOrNot(Bool: false)
+    }
+    
+    @IBAction func detailsNextMoai(_ sender: Any) {
+        let detailsNextMoaiVC = storyboard?.instantiateViewController(identifier: "detailsNextMoaiViewController") as! detailsNextMoaiViewController
+        detailsNextMoaiVC.date = self.nextMoaiDate
+        detailsNextMoaiVC.location = "あとで設定する〜〜"
+        detailsNextMoaiVC.judgeEntryArray = self.nextMoaiEntryArray
+        detailsNextMoaiVC.menbersArray = self.moaiMenbersNameList
+        navigationController?.pushViewController(detailsNextMoaiVC, animated: true)
+        
+    }
+    
+    
 
     //過去の模合の情報からn番目の情報をUIに移すメソッド
     private func setupPastMoaisView(backnumber: Int) {
@@ -185,7 +213,6 @@ class ManagementViewController: UIViewController {
         toolBar.tintColor = UIColor.black
         let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.donePressed))
-        //let cancel = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancelPressed))
         toolBar.setItems([space, done ], animated: true)
         toolBar.isUserInteractionEnabled = true
         toolBar.sizeToFit()
@@ -201,10 +228,6 @@ class ManagementViewController: UIViewController {
     }
     
     @objc func donePressed() {
-        self.vi?.isHidden = true
-    }
-    @objc func cancelPressed() {
-        //ピッカービューとツールバーを非表示にする
         self.vi?.isHidden = true
     }
 
@@ -235,17 +258,19 @@ class ManagementViewController: UIViewController {
                 print("エラーでした~~\(err)")
                 return
             }else {
-                let dic = snpashots?.data()
-                self.moai = Moai(dic: dic ?? ["":""] )
+                guard let dic = snpashots?.data() else { return }
+                self.moai = Moai(dic: dic)
             }
             self.makeMoaiMenbersNameList()
+            guard let next = self.moai?.next else {return}
+            self.nextMoaiEntryArray = next
         }
     }
 
     //過去の模合データを取得するメソッド(引数は、模合のDocumentIDと、何回目の模合を取得するかの数(Int型) )
     //viewDidLoadでは直近のデータを取り出し、viewWillApearで選択された時の模合データを取り出す。複数回利用するのでメソッド化
     private func fetchPastRecord() {
-        self.db.collection("moais").document("WNIz6YuRUnx7IaP5sLta").collection("pastRecords").getDocuments { (querySnapshots, err) in
+        self.db.collection("moais").document((self.user?.moais[1])!).collection("pastRecords").getDocuments { (querySnapshots, err) in
             if let err = err {
                 print("過去の模合情報の取得でエラーが出ました。\(err)")
                 return
@@ -349,9 +374,8 @@ class ManagementViewController: UIViewController {
     //模合のメンバーをIDでなく、名前で配列に入れる
     private func makeMoaiMenbersNameList() {
         guard let moaiMenbers = self.moai?.menbers else {return}
-        self.moaiMenbersNameList.removeFirst()
         for menber in moaiMenbers {
-            print("menberに格納されている値はこちら　\(menber)")
+            //print("menberに格納されている値はこちら　\(menber)")
             self.db.collection("users").document(menber).getDocument { (snapshots, err) in
                 if let err = err {
                     print("模合に所属するユーザー情報の取得に失敗しました。\(err)")
@@ -362,6 +386,28 @@ class ManagementViewController: UIViewController {
             }
         }
     }
+    
+    private func entryOrNot(Bool: Bool) {
+        guard let myName = self.user?.username else {return}
+        //ログインしているユーザーが配列の何番目かを取得
+        guard let myNumber = self.moaiMenbersNameList.index(of: myName) else {return}
+        //配列の中身を更新
+        nextMoaiEntryArray?[myNumber] = Bool
+        //DBのnextの値を上で更新した配列に切り替える
+        self.db.collection("moais").document((self.user?.moais[1])!).updateData(["next": self.nextMoaiEntryArray ]) { (err) in
+            if let err = err {
+                print("参加ボタン、不参加ボタンで起きたエラー → \(err)")
+            }
+        }
+        if Bool == true {
+            entryButton.alpha = 0.5
+            notEntryButton.alpha = 1.0
+        }else {
+            entryButton.alpha = 1.0
+            notEntryButton.alpha = 0.5
+        }
+    }
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~  DB操作終了  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     private func makeGetMoneyPersonList() {
         //配列の値を一旦、全て削除する
@@ -455,9 +501,6 @@ extension ManagementViewController: UIPickerViewDelegate, UIPickerViewDataSource
     }
 }
 
-
-
-
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -467,22 +510,6 @@ extension ManagementViewController: UIPickerViewDelegate, UIPickerViewDataSource
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 extension ManagementViewController: UITableViewDelegate,UITableViewDataSource {
     

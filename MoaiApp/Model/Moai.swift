@@ -17,6 +17,7 @@ class Moai {
     let amount: String
     let createdAt: Timestamp
     let password: String
+    let next: [Bool]
     
     init(dic: [String: Any]) {
         self.groupName = dic["groupName"] as? String ?? ""
@@ -26,6 +27,7 @@ class Moai {
         self.amount = dic["amount"] as? String ?? ""
         self.createdAt = dic["createdAt"] as? Timestamp ?? Timestamp()
         self.password = dic["password"] as? String ?? ""
+        self.next = dic["next"] as? [Bool] ?? [false]
     }
     
 }

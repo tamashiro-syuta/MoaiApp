@@ -39,7 +39,8 @@ class LoginViewController: UIViewController {
         guard let password = passwordTextField.text else {return}
         
         HUD.show(.progress)
-        
+        print(password)
+        print(email)
         Auth.auth().signIn(withEmail: email, password: password) { (res, err) in
             if let err = err {
                 print("ログインに失敗しました。\(err)")

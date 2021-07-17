@@ -146,7 +146,7 @@ class FirstJoinViewController: UIViewController {
     }
     
     private func NoMoaiAlert() {
-        let alert: UIAlertController = UIAlertController(title: "合言葉が違います。", message: "ど〜んまい⭐︎", preferredStyle:  UIAlertController.Style.alert)
+        let alert: UIAlertController = UIAlertController(title: "合言葉が違います。", message: "あああああ", preferredStyle:  UIAlertController.Style.alert)
         let OKAction: UIAlertAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler:{
                 // ボタンが押された時の処理を書く（クロージャ実装）
                 (action: UIAlertAction!) -> Void in

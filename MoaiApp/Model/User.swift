@@ -15,6 +15,7 @@ class User {
     let createdAt: Timestamp
     let profileImageUrl: String
     let moais: [String]
+    let password: String
     
     //chatを開始する時に使うため
     var uid: String?
@@ -25,6 +26,7 @@ class User {
         self.createdAt = dic["createdAt"] as? Timestamp ?? Timestamp()
         self.profileImageUrl = dic["profileImageUrl"] as? String ?? ""
         self.moais = dic["moais"] as? [String] ?? [""]
+        self.password = dic["password"] as? String ?? ""
     }
     
 }

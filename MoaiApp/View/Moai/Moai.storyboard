@@ -210,7 +210,7 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CRe-wr-wEH">
-                                <rect key="frame" x="82" y="648" width="250" height="100"/>
+                                <rect key="frame" x="82" y="608" width="250" height="100"/>
                                 <color key="backgroundColor" red="0.61479655249999998" green="1" blue="0.49687889499999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="RET-Oc-Es9"/>
@@ -233,7 +233,7 @@
                             <constraint firstItem="CRe-wr-wEH" firstAttribute="centerX" secondItem="KOD-1n-C0e" secondAttribute="centerX" id="RuX-GY-OAl"/>
                             <constraint firstItem="2sb-B7-BZJ" firstAttribute="leading" secondItem="zPz-59-9CK" secondAttribute="leading" constant="40" id="YtS-Cr-s7i"/>
                             <constraint firstItem="zPz-59-9CK" firstAttribute="trailing" secondItem="2sb-B7-BZJ" secondAttribute="trailing" constant="40" id="czw-Ud-d6g"/>
-                            <constraint firstItem="CRe-wr-wEH" firstAttribute="top" secondItem="2sb-B7-BZJ" secondAttribute="bottom" constant="100" id="qz8-77-T7q"/>
+                            <constraint firstItem="CRe-wr-wEH" firstAttribute="top" secondItem="2sb-B7-BZJ" secondAttribute="bottom" constant="60" id="qz8-77-T7q"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="M0e-2v-tPo"/>
