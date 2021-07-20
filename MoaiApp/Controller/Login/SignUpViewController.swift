@@ -126,6 +126,7 @@ class SignUpViewController: UIViewController {
                 "username": username,
                 "createdAt": Timestamp(),
                 "profileImageUrl": profileImageUrl,
+                "password": password,
                 "moais":[""]
             ] as [String : Any]
             
