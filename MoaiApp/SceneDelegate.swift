@@ -14,23 +14,54 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         //初期の画面設定
+//        let window = UIWindow(windowScene: scene as! UIWindowScene)
+//        self.window = window
+//        window.makeKeyAndVisible()
+//        
+////        let storyboard = UIStoryboard(name: "ChatList", bundle: nil )
+////        let chatListViewController = storyboard.instantiateViewController(identifier: "ChatListViewController")
+////        let nav = UINavigationController(rootViewController: chatListViewController)
+//
+//        let storyboard = UIStoryboard(name: "FirstView", bundle: nil )
+//        let firstViewController = storyboard.instantiateViewController(identifier: "MainTabBarController")
+//        let nav = UINavigationController(rootViewController: firstViewController)
+//
+////        let storyboard = UIStoryboard(name: "ChatList", bundle: nil )
+////        let firstViewController = storyboard.instantiateViewController(identifier: "ChatListViewController")
+////        let nav = UINavigationController(rootViewController: firstViewController)
+//
+//        window.rootViewController = nav
         let window = UIWindow(windowScene: scene as! UIWindowScene)
         self.window = window
+        
+        // ページを格納する配列
+        var viewControllers: [UIViewController] = []
+        
+        //各ViewContorllerのインスタンスを作成（viewとcontrollerを紐付けて生成）
+        let chatListStoryBoard = UIStoryboard(name: "ChatList", bundle: nil )
+        let chatListVC = chatListStoryBoard.instantiateViewController(identifier: "Chat")
+        
+        let judgeUserInMoaiStoryboard =  UIStoryboard(name: "JudgeUserInMoai", bundle: nil)
+        let judgeUserInMoaiVC = judgeUserInMoaiStoryboard.instantiateViewController(identifier: "JudgeUserInMoai")
+        
+        let mapStoryBoard = UIStoryboard(name: "Map", bundle: nil )
+        let mapVC = mapStoryBoard.instantiateViewController(identifier: "Map")
+        
+        //各インスタンスのViewConrollerに対して、アイコンなどのTabBarItemを設定
+        chatListVC.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 1)
+        judgeUserInMoaiVC.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 2)
+        mapVC.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 3)
+        
+        //配列に各ViewContollerをアペンド
+        viewControllers.append(chatListVC)
+        viewControllers.append(judgeUserInMoaiVC)
+        viewControllers.append(mapVC)
+        
+        let tabBarController = UITabBarController()
+        tabBarController.setViewControllers(viewControllers, animated: false)
+        
+        window.rootViewController = tabBarController
         window.makeKeyAndVisible()
-        
-//        let storyboard = UIStoryboard(name: "ChatList", bundle: nil )
-//        let chatListViewController = storyboard.instantiateViewController(identifier: "ChatListViewController")
-//        let nav = UINavigationController(rootViewController: chatListViewController)
-        
-        let storyboard = UIStoryboard(name: "FirstView", bundle: nil )
-        let firstViewController = storyboard.instantiateViewController(identifier: "MainTabBarController")
-        let nav = UINavigationController(rootViewController: firstViewController)
-        
-//        let storyboard = UIStoryboard(name: "ChatList", bundle: nil )
-//        let firstViewController = storyboard.instantiateViewController(identifier: "ChatListViewController")
-//        let nav = UINavigationController(rootViewController: firstViewController)
-        
-        window.rootViewController = nav
         
         
         guard let _ = (scene as? UIWindowScene) else { return }

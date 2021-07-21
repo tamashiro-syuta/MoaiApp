@@ -17,6 +17,8 @@ class FirstJoinViewController: UIViewController {
     var myPassword = ""
     var selectedMoai: Moai?
     
+   // var managementVC: UIViewController?
+    
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var textField: UITextField!
     
@@ -140,8 +142,15 @@ class FirstJoinViewController: UIViewController {
                 }
             }
             print("ユーザーに模合の保存完了！！")
-            //management.storyboardに遷移
-            self.dismiss(animated: true, completion: nil)
+            //0.5秒後にmanagement.storyboardに遷移
+            
+            //遷移前のViewControllerの情報を取得
+            //self.managementVC = self.presentingViewController as! ManagementViewController
+            Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.dismissModal), userInfo: nil, repeats: false)
+//            let storyboard = UIStoryboard(name: "Management", bundle: nil)
+//            let ManagementVC = storyboard.instantiateViewController(withIdentifier: "Management")
+//            ManagementVC.modalPresentationStyle = .fullScreen
+//            self.present(ManagementVC, animated: true, completion: nil)
             
             
             print("OK")
@@ -166,5 +175,16 @@ class FirstJoinViewController: UIViewController {
         alert.addAction(OKAction)
         present(alert, animated: true, completion: nil)
     }
+    
+    //タイマーで時差をつくるためにメソッド化
+    @objc private func dismissModal() {
+//        let ManagementVC = presentingViewController as! ManagementViewController
+////        ManagementVC.viewDidLoad()
+//        let storyboard = UIStoryboard(name: "Management", bundle: nil)
+//        let ManagementVC = storyboard.instantiateViewController(withIdentifier: "Management")
+//        ManagementVC.modalPresentationStyle = .fullScreen
+        self.dismiss(animated: true, completion: nil)
+        
+        }
     
 }

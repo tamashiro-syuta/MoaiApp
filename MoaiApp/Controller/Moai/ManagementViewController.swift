@@ -19,30 +19,14 @@ class ManagementViewController: UIViewController {
     let downImage = UIImage(systemName: "arrowtriangle.down.fill")
     let upImage = UIImage(systemName: "arrowtriangle.up.fill")
     
-    //模合代を誰が徴収したかの確認(誰が何日にもらって的なやつ)のための辞書型の変数
-    //FireBaseからデータを取得して入れる
-    //ex) let dic = ["Aさん":"12/5","Bさん":"×"]
-    var GetMoneyPersonList: Array = [
-        ["A","7/1"],
-        ["B","×"],
-        ["C","なんでテーブルビューが表示されないんだよ"]
-    ]
-    
-    var moaiMenbersNameList: [String] = [] //模合メンバーの名前の配列
-    
-    //ログインしているユーザー情報を入れる
+    // 前ページから持ってきた値
     var user: User?
     var moai: Moai?
     var pastRecodeArray: [PastMoaiRecord]?  //古いデータが「0番目」、新しいのが「n番目」になってる
-    var pastRecodeIDStringArray: [String]?  // 20210417みたいな形で取り出してる
     var pastRecodeIDDateArray: [String]?  //◯月◯日みたいな形で取り出してる
     var nextMoaiEntryArray: [Bool]? // ブーリアン型の配列
-    let today = Date()
-    var nextMoaiDate: String?
+    var moaiMenbersNameList: [String] = [] //模合メンバーの名前の配列
     
-    
-    var vi: UIView?
-
     @IBOutlet weak var nextMoaiDateLabel: UILabel!
     @IBOutlet weak var entryButton: UIButton!
     @IBOutlet weak var notEntryButton: UIButton!
@@ -51,72 +35,71 @@ class ManagementViewController: UIViewController {
     @IBOutlet weak var getMoneyPersonTableView: UITableView!
     @IBOutlet weak var blurView: UIVisualEffectView!
     
+    //模合代を誰が徴収したかの確認(誰が何日にもらって的なやつ)のための辞書型の変数
+    //FireBaseからデータを取得して入れる
+    var GetMoneyPersonList: Array = [
+        ["A","7/1"],
+        ["B","×"],
+        ["C","なんでテーブルビューが表示されないんだよ"]
+    ]
     
+    //前画面でpastRecodeIDDateArrayに変換して持ってくるので、コメントアウト
+    //var pastRecodeIDStringArray: [String]?  // 20210417みたいな形で取り出してる
+    let today = Date()
+    var nextMoaiDate: String?
+    
+    var vi: UIView?  //過去の模合のスクロールビューで使用
     
     //viewが初めて呼ばれた１回目だけ呼ばれるメソッド
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("viewDidLoad")
         
-        self.blurView.alpha = 1
+        self.setupView()
+        self.makeGetMoneyPersonList()
+        self.getMoneyPersonTableView.dataSource = self
+        self.getMoneyPersonTableView.delegate = self
         
-        //ユーザーが模合に入っているか確認
-        confirmUserInMoai()
-        
-        //ユーザーの模合情報から模合情報を取得
-        fetchLoginUserInfo()
-        
-        //インジケーターを回す
-        HUD.flash(.progress, onView: view, delay: 1.5) {_ in
-            //非表示にした後の処理
-            //模合の情報を元に画面に表示
-            self.setupView()
-            self.makeGetMoneyPersonList()
-            self.getMoneyPersonTableView.dataSource = self
-            self.getMoneyPersonTableView.delegate = self
-            self.blurView.alpha = 0
-        }
-    }
-    
-    //ログインしてないとログイン画面に飛ばすやつ(これをユーザーが模合に入っていないと模合の作成、参加画面に飛ばすように変更する)
-    private func confirmUserInMoai() {
-        db.collection("users").document(userID ?? "").getDocument { (snapshots, err) in
-            if let err = err {
-                print("なんか知らんけど、ユーザー情報取れないんですけど~~(\(err))")
-                return
-            }else {
-                let moaiArray = snapshots?.data()?["moais"] as! Array<Any>
-                print(moaiArray.count)
-                //ユーザー登録の時点では、moaisには、空の文字型""が入っているので、カウントが１＝模合に所属していないことになる
-                if moaiArray.count == 1 {
-                    //Moai.storyboardに画面遷移
-                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    //    画面遷移できない（直しが必要）
-                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    self.pushMoaiViewController()
-                }
-            }
-        }
-    }
-    
-    //Moai.storyboardに画面遷移
-    private func pushMoaiViewController() {
-        print("画面遷移しまーーーーーーーーーーーーーーーす")
-        let storyboard = UIStoryboard(name: "Moai", bundle: nil)
-        let MoaiVC = storyboard.instantiateViewController(withIdentifier: "Moai")
-        //signUpViewControllerをナビゲーションの最初の画面にし、それを定数navに格納
-//        let nav = UINavigationController(rootViewController: MoaiVC)
-//        nav.modalPresentationStyle = .fullScreen
-//        self.present(MoaiVC, animated: true, completion: nil)
-        navigationController?.pushViewController(MoaiVC, animated: true)
+//        self.blurView.alpha = 1
+//
+//        //DB系の処理
+//        self.fetchLoginUserInfo() //ユーザー情報、ユーザーの所属している模合情報の取得、過去の模合情報の取得
+//
+//        //インジケーターを回す
+//        HUD.flash(.progress, onView: self.view, delay: 1) {_ in
+//
+//            //ユーザーが模合に参加していなかったら画面遷移
+//            if self.judgeUserMoaiCount == 1 {
+//                self.pushMoaiViewController()
+//            }else {
+//                //模合の情報を元に画面に表示
+//                self.setupView()
+//                self.makeGetMoneyPersonList()
+//                self.getMoneyPersonTableView.dataSource = self
+//                self.getMoneyPersonTableView.delegate = self
+//                self.blurView.alpha = 0
+//            }
+//        }
     }
     
     //viewが更新された度に呼ばれる
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        print("viewWillAppear")
+
     }
+    
+    //Moai.storyboardに画面遷移
+//    private func pushMoaiViewController() {
+//        print("画面遷移しまーーーーーーーーーーーーーーーす")
+//        let storyboard = UIStoryboard(name: "Moai", bundle: nil)
+//        let MoaiBaseViewController = storyboard.instantiateViewController(withIdentifier: "MoaiBaseViewController")
+//        //signUpViewControllerをナビゲーションの最初の画面にし、それを定数navに格納
+//        let nav = UINavigationController(rootViewController: MoaiBaseViewController)
+//        nav.modalPresentationStyle = .fullScreen
+//        self.present(nav, animated: true, completion: nil)
+//    }
     
     //「次回の模合は」の部分のview
     private func setupView() {
@@ -232,69 +215,80 @@ class ManagementViewController: UIViewController {
     }
 
 
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DB操作 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DB操作 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         
     //ユーザー情報の取得
-    private func fetchLoginUserInfo() {
-        self.db.collection("users").document(self.userID ?? "").getDocument { (snapshots, err) in
-            if let err = err {
-                print("エラーでした~~\(err)")
-                return
-            }else {
-                let dic = snapshots?.data()
-                self.user = User(dic: dic ?? ["":""])
-
-                //user情報から模合情報を取得
-                self.fetchUsersMoaiInfo(user: self.user!)
-                self.fetchPastRecord()
-            }
-        }
-    }
+//    private func fetchLoginUserInfo() {
+//        self.db.collection("users").document(self.userID ?? "").getDocument { (snapshots, err) in
+//            if let err = err {
+//                print("エラーでした~~\(err)")
+//                return
+//            }else {
+//                guard let dic = snapshots?.data() else {
+//                    print("snapshotsの値が取得できませんでした！！")
+//                    return
+//                }
+//                self.user = User(dic: dic)
+//
+//                //ビューのロード時に画面遷移をするかしないか決めるための変数
+//                self.judgeUserMoaiCount = (self.user?.moais.count)!
+//
+//                if self.judgeUserMoaiCount == 1 {
+//                    print("ユーザーは模合に入ってなんかいねぇよ！！！")
+//                    return
+//                }else {
+//                    //user情報から模合情報を取得
+//                    self.fetchUsersMoaiInfo(user: self.user!)
+//                    self.fetchPastRecord()
+//                }
+//            }
+//        }
+//    }
     
     //ユーザーの模合情報の取得(後々は、複数入っている場合の模合情報を取れるようにする（配列の番号指定の部分を変数に置き換えして）)
-    private func fetchUsersMoaiInfo(user: User) {
-        self.db.collection("moais").document(user.moais[1]).getDocument { (snpashots, err) in
-            if let err = err {
-                print("エラーでした~~\(err)")
-                return
-            }else {
-                guard let dic = snpashots?.data() else { return }
-                self.moai = Moai(dic: dic)
-            }
-            self.makeMoaiMenbersNameList()
-            guard let next = self.moai?.next else {return}
-            self.nextMoaiEntryArray = next
-        }
-    }
+//    private func fetchUsersMoaiInfo(user: User) {
+//        self.db.collection("moais").document(user.moais[1]).getDocument { (snpashots, err) in
+//            if let err = err {
+//                print("エラーでした~~\(err)")
+//                return
+//            }else {
+//                guard let dic = snpashots?.data() else { return }
+//                self.moai = Moai(dic: dic)
+//            }
+//            self.makeMoaiMenbersNameList()
+//            guard let next = self.moai?.next else {return}
+//            self.nextMoaiEntryArray = next
+//        }
+//    }
 
     //過去の模合データを取得するメソッド(引数は、模合のDocumentIDと、何回目の模合を取得するかの数(Int型) )
     //viewDidLoadでは直近のデータを取り出し、viewWillApearで選択された時の模合データを取り出す。複数回利用するのでメソッド化
-    private func fetchPastRecord() {
-        self.db.collection("moais").document((self.user?.moais[1])!).collection("pastRecords").getDocuments { (querySnapshots, err) in
-            if let err = err {
-                print("過去の模合情報の取得でエラーが出ました。\(err)")
-                return
-            }else {
-                var array1 = [PastMoaiRecord]()
-                var array2 = [String]()
-                guard let querySnapshots = querySnapshots else {return}
-                for document in querySnapshots.documents {
-                    let dic = document.data()
-                    let recode = PastMoaiRecord(dic: dic)
-                    print("\(document.documentID) => \(document.data())")
-                    array1.append(recode)
-                    
-                    let moaiID = document.documentID
-                    array2.append(moaiID)
-                    
-                }
-                //古いデータが「0番目」、新しいのが「n番目」になってる
-                self.pastRecodeArray = array1
-                self.pastRecodeIDStringArray = array2
-                self.makePastRecodeIDArray(array: self.pastRecodeIDStringArray!)
-            }
-        }
-    }
+//    private func fetchPastRecord() {
+//        self.db.collection("moais").document((self.user?.moais[1])!).collection("pastRecords").getDocuments { (querySnapshots, err) in
+//            if let err = err {
+//                print("過去の模合情報の取得でエラーが出ました。\(err)")
+//                return
+//            }else {
+//                var array1 = [PastMoaiRecord]()
+//                var array2 = [String]()
+//                guard let querySnapshots = querySnapshots else {return}
+//                for document in querySnapshots.documents {
+//                    let dic = document.data()
+//                    let recode = PastMoaiRecord(dic: dic)
+//                    print("\(document.documentID) => \(document.data())")
+//                    array1.append(recode)
+//
+//                    let moaiID = document.documentID
+//                    array2.append(moaiID)
+//
+//                }
+//                //古いデータが「0番目」、新しいのが「n番目」になってる
+//                self.pastRecodeArray = array1
+//                self.pastRecodeIDStringArray = array2
+//                self.makePastRecodeIDtoDateArray(array: self.pastRecodeIDStringArray!)
+//            }
+//        }
+//    }
     
     //DBに文字列で保存外れている値を数字に変換する
     private func switchMoaiDate(weekNum: String, weekDay: String) -> (Int,Int)  {
@@ -372,20 +366,20 @@ class ManagementViewController: UIViewController {
     }
     
     //模合のメンバーをIDでなく、名前で配列に入れる
-    private func makeMoaiMenbersNameList() {
-        guard let moaiMenbers = self.moai?.menbers else {return}
-        for menber in moaiMenbers {
-            //print("menberに格納されている値はこちら　\(menber)")
-            self.db.collection("users").document(menber).getDocument { (snapshots, err) in
-                if let err = err {
-                    print("模合に所属するユーザー情報の取得に失敗しました。\(err)")
-                    return
-                }
-                let dic = snapshots?.data()
-                self.moaiMenbersNameList.append(dic?["username"] as! String)
-            }
-        }
-    }
+//    private func makeMoaiMenbersNameList() {
+//        guard let moaiMenbers = self.moai?.menbers else {return}
+//        for menber in moaiMenbers {
+//            //print("menberに格納されている値はこちら　\(menber)")
+//            self.db.collection("users").document(menber).getDocument { (snapshots, err) in
+//                if let err = err {
+//                    print("模合に所属するユーザー情報の取得に失敗しました。\(err)")
+//                    return
+//                }
+//                let dic = snapshots?.data()
+//                self.moaiMenbersNameList.append(dic?["username"] as! String)
+//            }
+//        }
+//    }
     
     private func entryOrNot(Bool: Bool) {
         guard let myName = self.user?.username else {return}
@@ -431,34 +425,31 @@ class ManagementViewController: UIViewController {
         }
     }
     
-    //文字列型で入ってる配列を、読みやすい形に直すためのメソッド
-    private func makePastRecodeIDArray(array: Array<Any>) {
-        
-        //これ入れないと、配列に値を入れれなくなって、空になるから消さない。
-        self.pastRecodeIDDateArray = ["◯年◯月◯日みたいな形で取り出すよ"]
-        self.pastRecodeIDDateArray?.removeFirst()
-        
-        let dateFormatter1 = DateFormatter()
-        dateFormatter1.dateFormat = "yyyyMMdd"  //"E, d MMM yyyy HH:mm:ss Z"
-//        dateFormatter.dateStyle = .long
-//        dateFormatter.timeStyle = .none
-//        dateFormatter.locale = Locale(identifier: "ja_JP")
-        
-        let dateFormatter2 = DateFormatter()
-        dateFormatter2.dateStyle = .long
-        dateFormatter2.timeStyle = .none
-        dateFormatter2.locale = Locale(identifier: "ja_JP")
-        
-        for item in array {
-            //DateFormatterで文字列を◯年◯月◯日に直す。必要なら、DBのIDの形も変えてよし
-            //arrayには、20210409の形でデータが入っている
-            let pastDate1 = dateFormatter1.date(from: item as! String)
-            let pastDate2 = dateFormatter2.string(from: pastDate1!)
-            self.pastRecodeIDDateArray?.append(pastDate2)
-        }
-        print(self.pastRecodeIDDateArray)
-        print(self.pastRecodeIDStringArray)
-    }
+    //文字列型で入ってる配列を、読みやすい形に直すためのメソッド(引数にはself.pastRecodeIDStringArrayを入れる)
+//    private func makePastRecodeIDtoDateArray(array: Array<Any>) {
+//
+//        //これ入れないと、配列に値を入れれなくなって、空になるから消さない。
+//        self.pastRecodeIDDateArray = ["◯年◯月◯日みたいな形で取り出すよ"]
+//        self.pastRecodeIDDateArray?.removeFirst()
+//
+//        let dateFormatter1 = DateFormatter()
+//        dateFormatter1.dateFormat = "yyyyMMdd"  //"E, d MMM yyyy HH:mm:ss Z"
+//
+//        let dateFormatter2 = DateFormatter()
+//        dateFormatter2.dateStyle = .long
+//        dateFormatter2.timeStyle = .none
+//        dateFormatter2.locale = Locale(identifier: "ja_JP")
+//
+//        for item in array {
+//            //DateFormatterで文字列を◯年◯月◯日に直す。必要なら、DBのIDの形も変えてよし
+//            //arrayには、20210409の形でデータが入っている
+//            let pastDate1 = dateFormatter1.date(from: item as! String)
+//            let pastDate2 = dateFormatter2.string(from: pastDate1!)
+//            self.pastRecodeIDDateArray?.append(pastDate2)
+//        }
+//        print(self.pastRecodeIDDateArray)
+//        print(self.pastRecodeIDStringArray)
+//    }
     
 }
 
@@ -501,15 +492,6 @@ extension ManagementViewController: UIPickerViewDelegate, UIPickerViewDataSource
     }
 }
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~ 明日やること ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~ 参加不参加を押すことで、メンバーが参加予定かそうでないかを判別 ~~~~~~~~
-// ~~~~~~~~ 右上の詳細ボタンから、次の模合は誰が参加予定か確認できるようにする ~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 extension ManagementViewController: UITableViewDelegate,UITableViewDataSource {
     

@@ -116,6 +116,7 @@ class CreateRoomViewController: UIViewController {
                     }
                     
                     // ~~~~~~~~~~~~~~~~~~~~~~ firebaseに保存された時の処理(画面遷移) ~~~~~~~~~~~~~~~~~~~~~~~
+                    self.dismiss(animated: true, completion: nil)
                 }
             }
             

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4804137526A2B1E6004F5BE0 /* detailsNextMoaiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4804137426A2B1E6004F5BE0 /* detailsNextMoaiViewController.swift */; };
+		4804137C26A7EC2A004F5BE0 /* JudgeUserInMoaiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4804137B26A7EC2A004F5BE0 /* JudgeUserInMoaiViewController.swift */; };
+		4804137F26A7F031004F5BE0 /* JudgeUserInMoai.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4804137E26A7F031004F5BE0 /* JudgeUserInMoai.storyboard */; };
 		48231783265375F200257189 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48231782265375F200257189 /* Message.swift */; };
 		482317862653EDFD00257189 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 482317852653EDFD00257189 /* Login.storyboard */; };
 		482317892653EF4B00257189 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482317882653EF4B00257189 /* LoginViewController.swift */; };
@@ -41,7 +43,6 @@
 		48C6086F26478495002D1258 /* ChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C6086E26478495002D1258 /* ChatListViewController.swift */; };
 		48DE010D26830FFF00B4E62E /* Moai.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48DE010C26830FFF00B4E62E /* Moai.storyboard */; };
 		48DE01112683103C00B4E62E /* MoaiBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE01102683103C00B4E62E /* MoaiBaseViewController.swift */; };
-		48DE0149268327D500B4E62E /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE0148268327D500B4E62E /* MainTabBarController.swift */; };
 		48DE014F26832A8800B4E62E /* FirstView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48DE014E26832A8800B4E62E /* FirstView.storyboard */; };
 		48E7FD5E2690C40600E4FF2B /* PastMoaiRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E7FD5D2690C40400E4FF2B /* PastMoaiRecord.swift */; };
 		48ECBCC72697F08B00FA65CC /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ECBCC62697F08B00FA65CC /* MapViewController.swift */; };
@@ -53,6 +54,8 @@
 		0A47746F34EA0457A401A8A8 /* Pods-ChatAppWithFirebase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatAppWithFirebase.release.xcconfig"; path = "Target Support Files/Pods-ChatAppWithFirebase/Pods-ChatAppWithFirebase.release.xcconfig"; sourceTree = "<group>"; };
 		0A6AE2FFFDC414F0EBA617AB /* Pods-MoaiApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoaiApp.debug.xcconfig"; path = "Target Support Files/Pods-MoaiApp/Pods-MoaiApp.debug.xcconfig"; sourceTree = "<group>"; };
 		4804137426A2B1E6004F5BE0 /* detailsNextMoaiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = detailsNextMoaiViewController.swift; sourceTree = "<group>"; };
+		4804137B26A7EC2A004F5BE0 /* JudgeUserInMoaiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JudgeUserInMoaiViewController.swift; sourceTree = "<group>"; };
+		4804137E26A7F031004F5BE0 /* JudgeUserInMoai.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = JudgeUserInMoai.storyboard; sourceTree = "<group>"; };
 		48231782265375F200257189 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		482317852653EDFD00257189 /* Login.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
 		482317882653EF4B00257189 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -88,7 +91,6 @@
 		48C6086E26478495002D1258 /* ChatListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewController.swift; sourceTree = "<group>"; };
 		48DE010C26830FFF00B4E62E /* Moai.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Moai.storyboard; sourceTree = "<group>"; };
 		48DE01102683103C00B4E62E /* MoaiBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoaiBaseViewController.swift; sourceTree = "<group>"; };
-		48DE0148268327D500B4E62E /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		48DE014E26832A8800B4E62E /* FirstView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FirstView.storyboard; sourceTree = "<group>"; };
 		48E7FD5D2690C40400E4FF2B /* PastMoaiRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastMoaiRecord.swift; sourceTree = "<group>"; };
 		48ECBCC62697F08B00FA65CC /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -219,7 +221,6 @@
 				482318112657F65C00257189 /* Login */,
 				4823180F2657F64600257189 /* Chat */,
 				4823184E2660B65B00257189 /* FirstViewController.swift */,
-				48DE0148268327D500B4E62E /* MainTabBarController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -230,6 +231,7 @@
 				48DE010C26830FFF00B4E62E /* Moai.storyboard */,
 				484388972684FF5300175415 /* Management.storyboard */,
 				483BBEF8269E930500832A01 /* sampleViewController.swift */,
+				4804137E26A7F031004F5BE0 /* JudgeUserInMoai.storyboard */,
 			);
 			path = Moai;
 			sourceTree = "<group>";
@@ -243,6 +245,7 @@
 				484388B62686F6E800175415 /* sample1ViewController.swift */,
 				484388B92688C40600175415 /* ManagementViewController.swift */,
 				4804137426A2B1E6004F5BE0 /* detailsNextMoaiViewController.swift */,
+				4804137B26A7EC2A004F5BE0 /* JudgeUserInMoaiViewController.swift */,
 			);
 			path = Moai;
 			sourceTree = "<group>";
@@ -350,6 +353,7 @@
 				48C60867264782FB002D1258 /* ChatList.storyboard in Resources */,
 				4858386126494E1800274507 /* ChatInputAccessoryView.xib in Resources */,
 				485838542647E84C00274507 /* ChatRoom.storyboard in Resources */,
+				4804137F26A7F031004F5BE0 /* JudgeUserInMoai.storyboard in Resources */,
 				4823182F2657FCD100257189 /* GoogleService-Info.plist in Resources */,
 				48DE014F26832A8800B4E62E /* FirstView.storyboard in Resources */,
 				484388982684FF5300175415 /* Management.storyboard in Resources */,
@@ -423,6 +427,7 @@
 				48E7FD5E2690C40600E4FF2B /* PastMoaiRecord.swift in Sources */,
 				48231783265375F200257189 /* Message.swift in Sources */,
 				48ABEA062647E27500B40323 /* UIColorExtension.swift in Sources */,
+				4804137C26A7EC2A004F5BE0 /* JudgeUserInMoaiViewController.swift in Sources */,
 				484388952684F6B600175415 /* CreateRoomViewController.swift in Sources */,
 				484388B42685B59200175415 /* Moai.swift in Sources */,
 				482317892653EF4B00257189 /* LoginViewController.swift in Sources */,
@@ -431,7 +436,6 @@
 				4823184F2660B65C00257189 /* FirstViewController.swift in Sources */,
 				483BBEF9269E930500832A01 /* sampleViewController.swift in Sources */,
 				4804137526A2B1E6004F5BE0 /* detailsNextMoaiViewController.swift in Sources */,
-				48DE0149268327D500B4E62E /* MainTabBarController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
