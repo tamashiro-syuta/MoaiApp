@@ -69,6 +69,7 @@ class JudgeUserInMoaiViewController: UIViewController {
         print("ManagementViewに画面遷移しまーす")
         let storyboard = UIStoryboard(name: "Moai", bundle: nil)
         let MoaiBaseVC = storyboard.instantiateViewController(withIdentifier: "MoaiBaseViewController") as! MoaiBaseViewController
+        MoaiBaseVC.user = self.user
         MoaiBaseVC.navigationItem.hidesBackButton = true  // navigationの戻るボタンを非表示
         self.navigationController?.pushViewController(MoaiBaseVC, animated: true)
     }

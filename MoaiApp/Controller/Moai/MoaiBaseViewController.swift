@@ -9,6 +9,8 @@ import UIKit
 
 class MoaiBaseViewController: UIViewController {
     
+    var user: User?
+    
     
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var createButton: UIButton!
@@ -22,5 +24,18 @@ class MoaiBaseViewController: UIViewController {
         createButton.layer.cornerRadius = createButton.frame.size.height / 3
         
     }
+    
+    @IBAction func tappedJoinButton(_ sender: Any) {
+        let FirstJoinVC = self.storyboard?.instantiateViewController(withIdentifier: "FirstJoinViewController") as! FirstJoinViewController
+        FirstJoinVC.user = self.user
+        self.navigationController?.pushViewController(FirstJoinVC, animated: true)
+    }
+    
+    @IBAction func tappedMakeButton(_ sender: Any) {
+        let CreateRoomVC = self.storyboard?.instantiateViewController(withIdentifier: "CreateRoomViewController") as! CreateRoomViewController
+        CreateRoomVC.user = self.user
+        self.navigationController?.pushViewController(CreateRoomVC, animated: true)
+    }
+    
 
 }

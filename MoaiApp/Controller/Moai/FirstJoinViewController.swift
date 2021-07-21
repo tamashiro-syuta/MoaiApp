@@ -17,6 +17,8 @@ class FirstJoinViewController: UIViewController {
     var myPassword = ""
     var selectedMoai: Moai?
     
+    var user: User?
+    
    // var managementVC: UIViewController?
     
     @IBOutlet weak var joinButton: UIButton!
@@ -28,6 +30,7 @@ class FirstJoinViewController: UIViewController {
         super.viewDidLoad()
 
         setupView()
+        print(self.user?.password)
         
     }
     
@@ -97,60 +100,13 @@ class FirstJoinViewController: UIViewController {
             
             
             //模合にユーザーを追加
-            var newMenbers = self.selectedMoai?.menbers
-            var newNext = self.selectedMoai!.next //模合管理機能で使うため
-            if self.userID != nil {
-                newMenbers?.append(self.userID ?? "")
-                newNext.append(false)
-            }
-            let newMenberData = ["menbers":newMenbers]
-            let newNextData = ["next":newNext]
-            self.db.collection("moais").document(self.selectedMoaiID ?? "").updateData(newMenberData) { (err) in
-                if let err = err {
-                    print("エラーでした~~\(err)")
-                    return
-                }
-            }
-            self.db.collection("moais").document(self.selectedMoaiID ?? "").updateData(newNextData) { (err) in
-                if let err = err {
-                    print("エラーです \(err)")
-                    return
-                }
-            }
-            print("模合にユーザー情報の保存完了！！")
+            self.addUserInfoToMoai()
             
             //ユーザーに模合を追加
-            self.db.collection("users").document(self.userID ?? "").getDocument { (snapshot, err) in
-                if let err = err {
-                    print("エラーでした~~\(err)")
-                    return
-                }else {
-                    //変数userにDBから取得してきた情報を格納
-                    let dic = snapshot?.data()
-                    let user = User(dic: dic ?? ["":""])
-                    
-                    //user情報からmoai情報のみの配列を作成し、そこに新しい模合の情報を追加
-                    var newMoaiArray = user.moais
-                    newMoaiArray.append(self.selectedMoaiID ?? "")
-                    let usersNewMoaiData = ["moais":newMoaiArray]
-                    self.db.collection("users").document(self.userID ?? "").updateData(usersNewMoaiData) { (err) in
-                        if let err = err {
-                            print("エラーでした~~\(err)")
-                            return
-                        }
-                    }
-                }
-            }
-            print("ユーザーに模合の保存完了！！")
-            //0.5秒後にmanagement.storyboardに遷移
+            self.addMoaiInfoToUser()
             
-            //遷移前のViewControllerの情報を取得
-            //self.managementVC = self.presentingViewController as! ManagementViewController
-            Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.dismissModal), userInfo: nil, repeats: false)
-//            let storyboard = UIStoryboard(name: "Management", bundle: nil)
-//            let ManagementVC = storyboard.instantiateViewController(withIdentifier: "Management")
-//            ManagementVC.modalPresentationStyle = .fullScreen
-//            self.present(ManagementVC, animated: true, completion: nil)
+            //一定時間後にmanagement.storyboardに遷移
+            Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.pushManagementVC), userInfo: nil, repeats: false)
             
             
             print("OK")
@@ -177,14 +133,69 @@ class FirstJoinViewController: UIViewController {
     }
     
     //タイマーで時差をつくるためにメソッド化
-    @objc private func dismissModal() {
-//        let ManagementVC = presentingViewController as! ManagementViewController
-////        ManagementVC.viewDidLoad()
-//        let storyboard = UIStoryboard(name: "Management", bundle: nil)
-//        let ManagementVC = storyboard.instantiateViewController(withIdentifier: "Management")
-//        ManagementVC.modalPresentationStyle = .fullScreen
-        self.dismiss(animated: true, completion: nil)
+    @objc private func pushManagementVC() {
+        let storyboard = UIStoryboard(name: "Management", bundle: nil)
+        let ManagementVC = storyboard.instantiateViewController(withIdentifier: "ManagementViewController") as! ManagementViewController
+        ManagementVC.navigationItem.hidesBackButton = true
+        //値の受け渡し
+//        ManagementVC.user = self.user
+//        ManagementVC.moai = self.moai
+//        ManagementVC.pastRecodeArray = self.pastRecodeArray
+//        ManagementVC.pastRecodeIDDateArray = self.pastRecodeIDDateArray
+//        ManagementVC.nextMoaiEntryArray = self.nextMoaiEntryArray
+//        ManagementVC.moaiMenbersNameList = self.moaiMenbersNameList
         
+        self.navigationController?.pushViewController(ManagementVC, animated: true)
+        
+    }
+    
+    private func addMoaiInfoToUser() {
+        self.db.collection("users").document(self.userID ?? "").getDocument { (snapshot, err) in
+            if let err = err {
+                print("エラーでした~~\(err)")
+                return
+            }else {
+                //変数userにDBから取得してきた情報を格納
+                let dic = snapshot?.data()
+                let user = User(dic: dic ?? ["":""])
+                
+                //user情報からmoai情報のみの配列を作成し、そこに新しい模合の情報を追加
+                var newMoaiArray = user.moais
+                newMoaiArray.append(self.selectedMoaiID ?? "")
+                let usersNewMoaiData = ["moais":newMoaiArray]
+                self.db.collection("users").document(self.userID ?? "").updateData(usersNewMoaiData) { (err) in
+                    if let err = err {
+                        print("エラーでした~~\(err)")
+                        return
+                    }
+                }
+            }
         }
+        print("ユーザーに模合の保存完了！！")
+    }
+    
+    private func addUserInfoToMoai() {
+        var newMenbers = self.selectedMoai?.menbers
+        var newNext = self.selectedMoai!.next //模合管理機能(次回の参加確認機能)で使うため
+        if self.userID != nil {
+            newMenbers?.append(self.userID ?? "")
+            newNext.append(false)
+        }
+        let newMenberData = ["menbers":newMenbers]
+        let newNextData = ["next":newNext]
+        self.db.collection("moais").document(self.selectedMoaiID ?? "").updateData(newMenberData) { (err) in
+            if let err = err {
+                print("エラーでした~~\(err)")
+                return
+            }
+        }
+        self.db.collection("moais").document(self.selectedMoaiID ?? "").updateData(newNextData) { (err) in
+            if let err = err {
+                print("エラーです \(err)")
+                return
+            }
+        }
+        print("模合にユーザー情報の保存完了！！")
+    }
     
 }

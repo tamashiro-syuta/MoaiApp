@@ -39,6 +39,7 @@ class CreateRoomViewController: UIViewController {
         super.viewDidLoad()
 
         setupViews()
+        print(self.user?.password)
         
     }
     
@@ -78,10 +79,6 @@ class CreateRoomViewController: UIViewController {
            amountTextField.text?.isEmpty == false &&
            passwordTextField.text?.isEmpty == false
         {
-//            groupName = groupNameTextField.text
-//            date = dateTextField.text
-//            amount = amountTextField.text
-//            password = passwordTextField.text
             
             let docData = [
                 "groupName": groupName,
@@ -116,7 +113,7 @@ class CreateRoomViewController: UIViewController {
                     }
                     
                     // ~~~~~~~~~~~~~~~~~~~~~~ firebaseに保存された時の処理(画面遷移) ~~~~~~~~~~~~~~~~~~~~~~~
-                    self.dismiss(animated: true, completion: nil)
+                    self.pushManagementVC()
                 }
             }
             
@@ -126,24 +123,16 @@ class CreateRoomViewController: UIViewController {
         }
     }
     
-    //ユーザー情報から模合情報を取得し、新しい模合情報を追加後、DBに戻す
+    //ユーザー情報から模合情報を取得し、新しい模合情報を追加後、DBに戻す    
     private func fetchAndResetUserMoaiInfo(moaiID: String) {
-        self.db.collection("users").document(self.userID).getDocument { (snapshot, err) in
+        var moaisArray: [String] = self.user!.moais
+        moaisArray.append(moaiID)
+        self.db.collection("users").document(self.userID).updateData(["moais":moaisArray]) { (err) in
             if let err = err {
-                print("エラーが出ました \(err)")
+                print("エラーでっせ　\(err)")
                 return
             }
-            let dic = snapshot?.data()
-            self.user = User(dic: dic!)
-            var moaisArray: [String] = self.user!.moais
-            moaisArray.append(moaiID)
-            self.db.collection("users").document(self.userID).updateData(["moais":moaisArray]) { (err) in
-                if let err = err {
-                    print("エラーでっせ　\(err)")
-                    return
-                }
-                print("DBに保存成功！！")
-            }
+            print("DBに保存成功！！")
         }
     }
     
@@ -168,6 +157,14 @@ class CreateRoomViewController: UIViewController {
         // ④ Alertを表示
         present(alert, animated: true, completion: nil)
     }
+    
+    private func pushManagementVC() {
+        let storyboard = UIStoryboard(name: "Management", bundle: nil)
+        let ManagementVC = storyboard.instantiateViewController(withIdentifier: "ManagementViewController") as! ManagementViewController
+        ManagementVC.navigationItem.hidesBackButton = true
+        self.navigationController?.pushViewController(ManagementVC, animated: true)
+    }
+    
 }
 
 

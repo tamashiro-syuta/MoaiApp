@@ -13,24 +13,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        //初期の画面設定
-//        let window = UIWindow(windowScene: scene as! UIWindowScene)
-//        self.window = window
-//        window.makeKeyAndVisible()
-//        
-////        let storyboard = UIStoryboard(name: "ChatList", bundle: nil )
-////        let chatListViewController = storyboard.instantiateViewController(identifier: "ChatListViewController")
-////        let nav = UINavigationController(rootViewController: chatListViewController)
-//
-//        let storyboard = UIStoryboard(name: "FirstView", bundle: nil )
-//        let firstViewController = storyboard.instantiateViewController(identifier: "MainTabBarController")
-//        let nav = UINavigationController(rootViewController: firstViewController)
-//
-////        let storyboard = UIStoryboard(name: "ChatList", bundle: nil )
-////        let firstViewController = storyboard.instantiateViewController(identifier: "ChatListViewController")
-////        let nav = UINavigationController(rootViewController: firstViewController)
-//
-//        window.rootViewController = nav
+
         let window = UIWindow(windowScene: scene as! UIWindowScene)
         self.window = window
         

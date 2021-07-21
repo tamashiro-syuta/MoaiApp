@@ -15,50 +15,50 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gl5-9J-ea4">
-                                <rect key="frame" x="82" y="352" width="250" height="150"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gVe-Yw-zPq">
+                                <rect key="frame" x="50" y="194" width="314" height="150"/>
                                 <color key="backgroundColor" red="0.61479655249999998" green="1" blue="0.49687889499999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="150" id="Iir-0C-u5s"/>
-                                    <constraint firstAttribute="width" constant="250" id="Vcx-5n-h22"/>
+                                    <constraint firstAttribute="height" constant="150" id="Q9A-VM-3A3"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="35"/>
                                 <state key="normal" title="模合に参加">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <segue destination="dks-dA-Dis" kind="show" id="kH9-5z-I3Q"/>
+                                    <action selector="tappedJoinButton:" destination="2VF-zS-vmc" eventType="touchUpInside" id="SdH-vw-lo8"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4av-dz-Avy">
-                                <rect key="frame" x="82" y="582" width="250" height="150"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1xe-gy-Aju">
+                                <rect key="frame" x="50" y="394" width="314" height="150"/>
                                 <color key="backgroundColor" red="0.61479655249999998" green="1" blue="0.49687889499999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="250" id="6sz-hf-euS"/>
-                                    <constraint firstAttribute="height" constant="150" id="vJ7-4C-sGa"/>
+                                    <constraint firstAttribute="height" constant="150" id="OSS-8r-lcz"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="35"/>
-                                <state key="normal" title="模合を作る">
+                                <state key="normal" title="模合を作成">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <segue destination="hWZ-Bt-NDH" kind="show" id="RFr-Kf-oHa"/>
+                                    <action selector="tappedMakeButton:" destination="2VF-zS-vmc" eventType="touchUpInside" id="vGQ-Rl-Df2"/>
                                 </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Yoj-QE-fbN"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Yoj-QE-fbN" firstAttribute="bottom" secondItem="4av-dz-Avy" secondAttribute="bottom" constant="130" id="9WR-H6-seg"/>
-                            <constraint firstItem="4av-dz-Avy" firstAttribute="top" secondItem="Gl5-9J-ea4" secondAttribute="bottom" constant="80" id="BzW-pT-afI"/>
-                            <constraint firstItem="4av-dz-Avy" firstAttribute="centerX" secondItem="wsD-uw-DHi" secondAttribute="centerX" id="isC-lv-amS"/>
-                            <constraint firstItem="Gl5-9J-ea4" firstAttribute="centerX" secondItem="wsD-uw-DHi" secondAttribute="centerX" id="qt7-fA-6h0"/>
+                            <constraint firstItem="1xe-gy-Aju" firstAttribute="top" secondItem="gVe-Yw-zPq" secondAttribute="bottom" constant="50" id="2n1-2A-XQj"/>
+                            <constraint firstItem="1xe-gy-Aju" firstAttribute="leading" secondItem="Yoj-QE-fbN" secondAttribute="leading" constant="50" id="JYn-iL-bgi"/>
+                            <constraint firstItem="Yoj-QE-fbN" firstAttribute="trailing" secondItem="gVe-Yw-zPq" secondAttribute="trailing" constant="50" id="eLP-rk-M2t"/>
+                            <constraint firstItem="gVe-Yw-zPq" firstAttribute="top" secondItem="Yoj-QE-fbN" secondAttribute="top" constant="150" id="f1M-kB-Y9K"/>
+                            <constraint firstItem="gVe-Yw-zPq" firstAttribute="leading" secondItem="Yoj-QE-fbN" secondAttribute="leading" constant="50" id="lpW-b9-EJl"/>
+                            <constraint firstItem="Yoj-QE-fbN" firstAttribute="trailing" secondItem="1xe-gy-Aju" secondAttribute="trailing" constant="50" id="ytb-Us-sW5"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="OPN-Oc-wiJ"/>
                     <connections>
-                        <outlet property="createButton" destination="4av-dz-Avy" id="b8U-4v-DF8"/>
-                        <outlet property="joinButton" destination="Gl5-9J-ea4" id="CLo-c5-IxQ"/>
+                        <outlet property="createButton" destination="1xe-gy-Aju" id="jkh-Vb-TtM"/>
+                        <outlet property="joinButton" destination="gVe-Yw-zPq" id="fjN-8H-MYZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="juj-uG-T7H" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -70,11 +70,11 @@
             <objects>
                 <viewController storyboardIdentifier="FirstJoinViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="dks-dA-Dis" customClass="FirstJoinViewController" customModule="MoaiApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mjf-Q1-plb">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UkB-fY-5HV">
-                                <rect key="frame" x="82" y="383" width="250" height="40"/>
+                                <rect key="frame" x="82" y="437" width="250" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="iWg-8P-zMC"/>
                                     <constraint firstAttribute="height" constant="40" id="pxP-lF-ZK5"/>
@@ -83,7 +83,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="合言葉は？？" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w2e-8E-Lsq">
-                                <rect key="frame" x="82" y="273" width="250" height="50"/>
+                                <rect key="frame" x="82" y="327" width="250" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="ISD-WS-vA7"/>
                                     <constraint firstAttribute="height" constant="50" id="xcc-Q3-Y5s"/>
@@ -93,7 +93,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5md-AJ-dym">
-                                <rect key="frame" x="82" y="508" width="250" height="120"/>
+                                <rect key="frame" x="82" y="562" width="250" height="120"/>
                                 <color key="backgroundColor" red="0.61479655249999998" green="1" blue="0.49687889499999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="RDj-Z7-5bg"/>
@@ -134,11 +134,11 @@
             <objects>
                 <viewController storyboardIdentifier="CreateRoomViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="hWZ-Bt-NDH" customClass="CreateRoomViewController" customModule="MoaiApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="KOD-1n-C0e">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="2sb-B7-BZJ">
-                                <rect key="frame" x="40" y="100" width="334" height="360"/>
+                                <rect key="frame" x="40" y="144" width="334" height="360"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="EVq-rB-MiA">
                                         <rect key="frame" x="0.0" y="0.0" width="334" height="67.5"/>
@@ -210,7 +210,7 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CRe-wr-wEH">
-                                <rect key="frame" x="82" y="520" width="250" height="100"/>
+                                <rect key="frame" x="82" y="564" width="250" height="100"/>
                                 <color key="backgroundColor" red="0.61479655249999998" green="1" blue="0.49687889499999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="RET-Oc-Es9"/>
