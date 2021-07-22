@@ -16,8 +16,9 @@ class FirstJoinViewController: UIViewController {
     let userID = Auth.auth().currentUser?.uid
     var myPassword = ""
     var moai: Moai?
-    
     var user: User?
+    var moaiMenbersNameList: [String] = []
+    var nextMoaiEntryArray: [Bool]?
     
    // var managementVC: UIViewController?
     
@@ -30,7 +31,6 @@ class FirstJoinViewController: UIViewController {
         super.viewDidLoad()
 
         setupView()
-        print(self.user?.password)
         
     }
     
@@ -98,13 +98,11 @@ class FirstJoinViewController: UIViewController {
             // ボタンが押された時の処理を書く（クロージャ実装）
             (action: UIAlertAction!) -> Void in
 
-            //模合にユーザーを追加
+            //模合にユーザーを追加(このメソッド内で新しい模合情報を取得し変数moaiに代入済み)
             self.addUserInfoToMoai()
             
             //ユーザーに模合を追加
             self.addMoaiInfoToUser()
-            
-            
             
             //一定時間後にmanagement.storyboardに遷移
             Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.pushManagementVC), userInfo: nil, repeats: false)
@@ -138,7 +136,10 @@ class FirstJoinViewController: UIViewController {
         let storyboard = UIStoryboard(name: "Management", bundle: nil)
         let ManagementVC = storyboard.instantiateViewController(withIdentifier: "ManagementViewController") as! ManagementViewController
         ManagementVC.navigationItem.hidesBackButton = true
+        ManagementVC.user = self.user
         ManagementVC.moai = self.moai
+        ManagementVC.moaiMenbersNameList = self.moaiMenbersNameList
+        ManagementVC.nextMoaiEntryArray = self.nextMoaiEntryArray
         self.navigationController?.pushViewController(ManagementVC, animated: true)
         
     }
@@ -162,6 +163,10 @@ class FirstJoinViewController: UIViewController {
                         print("エラーでした~~\(err)")
                         return
                     }
+                    //多分、ここでユーザー情報の更新すはず！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！１
+                    self.fetchUserNewInfo()
+                    print("ちゃんとできてるかな〜〜〜？？　\(self.user?.moais.count)")
+                    
                 }
             }
         }
@@ -206,6 +211,36 @@ class FirstJoinViewController: UIViewController {
             }
             //模合情報をユーザーを追加した新しい模合情報に書き換えた
             self.moai = Moai(dic: dic)
+            self.makeMoaiMenbersNameList()
+            guard let next = self.moai?.next else {return}
+            self.nextMoaiEntryArray = next
+        }
+    }
+    
+    private func makeMoaiMenbersNameList() {
+        guard let moaiMenbers = self.moai?.menbers else {return}
+        for menber in moaiMenbers {
+            //print("menberに格納されている値はこちら　\(menber)")
+            self.db.collection("users").document(menber).getDocument { (snapshots, err) in
+                if let err = err {
+                    print("模合に所属するユーザー情報の取得に失敗しました。\(err)")
+                    return
+                }
+                let dic = snapshots?.data()
+                self.moaiMenbersNameList.append(dic?["username"] as! String)
+            }
+        }
+    }
+    
+    //模合情報を付け加えたユーザーの情報を取得
+    private func fetchUserNewInfo() {
+        self.db.collection("users").document(self.userID!).getDocument { (snapshot, err) in
+            if let err = err {
+                print("エラーでした~~\(err)")
+                return
+            }
+            guard let dic = snapshot?.data() else {return}
+            self.user = User(dic: dic)
         }
     }
     

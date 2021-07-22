@@ -53,6 +53,7 @@ class ManagementViewController: UIViewController {
         super.viewDidLoad()
         print("viewDidLoad")
         
+        print(self.user?.moais)
         print(self.pastRecodeArray) //nil
         print(self.pastRecodeArray?.count) //nil
         print(self.nextMoaiEntryArray) //nil
@@ -277,9 +278,13 @@ class ManagementViewController: UIViewController {
     }
     
     private func entryOrNot(Bool: Bool) {
-        guard let myName = self.user?.username else {return}
+        guard let myName = self.user?.username else {
+            print("エラー１１１１１１１１１１１１１１１")
+            return}
         //ログインしているユーザーが配列の何番目かを取得
-        guard let myNumber = self.moaiMenbersNameList.index(of: myName) else {return}
+        guard let myNumber = self.moaiMenbersNameList.index(of: myName) else {
+            print("エラー２２２２２２２２２２２２２２２")
+            return}
         //配列の中身を更新
         nextMoaiEntryArray?[myNumber] = Bool
         //DBのnextの値を上で更新した配列に切り替える
