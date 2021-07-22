@@ -15,7 +15,7 @@ class FirstJoinViewController: UIViewController {
     let db = Firestore.firestore()
     let userID = Auth.auth().currentUser?.uid
     var myPassword = ""
-    var selectedMoai: Moai?
+    var moai: Moai?
     
     var user: User?
     
@@ -24,7 +24,7 @@ class FirstJoinViewController: UIViewController {
     @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var textField: UITextField!
     
-    var selectedMoaiID:String?
+    var moaiID:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,8 +66,8 @@ class FirstJoinViewController: UIViewController {
                     //print(document.data()["password"]!)
                     
                     let dic = document.data()
-                    self.selectedMoai = Moai(dic: dic)
-                    self.selectedMoaiID = document.documentID
+                    self.moai = Moai(dic: dic)
+                    self.moaiID = document.documentID
                     
                     //アラートで「この模合で良いですか？」と確認させる
                     self.ConfirmationAlert(groupName: document.data()["groupName"] as! String)
@@ -97,13 +97,14 @@ class FirstJoinViewController: UIViewController {
         let joinAction: UIAlertAction = UIAlertAction(title: "参加", style: UIAlertAction.Style.default, handler:{
             // ボタンが押された時の処理を書く（クロージャ実装）
             (action: UIAlertAction!) -> Void in
-            
-            
+
             //模合にユーザーを追加
             self.addUserInfoToMoai()
             
             //ユーザーに模合を追加
             self.addMoaiInfoToUser()
+            
+            
             
             //一定時間後にmanagement.storyboardに遷移
             Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.pushManagementVC), userInfo: nil, repeats: false)
@@ -137,14 +138,7 @@ class FirstJoinViewController: UIViewController {
         let storyboard = UIStoryboard(name: "Management", bundle: nil)
         let ManagementVC = storyboard.instantiateViewController(withIdentifier: "ManagementViewController") as! ManagementViewController
         ManagementVC.navigationItem.hidesBackButton = true
-        //値の受け渡し
-//        ManagementVC.user = self.user
-//        ManagementVC.moai = self.moai
-//        ManagementVC.pastRecodeArray = self.pastRecodeArray
-//        ManagementVC.pastRecodeIDDateArray = self.pastRecodeIDDateArray
-//        ManagementVC.nextMoaiEntryArray = self.nextMoaiEntryArray
-//        ManagementVC.moaiMenbersNameList = self.moaiMenbersNameList
-        
+        ManagementVC.moai = self.moai
         self.navigationController?.pushViewController(ManagementVC, animated: true)
         
     }
@@ -161,9 +155,9 @@ class FirstJoinViewController: UIViewController {
                 
                 //user情報からmoai情報のみの配列を作成し、そこに新しい模合の情報を追加
                 var newMoaiArray = user.moais
-                newMoaiArray.append(self.selectedMoaiID ?? "")
+                newMoaiArray.append(self.moaiID!)
                 let usersNewMoaiData = ["moais":newMoaiArray]
-                self.db.collection("users").document(self.userID ?? "").updateData(usersNewMoaiData) { (err) in
+                self.db.collection("users").document(self.userID!).updateData(usersNewMoaiData) { (err) in
                     if let err = err {
                         print("エラーでした~~\(err)")
                         return
@@ -175,27 +169,44 @@ class FirstJoinViewController: UIViewController {
     }
     
     private func addUserInfoToMoai() {
-        var newMenbers = self.selectedMoai?.menbers
-        var newNext = self.selectedMoai!.next //模合管理機能(次回の参加確認機能)で使うため
+        var newMenbers = self.moai?.menbers
+        var newNext = self.moai!.next //模合管理機能(次回の参加確認機能)で使うため
         if self.userID != nil {
             newMenbers?.append(self.userID ?? "")
             newNext.append(false)
         }
         let newMenberData = ["menbers":newMenbers]
         let newNextData = ["next":newNext]
-        self.db.collection("moais").document(self.selectedMoaiID ?? "").updateData(newMenberData) { (err) in
+        self.db.collection("moais").document(self.moaiID!).updateData(newMenberData) { (err) in
             if let err = err {
                 print("エラーでした~~\(err)")
                 return
             }
-        }
-        self.db.collection("moais").document(self.selectedMoaiID ?? "").updateData(newNextData) { (err) in
-            if let err = err {
-                print("エラーです \(err)")
-                return
+            self.db.collection("moais").document(self.moaiID!).updateData(newNextData) { (err) in
+                if let err = err {
+                    print("エラーです \(err)")
+                    return
+                }
+                self.fetchNewMoaiInfo()
             }
         }
         print("模合にユーザー情報の保存完了！！")
+    }
+    
+    //ユーザーを追加した新しい模合の情報を取得
+    private func fetchNewMoaiInfo() {
+        self.db.collection("moais").document(self.moaiID!).getDocument { (snapshot, err) in
+            if let err = err {
+                print("エラーでした~~\(err)")
+                return
+            }
+            guard let dic = snapshot?.data() else {
+                print("なんらかのエラーの影響で正しくデータを取得できませんでした。")
+                return
+            }
+            //模合情報をユーザーを追加した新しい模合情報に書き換えた
+            self.moai = Moai(dic: dic)
+        }
     }
     
 }
