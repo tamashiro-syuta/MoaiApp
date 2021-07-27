@@ -22,7 +22,9 @@ class ManagementViewController: UIViewController {
     // 前ページから持ってきた値
     var user: User?
     var moai: Moai?
-    var pastRecodeArray: [PastMoaiRecord]?  //古いデータが「0番目」、新しいのが「n番目」になってる
+    var nextMoai: MoaiRecord? //次回の模合の情報
+    var nextMoaiID: String?
+    var pastRecodeArray: [MoaiRecord]?  //古いデータが「0番目」、新しいのが「n番目」になってる
     var pastRecodeIDDateArray: [String]?  //◯月◯日みたいな形で取り出してる
     var nextMoaiEntryArray: [Bool]? // ブーリアン型の配列
     var moaiMenbersNameList: [String] = [] //模合メンバーの名前の配列
@@ -52,12 +54,6 @@ class ManagementViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("viewDidLoad")
-        
-        print(self.user?.moais)
-        print(self.pastRecodeArray) //nil
-        print(self.pastRecodeArray?.count) //nil
-        print(self.nextMoaiEntryArray) //nil
-        print(self.moaiMenbersNameList) //[]
         
         self.setupView()
         self.makeGetMoneyPersonList()
@@ -90,9 +86,10 @@ class ManagementViewController: UIViewController {
         let moaiDate = self.switchMoaiDate(weekNum: weekNum, weekDay: weekDay)
         self.nextMoaiDate = self.GetNextMoaiDate(weekNum: moaiDate.0, weekDay: moaiDate.1)
         
+        //~~~~~~~~~~~~~~~~~~~  次回の模合の情報はDBから取り出して表示する方向に切り替えるから、今後修正必要  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         self.nextMoaiDateLabel.text = self.nextMoaiDate
         
-        //このタイトルは、DBから値を持ってくる前のサンプル的な用途で置いてるだけのやつ
+        
         if self.pastRecodeArray == nil || self.pastRecodeArray?.count == 0 {
             self.setupPastMoaisView(backnumber: 0)
             //ボタンの無効化
@@ -108,6 +105,9 @@ class ManagementViewController: UIViewController {
         
         //配列の順番をDBのmoaiのmenbersの順番と同じにするため
         self.moaiMenbersNameList.reverse()
+        
+        //次回の模合情報の取得
+        self.fetchNextMoaiInfo()
     }
     
     //参加ボタン
@@ -121,12 +121,23 @@ class ManagementViewController: UIViewController {
     
     @IBAction func detailsNextMoai(_ sender: Any) {
         let detailsNextMoaiVC = storyboard?.instantiateViewController(identifier: "detailsNextMoaiViewController") as! detailsNextMoaiViewController
-        detailsNextMoaiVC.date = self.nextMoaiDate
-        detailsNextMoaiVC.location = "あとで設定する〜〜"
+
+        detailsNextMoaiVC.nextMoai = self.nextMoai
         detailsNextMoaiVC.judgeEntryArray = self.nextMoaiEntryArray
         detailsNextMoaiVC.menbersArray = self.moaiMenbersNameList
         navigationController?.pushViewController(detailsNextMoaiVC, animated: true)
     }
+    
+    //次回の模合を変更（日にちや模合など）
+    @IBAction func changeNextMoai(_ sender: Any) {
+        let changeNextMoaiVC = storyboard?.instantiateViewController(identifier: "ChangeNextMoaiViewController") as! ChangeNextMoaiViewController
+        changeNextMoaiVC.nextMoai = self.nextMoai
+        changeNextMoaiVC.user = self.user
+        changeNextMoaiVC.nextMoaiID = self.nextMoaiID
+        print(self.nextMoaiID)
+        navigationController?.pushViewController(changeNextMoaiVC, animated: true)
+    }
+    
     
     
 
@@ -148,8 +159,9 @@ class ManagementViewController: UIViewController {
                 return
             }else {
                 //引数で指定した番号の模合情報をインスタンス化(上で引数が正常な値かチェックしてるから強制アンラップしても大丈夫)
-                let selectedPastRecode: PastMoaiRecord = (self.pastRecodeArray?[backnumber])!
-                let date = selectedPastRecode.date
+                let selectedPastRecode: MoaiRecord = (self.pastRecodeArray?[backnumber])!
+                let date = DateUtils.stringFromDate(date: selectedPastRecode.date.dateValue()) //TimeStampからDateに直したものを文字列化
+                print("dateはちゃんと取れてるかな〜〜？？\(date)")
                 let getPerson = selectedPastRecode.getMoneyPerson
                 let location = selectedPastRecode.location
                 let title = "  開催日：\(date)" + "\n" + "  受け取り：\(getPerson)" + "\n" + "  場所：\(location)"
@@ -244,13 +256,11 @@ class ManagementViewController: UIViewController {
         return (returnWeekNum,returnWeekDay)
     }
     
-    //来月の模合が何日かわかるやつ（今月の模合がまだでも来月の日にちを出力するので、要改善）
-    //引数はそれぞれ、使う部分の上でswitch文を使ってDBから得た値をうまく数字に変換してから使う
+    //来月の模合の日付を取得（模合の記録をし、DBに保存したタイミングで呼ぶ ）
     private func GetNextMoaiDate(weekNum: Int, weekDay:Int) -> String {
         let cal = Calendar.current
-        let year = cal.component(.year, from: Date() )
-        let month = cal.component(.month, from: Date() )
-        let now = cal.date(from: DateComponents(year: year, month: month))
+        let now = Date()
+        let nextMonth = cal.date(byAdding: .month, value: 1, to: now)
 
 
         let dateFormatter = DateFormatter()
@@ -260,15 +270,17 @@ class ManagementViewController: UIViewController {
         yearMonthFomatter.dateFormat = "yyyy 年 M 月"
         yearMonthFomatter.calendar = cal
         let monthDateFomatter = DateFormatter()
-        monthDateFomatter.dateFormat = "M 月 d 日"
+        monthDateFomatter.locale = Locale(identifier: "ja_JP")
+        monthDateFomatter.dateFormat = "M 月 d 日（EEE）"
         monthDateFomatter.calendar = cal
 
 
-        var components = cal.dateComponents([.year, .month], from: now ?? Date())
+        var components = cal.dateComponents([.year, .month], from: nextMonth!)
         components.weekdayOrdinal = weekNum // 第◯週目
-        print("\n\(yearMonthFomatter.string(from: now ?? Date() )) の第 \(components.weekdayOrdinal!) 日曜日 〜 土曜日")
+        print("\n\(yearMonthFomatter.string(from: now )) の第 \(components.weekdayOrdinal!) 日曜日 〜 土曜日")
         //ここから何曜日を取得するかはDBから模合の情報を取り出し、そこで判断する
         components.weekday = weekDay  // の◯曜日
+        
         if let date = cal.date(from: components) {
             print("  \(cal.weekdaySymbols[weekDay - 1]): \(dateFormatter.string(from: date))")
         }
@@ -278,13 +290,9 @@ class ManagementViewController: UIViewController {
     }
     
     private func entryOrNot(Bool: Bool) {
-        guard let myName = self.user?.username else {
-            print("エラー１１１１１１１１１１１１１１１")
-            return}
+        guard let myName = self.user?.username else {return}
         //ログインしているユーザーが配列の何番目かを取得
-        guard let myNumber = self.moaiMenbersNameList.index(of: myName) else {
-            print("エラー２２２２２２２２２２２２２２２")
-            return}
+        guard let myNumber = self.moaiMenbersNameList.index(of: myName) else {return}
         //配列の中身を更新
         nextMoaiEntryArray?[myNumber] = Bool
         //DBのnextの値を上で更新した配列に切り替える
@@ -315,7 +323,8 @@ class ManagementViewController: UIViewController {
                 var count = 0
                 for pastRecode in pastRecodeArray {
                     if menberName == pastRecode.getMoneyPerson {
-                        self.GetMoneyPersonList.append([menberName,pastRecode.date])
+                        let date = DateUtils.stringFromDate(date: pastRecode.date.dateValue())
+                        self.GetMoneyPersonList.append([menberName,date])
                         print(self.GetMoneyPersonList.last)
                     }else {
                         count += 1
@@ -328,7 +337,36 @@ class ManagementViewController: UIViewController {
             }
         }
     }
+    
+    private func fetchNextMoaiInfo() {
+        guard let moaiID = self.user?.moais[1] else {return}
+        self.db.collection("moais").document(moaiID).collection("next").getDocuments { (querySnapshots, err) in
+            if let err = err {
+                print("次回の模合情報の取得でエラーが出ました。\(err)")
+                return
+            }else {
+                guard let querySnapshots = querySnapshots else {return}
+                //コレクションからfor文で回しているだけでコレクション内のデータは1つしかないので直接self.nextMoaiに代入している
+                for document in querySnapshots.documents {
+                    let dic = document.data()
+                    let documentID = document.documentID
+                    self.nextMoai = MoaiRecord(dic: dic)
+                    self.nextMoaiID = documentID
+                }
+            }
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 extension ManagementViewController: UIPickerViewDelegate, UIPickerViewDataSource {
@@ -370,6 +408,13 @@ extension ManagementViewController: UIPickerViewDelegate, UIPickerViewDataSource
 }
 
 
+
+
+
+
+
+
+
 extension ManagementViewController: UITableViewDelegate,UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -387,5 +432,9 @@ extension ManagementViewController: UITableViewDelegate,UITableViewDataSource {
         label2.text = GetMoneyPersonList[indexPath.row][1]
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
     }
 }

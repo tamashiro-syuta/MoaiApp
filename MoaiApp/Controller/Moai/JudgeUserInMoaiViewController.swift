@@ -16,9 +16,12 @@ class JudgeUserInMoaiViewController: UIViewController {
     var user: User?
     var moai: Moai?
     
-    var pastRecodeArray: [PastMoaiRecord]?  //古いデータが「0番目」、新しいのが「n番目」になってる
+    var pastRecodeArray: [MoaiRecord]?  //古いデータが「0番目」、新しいのが「n番目」になってる
     var pastRecodeIDStringArray: [String]?  // 20210417みたいな形で取り出してる
     var pastRecodeIDDateArray: [String]?  //◯月◯日みたいな形で取り出してる
+    
+    var nextRecodeArray: [MoaiRecord]?
+    
     var nextMoaiEntryArray: [Bool]?
     var moaiMenbersNameList: [String] = [] //模合メンバーの名前の配列
     
@@ -132,12 +135,12 @@ class JudgeUserInMoaiViewController: UIViewController {
                 print("過去の模合情報の取得でエラーが出ました。\(err)")
                 return
             }else {
-                var array1 = [PastMoaiRecord]()
+                var array1 = [MoaiRecord]()
                 var array2 = [String]()
                 guard let querySnapshots = querySnapshots else {return}
                 for document in querySnapshots.documents {
                     let dic = document.data()
-                    let recode = PastMoaiRecord(dic: dic)
+                    let recode = MoaiRecord(dic: dic)
                     print("\(document.documentID) => \(document.data())")
                     array1.append(recode)
                     

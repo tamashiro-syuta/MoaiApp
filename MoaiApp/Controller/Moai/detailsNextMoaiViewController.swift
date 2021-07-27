@@ -9,8 +9,7 @@ import UIKit
 
 class detailsNextMoaiViewController: UIViewController {
     
-    var date: String?
-    var location: String?
+    var nextMoai:MoaiRecord?
     var judgeEntryArray: [Bool]?
     var menbersArray:[String]?
     
@@ -48,8 +47,10 @@ class detailsNextMoaiViewController: UIViewController {
     }
     
     private func setupViews() {
-        dateLabel.text = date
-        locationLabel.text = location
+        let date = DateUtils.stringFromDate(date: (self.nextMoai?.date.dateValue())!)
+        let startTime = DateUtils.fetchStartTimeFromDate(date: (self.nextMoai?.date.dateValue())!)
+        dateLabel.text = " " + date + " " + startTime + " 〜 "
+        locationLabel.text = " " + nextMoai!.location
         
     }
     
