@@ -204,8 +204,10 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
         let OKAction: UIAlertAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler:{
                 // ボタンが押された時の処理を書く（クロージャ実装）
                 (action: UIAlertAction!) -> Void in
-                print("更新後の通知完了っす")
-            })
+            print("更新後の通知完了っす")
+            //前画面に遷移
+            self.navigationController?.popViewController(animated: true)
+        })
         alert.addAction(OKAction)
         present(alert, animated: true, completion: nil)
     }

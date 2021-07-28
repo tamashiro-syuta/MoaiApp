@@ -131,6 +131,9 @@ class ChatListViewController: UIViewController {
     
     
     private func setUpViews() {
+        //viewの背景を白に設定
+        self.view.backgroundColor = .white
+        
         chatListTableView.delegate = self
         chatListTableView.dataSource = self
         chatListTableView.tableFooterView = UIView()
@@ -201,15 +204,27 @@ class ChatListViewController: UIViewController {
                 print("ユーザー情報の取得に失敗しました。\(err)")
                 return
             }
-            
             //snapshotのnilチェック
             guard let snapshot = snapshot,let dic = snapshot.data() else {return}
-            
             let user = User(dic: dic)
             //上で宣言した16行目で宣言したuserにuser(ログインしているユーザー)を入れる
             self.user = user
+            //ユーザーが模合に入っているか確認
+            self.confirmUserInMoai()
         }
     }
+    
+    //JudgeUserInMoaiでより素早く画面遷移するため
+    private func confirmUserInMoai() {
+        if self.user?.moais.count == 1 {
+            UserDefaults.standard.set(false, forKey: "userInMoai")
+            print("こいつ、模合に入っていません！！")
+        }else {
+            UserDefaults.standard.set(true, forKey: "userInMoai")
+            print("こいつ、模合に入ってます！！！")
+        }
+    }
+    
 }
 
 

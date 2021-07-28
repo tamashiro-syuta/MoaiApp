@@ -11,7 +11,7 @@ class detailsNextMoaiViewController: UIViewController {
     
     var nextMoai:MoaiRecord?
     var judgeEntryArray: [Bool]?
-    var menbersArray:[String]?
+    var moaiMenbersNameList:[String]?
     
     var EntryMenbersArray: [String]?
     var notEntryMenbersArray: [String]?
@@ -59,9 +59,9 @@ class detailsNextMoaiViewController: UIViewController {
         var dic = [String: Bool]()
         var array1:[String] = []
         var array2:[String] = []
-        guard let arrayCount = self.menbersArray?.count else {return}
+        guard let arrayCount = self.moaiMenbersNameList?.count else {return}
         for i in 0...arrayCount - 1 {
-            dic[self.menbersArray![i]] = self.judgeEntryArray![i]
+            dic[self.moaiMenbersNameList![i]] = self.judgeEntryArray![i]
         }
         for item in dic {
             if item.value == true {
@@ -77,16 +77,6 @@ class detailsNextMoaiViewController: UIViewController {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
 
 extension detailsNextMoaiViewController: UITableViewDelegate,UITableViewDataSource {
     
