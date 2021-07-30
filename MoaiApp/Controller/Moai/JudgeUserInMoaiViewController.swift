@@ -32,6 +32,7 @@ class JudgeUserInMoaiViewController: UIViewController {
         print("画面遷移しまーーーーーーーーーーーーーーーす")
         let storyboard = UIStoryboard(name: "Management", bundle: nil)
         let ManagementVC = storyboard.instantiateViewController(withIdentifier: "ManagementViewController") as! ManagementViewController
+        ManagementVC.navigationItem.hidesBackButton = true
         self.navigationController?.pushViewController(ManagementVC, animated: true)
     }
     
