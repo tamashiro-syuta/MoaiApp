@@ -26,7 +26,7 @@ class DateUtils {
         return formatter.string(from: date)
     }
     
-    // Date -> String("M 月 d 日（EEE）")
+    // Date -> String("yyyyMMdd")
     class func stringFromDateoForSettingNextID(date: Date) -> String {
         let formatter: DateFormatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .gregorian)
@@ -44,4 +44,20 @@ class DateUtils {
         formatter.timeStyle = .short
         return formatter.string(from: date)
     }
+    
+    // 次回の模合の日付をDate型で返す
+    class func returnNextMoaiDate(weekNum: Int, weekDay:Int) -> Date {
+        let cal = Calendar.current
+        let now = Date()
+        let nextMonth = cal.date(byAdding: .month, value: 1, to: now)
+
+        var components = cal.dateComponents([.year, .month], from: nextMonth!)
+        components.weekdayOrdinal = weekNum // 第◯週目
+        components.weekday = weekDay  // の◯曜日
+        
+        let nextMoaiDate = cal.date(from: components)
+        
+        return nextMoaiDate!
+    }
+    
 }

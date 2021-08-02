@@ -43,7 +43,7 @@ class ManagementViewController: UIViewController {
     var GetMoneyPersonList: Array = [
         ["A","7/1"],
         ["B","×"],
-        ["C","なんでテーブルビューが表示されないんだよ"]
+        ["C","2/13"]
     ]
 
     let today = Date()
@@ -92,7 +92,7 @@ class ManagementViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = .rgb(red: 39, green: 49, blue: 69)
         
         //ナビゲーションアイテムの追加
-        let reloadViewButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(self.reloadView(_:) ) )
+        let reloadViewButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(self.recodeMoaiinfo(_:) ) )
         reloadViewButton.tintColor = .white
         self.navigationItem.rightBarButtonItem = reloadViewButton
         
@@ -110,7 +110,6 @@ class ManagementViewController: UIViewController {
 //        let moaiDate = self.switchMoaiDate(weekNum: weekNum, weekDay: weekDay)
 //        self.nextMoaiDate = self.GetNextMoaiDate(weekNum: moaiDate.0, weekDay: moaiDate.1)
         
-        //~~~~~~~~~~~~~~~~~~~  次回の模合の情報はDBから取り出して表示する方向に切り替えるから、今後修正必要  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         let nextMoaiDate = DateUtils.stringFromDate(date: (self.nextMoai?.date.dateValue())!)
         self.nextMoaiDateLabel.text = nextMoaiDate
         
@@ -136,9 +135,17 @@ class ManagementViewController: UIViewController {
     }
     
     //viewの再読み込み
-    @objc func reloadView(_ sender: Any) {
-        print("reloadするぞ〜〜〜")
-        self.navigationController?.popToRootViewController(animated: true)
+    @objc func recodeMoaiinfo(_ sender: Any) {
+        print("模合の記録をしま〜〜〜〜す！！！！")
+        let storyboard = UIStoryboard(name: "RecodeMoaiInfo", bundle: nil)
+        let recodeMoaiInfoVC = storyboard.instantiateViewController(withIdentifier: "RecodeMoaiInfoViewController") as! RecodeMoaiInfoViewController
+        recodeMoaiInfoVC.nextMoai = self.nextMoai
+        recodeMoaiInfoVC.nextMoaiID = self.nextMoaiID
+        recodeMoaiInfoVC.user = self.user
+        recodeMoaiInfoVC.moai = self.moai
+        recodeMoaiInfoVC.moaiMenbersNameList = self.moaiMenbersNameList
+        self.navigationController?.pushViewController(recodeMoaiInfoVC, animated: true)
+        
     }
     
     //参加ボタン
@@ -161,9 +168,12 @@ class ManagementViewController: UIViewController {
     
     //次回の模合を変更（日にちや模合など）
     @IBAction func changeNextMoai(_ sender: Any) {
-        let changeNextMoaiVC = storyboard?.instantiateViewController(identifier: "ChangeNextMoaiViewController") as! ChangeNextMoaiViewController
-        changeNextMoaiVC.nextMoai = self.nextMoai
+        let storyboard = UIStoryboard(name: "ChangeNextMoai", bundle: nil)
+        let changeNextMoaiVC = storyboard.instantiateViewController(identifier: "ChangeNextMoaiViewController") as! ChangeNextMoaiViewController
         changeNextMoaiVC.user = self.user
+        changeNextMoaiVC.moai = self.moai
+        changeNextMoaiVC.moaiMenbersNameList = self.moaiMenbersNameList
+        changeNextMoaiVC.nextMoai = self.nextMoai
         changeNextMoaiVC.nextMoaiID = self.nextMoaiID
         print(self.nextMoaiID)
         navigationController?.pushViewController(changeNextMoaiVC, animated: true)
@@ -390,93 +400,6 @@ class ManagementViewController: UIViewController {
             let pastDate2 = dateFormatter2.string(from: pastDate1!)
             self.pastRecodeIDDateArray?.append(pastDate2)
         }
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    //DBに文字列で保存外れている値を数字に変換する
-    private func switchMoaiDate(weekNum: String, weekDay: String) -> (Int,Int)  {
-        let returnWeekNum:Int,returnWeekDay:Int
-        switch weekNum {
-        case "第１":
-            returnWeekNum = 1
-        case "第２":
-            returnWeekNum = 2
-        case "第３":
-            returnWeekNum = 3
-        case "第４":
-            returnWeekNum = 4
-        default:
-            returnWeekNum = 0
-        }
-        
-        switch weekDay {
-        case "日曜日":
-            returnWeekDay = 1
-        case "月曜日":
-            returnWeekDay = 2
-        case "火曜日":
-            returnWeekDay = 3
-        case "水曜日":
-            returnWeekDay = 4
-        case "木曜日":
-            returnWeekDay = 5
-        case "金曜日":
-            returnWeekDay = 6
-        case "土曜日":
-            returnWeekDay = 7
-        default:
-            returnWeekDay = 0
-        }
-
-        if returnWeekNum == 0 && returnWeekDay == 0 {
-            print("変な値になってるよーーーーー")
-        }
-        
-        return (returnWeekNum,returnWeekDay)
-    }
-    
-    //来月の模合の日付を取得（模合の記録をし、DBに保存したタイミングで呼ぶ ）
-    private func GetNextMoaiDate(weekNum: Int, weekDay:Int) -> String {
-        let cal = Calendar.current
-        let now = Date()
-        let nextMonth = cal.date(byAdding: .month, value: 1, to: now)
-
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.calendar = cal
-        let yearMonthFomatter = DateFormatter()
-        yearMonthFomatter.dateFormat = "yyyy 年 M 月"
-        yearMonthFomatter.calendar = cal
-        let monthDateFomatter = DateFormatter()
-        monthDateFomatter.locale = Locale(identifier: "ja_JP")
-        monthDateFomatter.dateFormat = "M 月 d 日（EEE）"
-        monthDateFomatter.calendar = cal
-
-
-        var components = cal.dateComponents([.year, .month], from: nextMonth!)
-        components.weekdayOrdinal = weekNum // 第◯週目
-        print("\n\(yearMonthFomatter.string(from: now )) の第 \(components.weekdayOrdinal!) 日曜日 〜 土曜日")
-        //ここから何曜日を取得するかはDBから模合の情報を取り出し、そこで判断する
-        components.weekday = weekDay  // の◯曜日
-        
-        if let date = cal.date(from: components) {
-            print("  \(cal.weekdaySymbols[weekDay - 1]): \(dateFormatter.string(from: date))")
-        }
-        let nextMoaiDate = monthDateFomatter.string(from: cal.date(from: components) ?? Date())
-        
-        return nextMoaiDate
     }
     
     private func entryOrNot(Bool: Bool) {

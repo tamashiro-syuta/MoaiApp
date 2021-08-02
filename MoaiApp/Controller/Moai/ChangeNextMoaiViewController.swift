@@ -14,6 +14,11 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
     let db = Firestore.firestore()
     
     var user:User?
+    
+    var moai:Moai?
+    var moaiID:String?
+    var moaiMenbersNameList:[String]?
+    
     var nextMoai:MoaiRecord?
     var nextMoaiID: String?
     
@@ -21,11 +26,11 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
     var viewsWidth:CGFloat?
     var textFieldMargin = 60
     
-    var datePickerView = UIPickerView()
+    var getMoneyPersonPickerView = UIPickerView()
     var startTimePickerView = UIPickerView()
     //配列の初めを""にすることで、変更予定がないのに誤ってタッチしても変更せずにできる
     let sampleArray = ["","1","2","3","4","5","6","7","8","9","10"]
-    let sampleArray2 = ["","あ","い","う","え","お"]
+    var menberIDArray:[String]?
     
     let calendarView = UIView()
     var choiceDateCalendar: FSCalendar = FSCalendar()
@@ -34,6 +39,7 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var startTimeTextField: UITextField!
+    @IBOutlet weak var getMoneyPersonTextField: UITextField!
     @IBOutlet weak var locationTextField: UITextField!
 
     
@@ -50,17 +56,28 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
     
     private func setupview() {
         
+        self.menberIDArray = self.moai?.menbers
+        self.menberIDArray?.insert("未定", at: 0)
+        self.moaiMenbersNameList?.insert("未定", at: 0)
+        print("menberIDArrayの値は、\(menberIDArray)")
+        print("moaiMenberNameListの値は、\(moaiMenbersNameList)")
+        
+        
+        self.moaiID = self.user?.moais[1]
+        
         choiceDateCalendar.delegate = self
         choiceDateCalendar.dataSource = self
         
         dateTextField.delegate = self
         startTimeTextField.delegate = self
+        getMoneyPersonTextField.delegate = self
         locationTextField.delegate = self
         
-        datePickerView.delegate = self
-        datePickerView.tag = 1
         startTimePickerView.delegate = self
-        startTimePickerView.tag = 2
+        startTimePickerView.tag = 1
+        
+        getMoneyPersonPickerView.delegate = self
+        getMoneyPersonPickerView.tag = 2
         
         locationTextField.frame.size.width = viewsWidth! - 60
         
@@ -68,6 +85,7 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
         let startTime = DateUtils.fetchStartTimeFromDate(date: (self.nextMoai?.date.dateValue())!)
         dateTextField.placeholder = date
         startTimeTextField.placeholder = startTime
+        getMoneyPersonTextField.placeholder = self.nextMoai?.getMoneyPerson
         locationTextField.placeholder = self.nextMoai?.location
         
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
@@ -82,6 +100,8 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
         dateTextField.inputAccessoryView = toolbar
         startTimeTextField.inputView = startTimePickerView
         startTimeTextField.inputAccessoryView = toolbar
+        getMoneyPersonTextField.inputView = getMoneyPersonPickerView
+        getMoneyPersonTextField.inputAccessoryView = toolbar
         locationTextField.inputAccessoryView = toolbar
         
     }
@@ -97,6 +117,9 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
         if startTimeTextField.isEditing == true {
             startTimeTextField.text = ""
         }
+        if getMoneyPersonTextField.isEditing == true {
+            getMoneyPersonTextField.text = ""
+        }
         if locationTextField.isEditing == true {
             locationTextField.text = ""
         }
@@ -111,6 +134,7 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
         }
         let date:String?
         let startTime:String?
+        let getMoneyPerson:String?
         let location:String?
         if self.dateTextField.text != "" {
             date = dateTextField.text
@@ -122,13 +146,18 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
         }else {
             startTime = startTimeTextField.placeholder
         }
+        if self.getMoneyPersonTextField.text != "" {
+            getMoneyPerson = getMoneyPersonTextField.text
+        }else {
+            getMoneyPerson = getMoneyPersonTextField.placeholder
+        }
         if self.locationTextField.text != "" {
             location = locationTextField.text
         }else {
             location = locationTextField.placeholder
         }
         
-        let changedInfo = "日付：\(date!)" + "\n" + "開始時刻：\(startTime!)" + "\n" + "場所：\(location!)"
+        let changedInfo = "日付：\(date!)" + "\n" + "開始時刻：\(startTime!)" + "\n" + "模合代受け取り：\(getMoneyPerson!)" + "\n" + "場所：\(location!)"
         
         let alert: UIAlertController = UIAlertController(title: "変更後の内容は以下でよろしいですか？", message: changedInfo, preferredStyle:  UIAlertController.Style.alert)
         let joinAction: UIAlertAction = UIAlertAction(title: "はい", style: UIAlertAction.Style.default, handler:{
@@ -137,6 +166,8 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
             
             var newDate:Timestamp = self.nextMoai!.date
             var newStartTime:String = self.nextMoai!.startTime
+            var newGetMoneyPerson:String = self.nextMoai!.getMoneyPerson
+            var newGetMoneyPersonID:String = self.nextMoai!.getMoneyPersonID
             var newLocation:String = self.nextMoai!.location
             
             //値が更新されているもののみアップデートする
@@ -148,6 +179,11 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
             if self.startTimeTextField.text != "" {
                 newStartTime = self.startTimeTextField.text!
             }
+            if self.getMoneyPersonTextField.text != "" {
+                newGetMoneyPerson = self.getMoneyPersonTextField.text!
+                let menbersIndex = self.moaiMenbersNameList?.firstIndex(of: self.getMoneyPersonTextField.text!)
+                newGetMoneyPersonID = self.menberIDArray![menbersIndex!]
+            }
             if self.locationTextField.text != "" {
                 newLocation = self.locationTextField.text!
             }
@@ -156,8 +192,8 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
             let dic = [
                 "date": newDate ,
                 "startTime": newStartTime,
-                "getMoneyPerson": "",
-                "getMoneyPersonID": "",
+                "getMoneyPerson": newGetMoneyPerson,
+                "getMoneyPersonID": newGetMoneyPersonID,
                 "location": newLocation,
             ] as [String : Any]
             
@@ -251,6 +287,9 @@ extension ChangeNextMoaiViewController: FSCalendarDelegate,FSCalendarDataSource 
         self.calendarView.backgroundColor = .white
         self.calendarView.addSubview(choiceDateCalendar)
         self.calendarView.addSubview(calendarToolbar)
+        
+        guard let nextMoaiDate = self.nextMoai?.date.dateValue() else {return}
+        self.selectedDate = [nextMoaiDate, DateUtils.stringFromDate(date: nextMoaiDate)]
     }
     
     //日付を選択した時の処理
@@ -297,7 +336,7 @@ extension ChangeNextMoaiViewController: UIPickerViewDelegate,UIPickerViewDataSou
         case 1:
             return sampleArray.count
         case 2:
-            return sampleArray2.count
+            return self.moaiMenbersNameList!.count
         default:
             return 1
         }
@@ -309,9 +348,20 @@ extension ChangeNextMoaiViewController: UIPickerViewDelegate,UIPickerViewDataSou
         case 1:
             return sampleArray[row]
         case 2:
-            return sampleArray2[row]
+            return self.moaiMenbersNameList![row]
         default:
             return "なんだろう、勝手にエラーでるのやめてもらっていいっすか？？"
+        }
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        switch pickerView.tag {
+        case 1:
+            return self.startTimeTextField.text = sampleArray[row]
+        case 2:
+            return self.getMoneyPersonTextField.text = self.moaiMenbersNameList![row]
+        default:
+            return self.getMoneyPersonTextField.text = "なんだろう、勝手にエラー出るのやめてもらっていいですか？？"
         }
     }
     
