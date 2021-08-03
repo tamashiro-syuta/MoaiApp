@@ -68,12 +68,15 @@ class ManagementViewController: UIViewController {
         
         self.blurView.alpha = 1
         
+        self.navigationItem.rightBarButtonItem?.isEnabled = false
+        
         HUD.flash(.progress, onView: view, delay: 1) { _ in
             //HUDを非表示にした後の処理
             self.setupView()
             self.makeGetMoneyPersonList()
             self.getMoneyPersonTableView.dataSource = self
             self.getMoneyPersonTableView.delegate = self
+            self.navigationItem.rightBarButtonItem?.isEnabled = true
             self.blurView.alpha = 0
         }
         
@@ -103,12 +106,6 @@ class ManagementViewController: UIViewController {
         pastMoaisButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 180, bottom: 0, right: 0)
         pastMoaisButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
         
-        
-        //DBから取得した値を使ってGetNextMoaiDateで正しい次の模合の日付を取得できるようにする（moaisテーブルのdateを二つに分けて（date1,date2など）それぞれをswitch文でInt型で返すようにしたいので、moaisテーブルにデータをセットする時の処理もそれ用に書き換える必要あり。）
-//        guard let weekNum = self.moai?.week else {return}
-//        guard let weekDay = self.moai?.day else {return}
-//        let moaiDate = self.switchMoaiDate(weekNum: weekNum, weekDay: weekDay)
-//        self.nextMoaiDate = self.GetNextMoaiDate(weekNum: moaiDate.0, weekDay: moaiDate.1)
         
         let nextMoaiDate = DateUtils.stringFromDate(date: (self.nextMoai?.date.dateValue())!)
         self.nextMoaiDateLabel.text = nextMoaiDate
