@@ -139,9 +139,9 @@ class ManagementViewController: UIViewController {
         print("模合の記録をしま〜〜〜〜す！！！！")
         let storyboard = UIStoryboard(name: "RecodeMoaiInfo", bundle: nil)
         let recodeMoaiInfoVC = storyboard.instantiateViewController(withIdentifier: "RecodeMoaiInfoViewController") as! RecodeMoaiInfoViewController
+        recodeMoaiInfoVC.user = self.user
         recodeMoaiInfoVC.nextMoai = self.nextMoai
         recodeMoaiInfoVC.nextMoaiID = self.nextMoaiID
-        recodeMoaiInfoVC.user = self.user
         recodeMoaiInfoVC.moai = self.moai
         recodeMoaiInfoVC.moaiMenbersNameList = self.moaiMenbersNameList
         self.navigationController?.pushViewController(recodeMoaiInfoVC, animated: true)

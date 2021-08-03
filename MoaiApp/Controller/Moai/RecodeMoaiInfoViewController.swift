@@ -33,6 +33,14 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
     var startTimePickerView = UIPickerView()
     let sampleArray:Array = ["","1","2","3","4","5","6"]
     
+    @IBOutlet weak var recodeStackView: UIStackView!
+    @IBOutlet weak var dateStackView: UIStackView!
+    @IBOutlet weak var startTimeStackView: UIStackView!
+    @IBOutlet weak var getMoneyPersonStackView: UIStackView!
+    @IBOutlet weak var locationStackView: UIStackView!
+    @IBOutlet weak var recodeButtonStackView: UIStackView!
+    @IBOutlet weak var recodeButton: UIButton!
+    
     
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var startTimeTextField: UITextField!
@@ -41,6 +49,8 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.setupStackViews()
         
         self.moaiID = self.user?.moais[1]
         
@@ -81,6 +91,54 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         getMoneyPersonTextField.inputAccessoryView = toolbar
         
         locationTextField.inputAccessoryView = toolbar
+        
+    }
+    
+    private func setupStackViews() {
+        
+        //costraintをコードで設定(詳しくは、レイアウトを書いている紙をチェック！！！)
+        let viewHeight = UIScreen.main.bounds.size.height
+        let viewWidth = UIScreen.main.bounds.size.width
+        print("viewHeightの値は\(viewHeight)")
+        print("viewWidthの値は\(viewWidth)")
+        print("UIScreen.main.bounds.sizeは\(UIScreen.main.bounds.size)")
+        
+        //AutoresizingMaskをAutoLayoutの制約に置き換えるかどうか指定する値(必ずfalse)
+        recodeStackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        recodeStackView.heightAnchor.constraint(equalToConstant: viewHeight * 2 / 3).isActive = true
+        recodeStackView.widthAnchor.constraint(equalToConstant: viewWidth * 5 / 6).isActive = true
+        
+        let changeSVHeight = recodeStackView.frame.size.height
+        
+        print("changeSVHeightの値は\(changeSVHeight)")
+        print("changeSVHeightの値は\(recodeStackView.frame.size.width)")
+
+        
+        dateStackView.translatesAutoresizingMaskIntoConstraints = false
+        dateStackView.heightAnchor.constraint(equalToConstant: changeSVHeight / 5).isActive = true
+        
+        startTimeStackView.translatesAutoresizingMaskIntoConstraints = false
+        startTimeStackView.heightAnchor.constraint(equalToConstant: changeSVHeight / 5).isActive = true
+        
+        getMoneyPersonStackView.translatesAutoresizingMaskIntoConstraints = false
+        getMoneyPersonStackView.heightAnchor.constraint(equalToConstant: changeSVHeight / 5).isActive = true
+        
+        locationStackView.translatesAutoresizingMaskIntoConstraints = false
+        locationStackView.heightAnchor.constraint(equalToConstant: changeSVHeight / 5).isActive = true
+        
+        recodeButtonStackView.translatesAutoresizingMaskIntoConstraints = false
+        recodeButtonStackView.heightAnchor.constraint(equalToConstant: changeSVHeight / 5).isActive = true
+        
+        recodeButton.frame.size.height = recodeButtonStackView.frame.size.height / 3
+        recodeButton.layer.cornerRadius = recodeButton.frame.size.width / 6
+        
+        print("dateStackViewのheightの値は\(dateStackView.frame.size.height)")
+        print("startTimeStackViewのheightの値は\(startTimeStackView.frame.size.height)")
+        print("getMoneyPersonStackViewのheightの値は\(getMoneyPersonStackView.frame.size.height)")
+        print("locationStackViewのheightの値は\(locationStackView.frame.size.height)")
+        print("changeButtonのheightの値は\(recodeButton.frame.size.height)")
+        
         
     }
     

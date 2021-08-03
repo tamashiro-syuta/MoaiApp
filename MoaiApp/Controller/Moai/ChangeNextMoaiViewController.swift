@@ -27,15 +27,24 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
     var textFieldMargin = 60
     
     var getMoneyPersonPickerView = UIPickerView()
+    var menberIDArray:[String]?
     var startTimePickerView = UIPickerView()
     //配列の初めを""にすることで、変更予定がないのに誤ってタッチしても変更せずにできる
     let sampleArray = ["","1","2","3","4","5","6","7","8","9","10"]
-    var menberIDArray:[String]?
     
     let calendarView = UIView()
     var choiceDateCalendar: FSCalendar = FSCalendar()
     var selectedDate: [Any]? = nil
 
+    
+    
+    @IBOutlet weak var changeStackView: UIStackView!
+    @IBOutlet weak var dateStackView: UIStackView!
+    @IBOutlet weak var startTimeStackView: UIStackView!
+    @IBOutlet weak var getMoneyPersonStackView: UIStackView!
+    @IBOutlet weak var locationStackView: UIStackView!
+    @IBOutlet weak var changeButtonStackView: UIStackView!
+    @IBOutlet weak var changeButton: UIButton!
     
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var startTimeTextField: UITextField!
@@ -56,12 +65,11 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
     
     private func setupview() {
         
+        self.setupStackViews()
+        
         self.menberIDArray = self.moai?.menbers
         self.menberIDArray?.insert("未定", at: 0)
         self.moaiMenbersNameList?.insert("未定", at: 0)
-        print("menberIDArrayの値は、\(menberIDArray)")
-        print("moaiMenberNameListの値は、\(moaiMenbersNameList)")
-        
         
         self.moaiID = self.user?.moais[1]
         
@@ -103,6 +111,54 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
         getMoneyPersonTextField.inputView = getMoneyPersonPickerView
         getMoneyPersonTextField.inputAccessoryView = toolbar
         locationTextField.inputAccessoryView = toolbar
+        
+    }
+    
+    private func setupStackViews() {
+        
+        //costraintをコードで設定(詳しくは、レイアウトを書いている紙をチェック！！！)
+        let viewHeight = UIScreen.main.bounds.size.height
+        let viewWidth = UIScreen.main.bounds.size.width
+        print("viewHeightの値は\(viewHeight)")
+        print("viewWidthの値は\(viewWidth)")
+        print("UIScreen.main.bounds.sizeは\(UIScreen.main.bounds.size)")
+        
+        //AutoresizingMaskをAutoLayoutの制約に置き換えるかどうか指定する値(必ずfalse)
+        changeStackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        changeStackView.heightAnchor.constraint(equalToConstant: viewHeight * 2 / 3).isActive = true
+        changeStackView.widthAnchor.constraint(equalToConstant: viewWidth * 5 / 6).isActive = true
+        
+        let changeSVHeight = changeStackView.frame.size.height
+        
+        print("changeSVHeightの値は\(changeSVHeight)")
+        print("changeSVHeightの値は\(changeStackView.frame.size.width)")
+
+        
+        dateStackView.translatesAutoresizingMaskIntoConstraints = false
+        dateStackView.heightAnchor.constraint(equalToConstant: changeSVHeight / 5).isActive = true
+        
+        startTimeStackView.translatesAutoresizingMaskIntoConstraints = false
+        startTimeStackView.heightAnchor.constraint(equalToConstant: changeSVHeight / 5).isActive = true
+        
+        getMoneyPersonStackView.translatesAutoresizingMaskIntoConstraints = false
+        getMoneyPersonStackView.heightAnchor.constraint(equalToConstant: changeSVHeight / 5).isActive = true
+        
+        locationStackView.translatesAutoresizingMaskIntoConstraints = false
+        locationStackView.heightAnchor.constraint(equalToConstant: changeSVHeight / 5).isActive = true
+        
+        changeButtonStackView.translatesAutoresizingMaskIntoConstraints = false
+        changeButtonStackView.heightAnchor.constraint(equalToConstant: changeSVHeight / 5).isActive = true
+        
+        changeButton.frame.size.height = changeButtonStackView.frame.size.height / 3
+        changeButton.layer.cornerRadius = changeButton.frame.size.width / 6
+        
+        print("dateStackViewのheightの値は\(dateStackView.frame.size.height)")
+        print("startTimeStackViewのheightの値は\(startTimeStackView.frame.size.height)")
+        print("getMoneyPersonStackViewのheightの値は\(getMoneyPersonStackView.frame.size.height)")
+        print("locationStackViewのheightの値は\(locationStackView.frame.size.height)")
+        print("changeButtonのheightの値は\(changeButton.frame.size.height)")
+        
         
     }
     
