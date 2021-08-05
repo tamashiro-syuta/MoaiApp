@@ -28,10 +28,14 @@ class UserListViewController: UIViewController {
         userListTableView.tableFooterView = UIView()
         startChatButton.layer.cornerRadius = 15
         startChatButton.isEnabled = false
+        startChatButton.backgroundColor = .white
+        startChatButton.setTitleColor(.textColor2(), for: .normal)
+        startChatButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        startChatButton.titleLabel?.minimumScaleFactor = 0.8
         //startChatButtonを押した時のメソッドの宣言（コードのみでの宣言の仕方）
         startChatButton.addTarget(self, action: #selector(tappedStartCahtButton), for: .touchUpInside)
         
-        navigationController?.navigationBar.barTintColor = .rgb(red: 39, green: 49, blue: 69)
+//        navigationController?.navigationBar.barTintColor = .rgb(red: 39, green: 49, blue: 69)
         fetchUserInfoFromFirestore()
         
     }

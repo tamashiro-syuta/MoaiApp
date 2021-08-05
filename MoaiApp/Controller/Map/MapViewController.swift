@@ -20,9 +20,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBar.barTintColor = .rgb(red: 39, green: 49, blue: 69)
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        
         searchTextField.delegate = self
         
         locationManager = CLLocationManager()

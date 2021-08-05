@@ -15,8 +15,8 @@ class JudgeUserInMoaiViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBar.barTintColor = .rgb(red: 39, green: 49, blue: 69)
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+//        navigationController?.navigationBar.barTintColor = .rgb(red: 39, green: 49, blue: 69)
+//        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
         if UserDefaults.standard.bool(forKey: "userInMoai") == true {
             print("Managementに画面遷移")

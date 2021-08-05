@@ -26,9 +26,6 @@ class ChatListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if navigationController?.navigationBar.isHidden == false {
-            //print("navBarは表示されてますよ")
-        }
         setUpViews()
         confirmLoginUser()
         //chatListViewが呼ばれる度にchatroomの情報を更新していると無駄に通信して良くないので、viewWillAppearではなく、viewDidLoadに記載
@@ -131,13 +128,15 @@ class ChatListViewController: UIViewController {
     
     
     private func setUpViews() {
+        print("self.navigationController?.navigationBar.barTintColorは\(self.navigationController?.navigationBar.barTintColor)")
+        
         //viewの背景を白に設定
         self.view.backgroundColor = .white
         
         chatListTableView.delegate = self
         chatListTableView.dataSource = self
         chatListTableView.tableFooterView = UIView()
-        navigationController?.navigationBar.barTintColor = .rgb(red: 39, green: 49, blue: 69)
+//        navigationController?.navigationBar.barTintColor = .barColor()
         navigationItem.title = "トーク"
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
@@ -151,7 +150,7 @@ class ChatListViewController: UIViewController {
         navigationItem.leftBarButtonItem?.tintColor = .white
         
         //tabbarの設定
-        tabBarController?.tabBar.barTintColor = .rgb(red: 39, green: 49, blue: 69)
+//        tabBarController?.tabBar.barTintColor = .rgb(red: 39, green: 49, blue: 69)
         
         
     }

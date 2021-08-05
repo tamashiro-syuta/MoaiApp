@@ -92,7 +92,6 @@ class ManagementViewController: UIViewController {
     
     //「次回の模合は」の部分のview
     private func setupView() {
-        navigationController?.navigationBar.barTintColor = .rgb(red: 39, green: 49, blue: 69)
         
         //ナビゲーションアイテムの追加
         let reloadViewButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(self.recodeMoaiinfo(_:) ) )
@@ -127,8 +126,6 @@ class ManagementViewController: UIViewController {
         //配列の順番をDBのmoaiのmenbersの順番と同じにするため
         self.moaiMenbersNameList.reverse()
         
-        //次回の模合情報の取得
-//        self.fetchNextMoaiInfo()
     }
     
     //viewの再読み込み

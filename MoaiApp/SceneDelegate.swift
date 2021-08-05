@@ -40,8 +40,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         viewControllers.append(judgeUserInMoaiVC)
         viewControllers.append(mapVC)
         
-        let tabBarController = UITabBarController()
+        let tabBarController = standardTabBarController()
         tabBarController.setViewControllers(viewControllers, animated: false)
+//        print(type(of: tabBarController.tabBar))
+//        tabBarController.tabBar.standardAppearance.
         
         window.rootViewController = tabBarController
         window.makeKeyAndVisible()

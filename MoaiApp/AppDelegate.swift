@@ -15,9 +15,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
+
+        navBarSetup()
         
         return true
     }
+    
+    func navBarSetup() {
+        UINavigationBar.appearance().barTintColor = .barColor()
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
+    }
+
 
     // MARK: UISceneSession Lifecycle
 
