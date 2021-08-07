@@ -11,6 +11,9 @@ import CoreLocation
 
 class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate {
     
+    var user:User?
+    var moai:Moai?
+    
     @IBOutlet weak var map: MKMapView!
     @IBOutlet weak var searchTextField: UITextField!
     

@@ -7,34 +7,44 @@
 
 import UIKit
 import Firebase
+import FirebaseAuth
 import Nuke
 
 class ChatListViewController: UIViewController {
     
+    let db = Firestore.firestore()
+    
     private let cellId = "cellId"
     private var chatrooms = [ChatRoom]()
     private var chatRoomLinstener: ListenerRegistration?
-    private var user: User? {
+    var user: User? {
         didSet {
             //ユーザーの情報がセットされた時点でナビゲーションバーのタイトルに名前を設定
             navigationItem.title = user?.username
         }
     }
+    var moai:Moai?
     
     @IBOutlet weak var chatListTableView: UITableView!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpViews()
-        confirmLoginUser()
-        //chatListViewが呼ばれる度にchatroomの情報を更新していると無駄に通信して良くないので、viewWillAppearではなく、viewDidLoadに記載
-        fetchChatroomsInfoFromFireStore()
+        fetchLoginUserInfo()
+        print("self.moai?.groupNameはこちら　→ \(self.moai?.groupName)")
+        
+        //1秒後に処理
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            //ここに処理
+            self.setUpViews()
+            //chatListViewが呼ばれる度にchatroomの情報を更新していると無駄に通信して良くないので、viewWillAppearではなく、viewDidLoadに記載
+            self.fetchChatroomsInfoFromFireStore()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(animated)
-        fetchLoginUserInfo()
+//        fetchLoginUserInfo()
     }
     
     //FireStoreからチャットルーム情報を取得
@@ -176,12 +186,12 @@ class ChatListViewController: UIViewController {
     
     
     
-    private func confirmLoginUser() {
-        if Auth.auth().currentUser?.uid == nil {
-            //立ち上がった時にSignUpViewControllerを表示する処理
-            pushLoginViewController()
-        }
-    }
+//    private func confirmLoginUser() {
+//        if Auth.auth().currentUser?.uid == nil {
+//            //立ち上がった時にSignUpViewControllerを表示する処理
+//            pushLoginViewController()
+//        }
+//    }
     
     private func pushLoginViewController() {
         let storyboard = UIStoryboard(name: "SignUp", bundle: nil)
@@ -191,14 +201,11 @@ class ChatListViewController: UIViewController {
         nav.modalPresentationStyle = .fullScreen
         self.present(nav, animated: true, completion: nil)
     }
-    
-    
-    
-    
+
     private func fetchLoginUserInfo() {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         //ログインしているユーザーの情報だけを取得
-        Firestore.firestore().collection("users").document(uid).getDocument { (snapshot, err) in
+        db.collection("users").document(uid).getDocument { (snapshot, err) in
             if let err = err {
                 print("ユーザー情報の取得に失敗しました。\(err)")
                 return
@@ -206,21 +213,24 @@ class ChatListViewController: UIViewController {
             //snapshotのnilチェック
             guard let snapshot = snapshot,let dic = snapshot.data() else {return}
             let user = User(dic: dic)
-            //上で宣言した16行目で宣言したuserにuser(ログインしているユーザー)を入れる
             self.user = user
-            //ユーザーが模合に入っているか確認
-            self.confirmUserInMoai()
+            //模合の情報を取得
+            self.fetchUsersMoaiInfo(user: self.user!)
+            
         }
     }
-    
-    //JudgeUserInMoaiでより素早く画面遷移するため
-    private func confirmUserInMoai() {
-        if self.user?.moais.count == 1 {
-            UserDefaults.standard.set(false, forKey: "userInMoai")
-            print("こいつ、模合に入っていません！！")
-        }else {
-            UserDefaults.standard.set(true, forKey: "userInMoai")
-            print("こいつ、模合に入ってます！！！")
+
+    //ユーザーの模合情報の取得(後々は、複数入っている場合の模合情報を取れるようにする（配列の番号指定の部分を変数に置き換えして）)
+    func fetchUsersMoaiInfo(user: User) {
+        guard let moaiID = self.user?.moais[1] else {return}
+        self.db.collection("moais").document(moaiID).getDocument { (snapshot, err) in
+            if let err = err {
+                print("ユーザーの模合情報の取得に失敗しました。\(err)")
+                return
+            }else {
+                guard let dic = snapshot?.data() else {return}
+                self.moai = Moai(dic: dic)
+            }
         }
     }
     
