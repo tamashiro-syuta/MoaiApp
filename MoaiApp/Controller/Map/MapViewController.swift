@@ -9,13 +9,13 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate {
+class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate, UISearchBarDelegate {
     
     var user:User?
     var moai:Moai?
     
     @IBOutlet weak var map: MKMapView!
-    @IBOutlet weak var searchTextField: UITextField!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     
     var locationManager: CLLocationManager!
@@ -23,7 +23,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        searchTextField.delegate = self
+        searchBar.delegate = self
         
         locationManager = CLLocationManager()
         locationManager.delegate = self
@@ -38,7 +38,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
             if let currentLocation = locationManager.location {
                 setPin(location: currentLocation, pinTitle: "現在地")
             }
-
+        }else {
+            //県庁の位置情報をデフォルトで設定
+            //中心座標
+            let defaultLocate = CLLocation(latitude: 26.2125, longitude: 127.68111) //たぶん県庁
+            setPin(location: defaultLocate, pinTitle: "沖縄県庁")
         }
         
         
@@ -49,33 +53,54 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         //入力された文字を取り出す
-        if let searchKey = textField.text {
+        if let searchKey = searchBar.text {
+            print("検索開始でっせ！！！")
             print(searchKey)
             
-            let geocorder = CLGeocoder()
-            //入力された文字から位置情報を取得
-            geocorder.geocodeAddressString(searchKey) { (placemarks, err) in
-                //位置情報が存在する場合
-                if let unwrapPlacemark = placemarks {
-                    print(type(of: unwrapPlacemark))
-                    //１件目の情報を取得
-                    if let firstPlacemark = unwrapPlacemark.first {
-                        print(type(of: firstPlacemark))
-                        //位置情報を取得
-                        if let location = firstPlacemark.location {
-                            //ピンを設置
-                            self.setPin(location: location, pinTitle: searchKey)
-                        }
+            //キーボードを閉じる。
+            searchBar.resignFirstResponder()
+            print("1")
+                    
+            //検索条件を作成する。
+            let request = MKLocalSearch.Request()
+            request.naturalLanguageQuery = searchKey
+            print("2")
+                    
+            //検索範囲はマップビューと同じにする。
+            request.region = map.region
+            print("3")
+                    
+            //ローカル検索を実行する。
+            let localSearch:MKLocalSearch = MKLocalSearch(request: request)
+            print("4")
+            localSearch.start(completionHandler: {(result, error) in
+                
+                print("5")
+             
+                for placemark in (result?.mapItems)! {
+                    if(error == nil) {
+                        print("6")
+                        //検索された場所にピンを刺す。
+//                        let annotation = MKPointAnnotation()
+//                        annotation.coordinate = CLLocationCoordinate2DMake(placemark.placemark.coordinate.latitude, placemark.placemark.coordinate.longitude)
+//                        annotation.title = placemark.placemark.name
+//                        annotation.subtitle = placemark.placemark.title
+//                        self.map.addAnnotation(annotation)
+                        guard let location = placemark.placemark.location else {return}
+                        let name = placemark.placemark.name
+                        self.setPin(location: location, pinTitle: name ?? "")
+                                
+                    } else {
+                        print("7")
+                        //エラー
+                        print(error)
                     }
                 }
-            }
+                print("8")
+            })
         }
-        //キーボードを閉じる
-        searchTextField.resignFirstResponder()
-        
-        return true
     }
     
     private func setPin(location: CLLocation, pinTitle: String) {
@@ -86,7 +111,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         pin.coordinate = targetCoordinate
         pin.title = pinTitle
         self.map.addAnnotation(pin)
-        self.map.region = MKCoordinateRegion(center: targetCoordinate, latitudinalMeters: 3000, longitudinalMeters: 3000)
+        self.map.region = MKCoordinateRegion(center: targetCoordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)
         
     }
 
