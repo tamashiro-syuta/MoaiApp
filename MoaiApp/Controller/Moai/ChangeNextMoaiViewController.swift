@@ -213,12 +213,21 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
             location = locationTextField.placeholder
         }
         
+        print(date)
+        print(startTime)
+        print(getMoneyPerson)
+        print(location)
+        
         let changedInfo = "日付：\(date!)" + "\n" + "開始時刻：\(startTime!)" + "\n" + "模合代受け取り：\(getMoneyPerson!)" + "\n" + "場所：\(location!)"
+        print(changedInfo)
         
         let alert: UIAlertController = UIAlertController(title: "変更後の内容は以下でよろしいですか？", message: changedInfo, preferredStyle:  UIAlertController.Style.alert)
+        print("1")
         let joinAction: UIAlertAction = UIAlertAction(title: "はい", style: UIAlertAction.Style.default, handler:{
             // ボタンが押された時の処理を書く（クロージャ実装）
             (action: UIAlertAction!) -> Void in
+            
+            print("joinActionの実行中だよ")
             
             var newDate:Timestamp = self.nextMoai!.date
             var newStartTime:String = self.nextMoai!.startTime
@@ -254,17 +263,22 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
             ] as [String : Any]
             
             //更新用データを用いて次回の模合情報をアップデート
-            self.updateNextMoai(newNextMoaiDic: dic, nextMoaiID: self.nextMoaiID!)
+            self.updateNextMoai(newNextMoaiDic: dic, nextMoaiID: nextMoaiID)
 
         })
+        print("2")
         let cancelAction: UIAlertAction = UIAlertAction(title: "取り消し", style: UIAlertAction.Style.cancel, handler:{
                 // ボタンが押された時の処理を書く（クロージャ実装）
                 (action: UIAlertAction!) -> Void in
                 print("Cancel")
             })
+        print("3")
         alert.addAction(cancelAction)
+        print("4")
         alert.addAction(joinAction)
+        print("5")
         present(alert, animated: true, completion: nil)
+        print("6")
     }
     
     //次回の模合情報の更新

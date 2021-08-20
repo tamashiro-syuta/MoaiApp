@@ -13,7 +13,7 @@ import FirebaseAuth
 class FirstJoinViewController: UIViewController {
     
     let db = Firestore.firestore()
-    let userID = Auth.auth().currentUser?.uid
+    var userID:String?
     var myPassword = ""
     var moai: Moai?
     var user: User?
@@ -104,8 +104,8 @@ class FirstJoinViewController: UIViewController {
             //ユーザーに模合を追加
             self.addMoaiInfoToUser()
             
-            //一定時間後にmanagement.storyboardに遷移
-            Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.pushManagementVC), userInfo: nil, repeats: false)
+            //一定時間後にタブバーに遷移
+            Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.pushTabBarController), userInfo: nil, repeats: false)
             
             
             print("OK")
@@ -132,16 +132,11 @@ class FirstJoinViewController: UIViewController {
     }
     
     //タイマーで時差をつくるためにメソッド化
-    @objc private func pushManagementVC() {
-        let storyboard = UIStoryboard(name: "Management", bundle: nil)
-        let ManagementVC = storyboard.instantiateViewController(withIdentifier: "ManagementViewController") as! ManagementViewController
-        ManagementVC.navigationItem.hidesBackButton = true
-        ManagementVC.user = self.user
-        ManagementVC.moai = self.moai
-        ManagementVC.moaiMenbersNameList = self.moaiMenbersNameList
-        ManagementVC.nextMoaiEntryArray = self.nextMoaiEntryArray
-        self.navigationController?.pushViewController(ManagementVC, animated: true)
-        
+    @objc private func pushTabBarController() {
+        print("タブバーに画面遷移するよ")
+        let tabBarController = standardTabBarController()
+        self.navigationController?.navigationBar.isHidden = true
+        self.navigationController?.pushViewController(tabBarController, animated: true)
     }
     
     private func addMoaiInfoToUser() {

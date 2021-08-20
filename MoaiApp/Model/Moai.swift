@@ -30,4 +30,45 @@ class Moai {
         self.next = dic["next"] as? [Bool] ?? [false]
     }
     
+    func switchMoaiDate(weekNum: String, weekDay: String) -> [Int]  {
+        var returnWeekAndDayArray:[Int] = []
+        switch weekNum {
+        case "第１":
+            returnWeekAndDayArray.append(1)
+        case "第２":
+            returnWeekAndDayArray.append(2)
+        case "第３":
+            returnWeekAndDayArray.append(3)
+        case "第４":
+            returnWeekAndDayArray.append(4)
+        default:
+            returnWeekAndDayArray.append(0)
+        }
+        
+        switch weekDay {
+        case "日曜日":
+            returnWeekAndDayArray.append(1)
+        case "月曜日":
+            returnWeekAndDayArray.append(2)
+        case "火曜日":
+            returnWeekAndDayArray.append(3)
+        case "水曜日":
+            returnWeekAndDayArray.append(4)
+        case "木曜日":
+            returnWeekAndDayArray.append(5)
+        case "金曜日":
+            returnWeekAndDayArray.append(6)
+        case "土曜日":
+            returnWeekAndDayArray.append(7)
+        default:
+            returnWeekAndDayArray.append(0)
+        }
+
+        if returnWeekAndDayArray[0] == 0 || returnWeekAndDayArray[1] == 0 {
+            print("変な値になってるよーーーーー")
+        }
+        
+        return returnWeekAndDayArray
+    }
+    
 }

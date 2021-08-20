@@ -104,7 +104,6 @@
                                                 </state>
                                                 <connections>
                                                     <action selector="change:" destination="fLF-f5-MVh" eventType="touchUpInside" id="mfA-7q-i3q"/>
-                                                    <action selector="tappedRegisterButton:" destination="fLF-f5-MVh" eventType="touchUpInside" id="guy-l8-dzr"/>
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gIu-9l-a47">

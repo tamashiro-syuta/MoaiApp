@@ -255,7 +255,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="orS-PW-wmj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1410.144927536232" y="150"/>
+            <point key="canvasLocation" x="1388" y="150"/>
         </scene>
         <!--Details Next Moai View Controller-->
         <scene sceneID="MLl-QL-olT">

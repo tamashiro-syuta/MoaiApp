@@ -276,10 +276,9 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
             return
         }
         
-        guard let week = self.moai?.week else {return}
-        guard let day = self.moai?.day else {return}
-        print("weekの値は\(week) | dayの値は\(day)")
-        let weekAndDayArray:[Int] = switchMoaiDate(weekNum: week, weekDay: day)
+        guard let moai = self.moai else {return}
+        print("weekの値は\(moai.week) | dayの値は\(moai.day)")
+        let weekAndDayArray:[Int] = moai.switchMoaiDate(weekNum: moai.week, weekDay: moai.day)
         
         self.newNextMoaiDate = DateUtils.returnNextMoaiDate(weekNum: weekAndDayArray[0], weekDay: weekAndDayArray[1])
         self.newNextMoaiDateID = DateUtils.stringFromDateoForSettingNextID(date: self.newNextMoaiDate!)
@@ -299,47 +298,6 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
             }
             print("新しくnextにデータを追加しました。")
         }
-    }
-    
-    private func switchMoaiDate(weekNum: String, weekDay: String) -> [Int]  {
-        var returnWeekAndDayArray:[Int] = []
-        switch weekNum {
-        case "第１":
-            returnWeekAndDayArray.append(1)
-        case "第２":
-            returnWeekAndDayArray.append(2)
-        case "第３":
-            returnWeekAndDayArray.append(3)
-        case "第４":
-            returnWeekAndDayArray.append(4)
-        default:
-            returnWeekAndDayArray.append(0)
-        }
-        
-        switch weekDay {
-        case "日曜日":
-            returnWeekAndDayArray.append(1)
-        case "月曜日":
-            returnWeekAndDayArray.append(2)
-        case "火曜日":
-            returnWeekAndDayArray.append(3)
-        case "水曜日":
-            returnWeekAndDayArray.append(4)
-        case "木曜日":
-            returnWeekAndDayArray.append(5)
-        case "金曜日":
-            returnWeekAndDayArray.append(6)
-        case "土曜日":
-            returnWeekAndDayArray.append(7)
-        default:
-            returnWeekAndDayArray.append(0)
-        }
-
-        if returnWeekAndDayArray[0] == 0 || returnWeekAndDayArray[1] == 0 {
-            print("変な値になってるよーーーーー")
-        }
-        
-        return returnWeekAndDayArray
     }
 }
 

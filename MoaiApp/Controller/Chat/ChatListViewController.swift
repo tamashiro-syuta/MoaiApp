@@ -10,25 +10,27 @@ import Firebase
 import FirebaseAuth
 import Nuke
 
-class ChatListViewController: UIViewController {
+class ChatListViewController: standardViewController {
     
-    let db = Firestore.firestore()
+//    let db = Firestore.firestore()
     
     private let cellId = "cellId"
     private var chatrooms = [ChatRoom]()
     private var chatRoomLinstener: ListenerRegistration?
-    var user: User? {
-        didSet {
-            //ユーザーの情報がセットされた時点でナビゲーションバーのタイトルに名前を設定
-            navigationItem.title = user?.username
-        }
-    }
-    var moai:Moai?
+//    var user: User? {
+//        didSet {
+//            //ユーザーの情報がセットされた時点でナビゲーションバーのタイトルに名前を設定
+//            navigationItem.title = user?.username
+//        }
+//    }
+//    var moai:Moai?
     
     @IBOutlet weak var chatListTableView: UITableView!
     
     
     override func viewDidLoad() {
+        print("self.pastRecodeArray?.countは\(self.pastRecodeArray?.count)")
+        print("self.userIDは\(self.userID)")
         super.viewDidLoad()
         fetchLoginUserInfo()
         print("self.moai?.groupNameはこちら　→ \(self.moai?.groupName)")
@@ -140,6 +142,7 @@ class ChatListViewController: UIViewController {
     private func setUpViews() {
         print("self.navigationController?.navigationBar.barTintColorは\(self.navigationController?.navigationBar.barTintColor)")
         
+        self.navigationItem.title = self.user?.username
         //viewの背景を白に設定
         self.view.backgroundColor = .white
         
@@ -221,18 +224,18 @@ class ChatListViewController: UIViewController {
     }
 
     //ユーザーの模合情報の取得(後々は、複数入っている場合の模合情報を取れるようにする（配列の番号指定の部分を変数に置き換えして）)
-    func fetchUsersMoaiInfo(user: User) {
-        guard let moaiID = self.user?.moais[1] else {return}
-        self.db.collection("moais").document(moaiID).getDocument { (snapshot, err) in
-            if let err = err {
-                print("ユーザーの模合情報の取得に失敗しました。\(err)")
-                return
-            }else {
-                guard let dic = snapshot?.data() else {return}
-                self.moai = Moai(dic: dic)
-            }
-        }
-    }
+//    func fetchUsersMoaiInfo(user: User) {
+//        guard let moaiID = self.user?.moais[1] else {return}
+//        self.db.collection("moais").document(moaiID).getDocument { (snapshot, err) in
+//            if let err = err {
+//                print("ユーザーの模合情報の取得に失敗しました。\(err)")
+//                return
+//            }else {
+//                guard let dic = snapshot?.data() else {return}
+//                self.moai = Moai(dic: dic)
+//            }
+//        }
+//    }
     
 }
 

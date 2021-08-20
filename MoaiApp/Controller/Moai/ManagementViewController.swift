@@ -9,26 +9,26 @@ import UIKit
 import Firebase
 import PKHUD
 
-class ManagementViewController: UIViewController {
+class ManagementViewController: standardViewController {
     
     
-    let db = Firestore.firestore()
-    let userID = Auth.auth().currentUser?.uid
+//    let db = Firestore.firestore()
+//    let userID = Auth.auth().currentUser?.uid
     
     //pastMoaisButtonの横のアイコンで使用
     let downImage = UIImage(systemName: "arrowtriangle.down.fill")
     let upImage = UIImage(systemName: "arrowtriangle.up.fill")
     
     // 前ページから持ってきた値
-    var user: User?
-    var moai: Moai?
-    var nextMoai: MoaiRecord? //次回の模合の情報
-    var nextMoaiID: String?
-    var pastRecodeArray: [MoaiRecord]?  //古いデータが「0番目」、新しいのが「n番目」になってる
-    var pastRecodeIDStringArray: [String]?  // 20210417みたいな形で取り出してる
-    var pastRecodeIDDateArray: [String]?  //◯月◯日みたいな形で取り出してる
-    var nextMoaiEntryArray: [Bool]? // ブーリアン型の配列
-    var moaiMenbersNameList: [String] = [] //模合メンバーの名前の配列
+//    var user: User?
+//    var moai: Moai?
+//    var nextMoai: MoaiRecord? //次回の模合の情報
+//    var nextMoaiID: String?
+//    var pastRecodeArray: [MoaiRecord]?  //古いデータが「0番目」、新しいのが「n番目」になってる
+//    var pastRecodeIDStringArray: [String]?  // 20210417みたいな形で取り出してる
+//    var pastRecodeIDDateArray: [String]?  //◯月◯日みたいな形で取り出してる
+//    var nextMoaiEntryArray: [Bool]? // ブーリアン型の配列
+//    var moaiMenbersNameList: [String] = [] //模合メンバーの名前の配列
     
     @IBOutlet weak var nextMoaiDateLabel: UILabel!
     @IBOutlet weak var entryButton: UIButton!
@@ -78,6 +78,7 @@ class ManagementViewController: UIViewController {
             self.getMoneyPersonTableView.delegate = self
             self.navigationItem.rightBarButtonItem?.isEnabled = true
             self.blurView.alpha = 0
+            print("現在、ログインしているユーザー　\(self.user?.username)")
         }
         
         //1秒後に処理
@@ -285,73 +286,73 @@ class ManagementViewController: UIViewController {
     }
     
     //ユーザーの模合情報の取得(後々は、複数入っている場合の模合情報を取れるようにする（配列の番号指定の部分を変数に置き換えして）)
-    func fetchUsersMoaiInfo(user: User) {
-        guard let moaiID = self.user?.moais[1] else {return}
-        self.db.collection("moais").document(moaiID).getDocument { (snapshot, err) in
-            if let err = err {
-                print("ユーザーの模合情報の取得に失敗しました。\(err)")
-                return
-            }else {
-                guard let dic = snapshot?.data() else {
-                    print("ユーザーの模合情報に誤りがありました。")
-                    return
-                }
-                self.moai = Moai(dic: dic)
-            }
-            self.makeMoaiMenbersNameList()
-            guard let next = self.moai?.next else {return}
-            self.nextMoaiEntryArray = next
-        }
-    }
+//    func fetchUsersMoaiInfo(user: User) {
+//        guard let moaiID = self.user?.moais[1] else {return}
+//        self.db.collection("moais").document(moaiID).getDocument { (snapshot, err) in
+//            if let err = err {
+//                print("ユーザーの模合情報の取得に失敗しました。\(err)")
+//                return
+//            }else {
+//                guard let dic = snapshot?.data() else {
+//                    print("ユーザーの模合情報に誤りがありました。")
+//                    return
+//                }
+//                self.moai = Moai(dic: dic)
+//            }
+//            self.makeMoaiMenbersNameList()
+//            guard let next = self.moai?.next else {return}
+//            self.nextMoaiEntryArray = next
+//        }
+//    }
 
     //過去の模合データを取得するメソッド(引数は、模合のDocumentIDと、何回目の模合を取得するかの数(Int型) )
     //viewDidLoadでは直近のデータを取り出し、viewWillApearで選択された時の模合データを取り出す。複数回利用するのでメソッド化
-    func fetchPastRecord() {
-        guard let moaiID = self.user?.moais[1] else {return}
-        self.db.collection("moais").document(moaiID).collection("pastRecords").getDocuments { (querySnapshots, err) in
-            if let err = err {
-                print("過去の模合情報の取得でエラーが出ました。\(err)")
-                return
-            }else {
-                var array1 = [MoaiRecord]()
-                var array2 = [String]()
-                guard let querySnapshots = querySnapshots else {return}
-                for document in querySnapshots.documents {
-                    let dic = document.data()
-                    let recode = MoaiRecord(dic: dic)
-                    print("\(document.documentID) => \(document.data())")
-                    array1.append(recode)
-                    
-                    let moaiID = document.documentID
-                    array2.append(moaiID)
-                    
-                }
-                //古いデータが「0番目」、新しいのが「n番目」になってる
-                self.pastRecodeArray = array1
-                self.pastRecodeIDStringArray = array2
-                self.makePastRecodeIDtoDateArray(array: self.pastRecodeIDStringArray!)
-            }
-        }
-    }
+//    func fetchPastRecord() {
+//        guard let moaiID = self.user?.moais[1] else {return}
+//        self.db.collection("moais").document(moaiID).collection("pastRecords").getDocuments { (querySnapshots, err) in
+//            if let err = err {
+//                print("過去の模合情報の取得でエラーが出ました。\(err)")
+//                return
+//            }else {
+//                var array1 = [MoaiRecord]()
+//                var array2 = [String]()
+//                guard let querySnapshots = querySnapshots else {return}
+//                for document in querySnapshots.documents {
+//                    let dic = document.data()
+//                    let recode = MoaiRecord(dic: dic)
+//                    print("\(document.documentID) => \(document.data())")
+//                    array1.append(recode)
+//
+//                    let moaiID = document.documentID
+//                    array2.append(moaiID)
+//
+//                }
+//                //古いデータが「0番目」、新しいのが「n番目」になってる
+//                self.pastRecodeArray = array1
+//                self.pastRecodeIDStringArray = array2
+//                self.makePastRecodeIDtoDateArray(array: self.pastRecodeIDStringArray!)
+//            }
+//        }
+//    }
         
-    func fetchNextMoaiInfo() {
-        guard let moaiID = self.user?.moais[1] else {return}
-        self.db.collection("moais").document(moaiID).collection("next").getDocuments { (querySnapshots, err) in
-            if let err = err {
-                print("次回の模合情報の取得でエラーが出ました。\(err)")
-                return
-            }else {
-                guard let querySnapshots = querySnapshots else {return}
-                //コレクションからfor文で回しているだけでコレクション内のデータは1つしかないので直接self.nextMoaiに代入している
-                for document in querySnapshots.documents {
-                    let dic = document.data()
-                    let documentID = document.documentID
-                    self.nextMoai = MoaiRecord(dic: dic)
-                    self.nextMoaiID = documentID
-                }
-            }
-        }
-    }
+//    func fetchNextMoaiInfo() {
+//        guard let moaiID = self.user?.moais[1] else {return}
+//        self.db.collection("moais").document(moaiID).collection("next").getDocuments { (querySnapshots, err) in
+//            if let err = err {
+//                print("次回の模合情報の取得でエラーが出ました。\(err)")
+//                return
+//            }else {
+//                guard let querySnapshots = querySnapshots else {return}
+//                //コレクションからfor文で回しているだけでコレクション内のデータは1つしかないので直接self.nextMoaiに代入している
+//                for document in querySnapshots.documents {
+//                    let dic = document.data()
+//                    let documentID = document.documentID
+//                    self.nextMoai = MoaiRecord(dic: dic)
+//                    self.nextMoaiID = documentID
+//                }
+//            }
+//        }
+//    }
     
     //模合のメンバーをIDでなく、名前で配列に入れる
     private func makeMoaiMenbersNameList() {
@@ -374,7 +375,6 @@ class ManagementViewController: UIViewController {
 
     
     private func makePastRecodeIDtoDateArray(array: Array<Any>) {
-        
         //これ入れないと、配列に値を入れれなくなって、空になるから消さない。
         self.pastRecodeIDDateArray = ["◯年◯月◯日みたいな形で取り出すよ"]
         self.pastRecodeIDDateArray?.removeFirst()

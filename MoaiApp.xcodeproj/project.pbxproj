@@ -37,6 +37,7 @@
 		485838652649529A00274507 /* ChatInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485838642649529A00274507 /* ChatInputAccessoryView.swift */; };
 		48583879264A13BF00274507 /* SignUp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48583878264A13BF00274507 /* SignUp.storyboard */; };
 		4858387C264A17A100274507 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4858387B264A17A100274507 /* SignUpViewController.swift */; };
+		485C003226CF865400F25E70 /* standardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485C003126CF865400F25E70 /* standardViewController.swift */; };
 		48ABEA062647E27500B40323 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ABEA052647E27500B40323 /* UIColorExtension.swift */; };
 		48B8B6A3264F917A00E863A1 /* ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B8B6A2264F917A00E863A1 /* ChatRoom.swift */; };
 		48C608522647828E002D1258 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C608512647828E002D1258 /* AppDelegate.swift */; };
@@ -88,6 +89,7 @@
 		485838642649529A00274507 /* ChatInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputAccessoryView.swift; sourceTree = "<group>"; };
 		48583878264A13BF00274507 /* SignUp.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SignUp.storyboard; sourceTree = "<group>"; };
 		4858387B264A17A100274507 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		485C003126CF865400F25E70 /* standardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = standardViewController.swift; sourceTree = "<group>"; };
 		48ABEA052647E27500B40323 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		48B8B6A2264F917A00E863A1 /* ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoom.swift; sourceTree = "<group>"; };
 		48C6084E2647828E002D1258 /* MoaiApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoaiApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -158,6 +160,8 @@
 		482318112657F65C00257189 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				484388942684F6B600175415 /* CreateRoomViewController.swift */,
+				484388912684F4AD00175415 /* FirstJoinViewController.swift */,
 				482317882653EF4B00257189 /* LoginViewController.swift */,
 				4858387B264A17A100274507 /* SignUpViewController.swift */,
 			);
@@ -234,6 +238,7 @@
 				4823180F2657F64600257189 /* Chat */,
 				4823184E2660B65B00257189 /* FirstViewController.swift */,
 				483DFB5526BA4D0400BA0CF6 /* standardTabBarController.swift */,
+				485C003126CF865400F25E70 /* standardViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -254,8 +259,6 @@
 			isa = PBXGroup;
 			children = (
 				48DE01102683103C00B4E62E /* MoaiBaseViewController.swift */,
-				484388912684F4AD00175415 /* FirstJoinViewController.swift */,
-				484388942684F6B600175415 /* CreateRoomViewController.swift */,
 				484388B92688C40600175415 /* ManagementViewController.swift */,
 				4804137426A2B1E6004F5BE0 /* detailsNextMoaiViewController.swift */,
 				4804137B26A7EC2A004F5BE0 /* JudgeUserInMoaiViewController.swift */,
@@ -431,6 +434,7 @@
 			files = (
 				48C608522647828E002D1258 /* AppDelegate.swift in Sources */,
 				48DE01112683103C00B4E62E /* MoaiBaseViewController.swift in Sources */,
+				485C003226CF865400F25E70 /* standardViewController.swift in Sources */,
 				485838652649529A00274507 /* ChatInputAccessoryView.swift in Sources */,
 				4858387C264A17A100274507 /* SignUpViewController.swift in Sources */,
 				48C6086F26478495002D1258 /* ChatListViewController.swift in Sources */,

@@ -18,11 +18,11 @@ extension UIColor {
     }
     
     static func textColor() -> UIColor {
-        return self.init(red: 101 / 255, green: 112 / 255, blue: 112 / 255, alpha: 44 / 255)
+        return self.init(red: 101 / 255, green: 112 / 255, blue: 112 / 255, alpha: 44 )
     }
     
     static func textColor2() -> UIColor {
-        return self.init(red: 41 / 255, green: 95 / 255, blue: 97 / 255, alpha: 38 / 255)
+        return self.init(red: 41 / 255, green: 95 / 255, blue: 97 / 255, alpha: 38 )
     }
     
     static func textColor3() -> UIColor {
@@ -30,7 +30,7 @@ extension UIColor {
     }
     
     static func barColor() -> UIColor {
-        return self.init(red: 75 / 255, green: 176 / 255, blue: 179 / 255, alpha: 70 / 255)
+        return self.init(red: 75 / 255, green: 176 / 255, blue: 179 / 255, alpha: 70 )
     }
     
 }

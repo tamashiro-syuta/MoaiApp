@@ -13,9 +13,15 @@ import FirebaseAuth
 class CreateRoomViewController: UIViewController {
     
     let db = Firestore.firestore()
-    let userID = Auth.auth().currentUser!.uid as String
+    
+    var moai:Moai?
+    
+    var userID:String?
     
     var user: User?
+    
+    var newNextMoaiDate:Date?
+    var newNextMoaiDateID:String?
     
     var groupName:String?
     var week:String = ""
@@ -39,7 +45,6 @@ class CreateRoomViewController: UIViewController {
         super.viewDidLoad()
 
         setupViews()
-        print(self.user?.password)
         
     }
     
@@ -93,12 +98,13 @@ class CreateRoomViewController: UIViewController {
             
             //新規模合グループ作成
             self.db.collection("moais").document().setData(docData) { (err) in
-                if err != nil {
-                    print("moaisコレクションに情報が保存されませんでした。\(err)")
+                if let err = err {
+                    print("新規模合の作成に失敗。moaisコレクションに情報が保存されませんでした。\(err)")
                     return
                 }else {
+                    //グループの引っ張り出し方は、passwordとgroupNameが一致するやつ
                     //エラーがでない＝保存完了？だから、たぶん、ID引っ張ってきて大丈夫？
-                    self.db.collection("moais").whereField("password", isEqualTo: self.password).whereField("menbers", isEqualTo: [self.userID]).getDocuments { (querySnapshot, err) in
+                    self.db.collection("moais").whereField("password", isEqualTo: self.password!).whereField("groupName", isEqualTo: self.groupName!).getDocuments { (querySnapshot, err) in
                         if let err = err {
                             print("エラーでましたあああああ　\(err)")
                             return
@@ -108,12 +114,12 @@ class CreateRoomViewController: UIViewController {
                             print("模合のID取れんかった")
                             return
                         }
-                        //ユーザー情報から模合情報を取得し、新しい模合情報を追加後、DBに戻す
-                        self.fetchAndResetUserMoaiInfo(moaiID: moaiID)
+                        
+                        //模合情報を格納
+                        self.moai = Moai(dic: docData)
+                        //nextの情報作成
+                        self.fetchNextMoaiDate(moai: self.moai!, moaiID: moaiID)
                     }
-                    
-                    // ~~~~~~~~~~~~~~~~~~~~~~ firebaseに保存された時の処理(画面遷移) ~~~~~~~~~~~~~~~~~~~~~~~
-                    self.pushManagementVC()
                 }
             }
             
@@ -127,12 +133,14 @@ class CreateRoomViewController: UIViewController {
     private func fetchAndResetUserMoaiInfo(moaiID: String) {
         var moaisArray: [String] = self.user!.moais
         moaisArray.append(moaiID)
-        self.db.collection("users").document(self.userID).updateData(["moais":moaisArray]) { (err) in
+        self.db.collection("users").document(self.userID!).updateData(["moais":moaisArray]) { (err) in
             if let err = err {
                 print("エラーでっせ　\(err)")
                 return
             }
-            print("DBに保存成功！！")
+            print("作成した模合の情報をユーザー情報用のDBに保存成功！！")
+            // ~~~~~~~~~~~~~~~~~~~~~~ firebaseに保存された後に画面遷移する ~~~~~~~~~~~~~~~~~~~~~~~
+            self.pushManagementVC()
         }
     }
     
@@ -158,11 +166,40 @@ class CreateRoomViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    
+    //画面遷移は、navigationのrootVCをtabBarControllerに上書き
+    //まあ、やり方は、おいおい考えていきますわ〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
     private func pushManagementVC() {
-        let storyboard = UIStoryboard(name: "Management", bundle: nil)
-        let ManagementVC = storyboard.instantiateViewController(withIdentifier: "ManagementViewController") as! ManagementViewController
-        ManagementVC.navigationItem.hidesBackButton = true
-        self.navigationController?.pushViewController(ManagementVC, animated: true)
+        print("タブバーに画面遷移するよ")
+        let tabBarController = standardTabBarController()
+        self.navigationController?.navigationBar.isHidden = true
+        
+        self.navigationController?.pushViewController(tabBarController, animated: true)
+    }
+    
+    private func fetchNextMoaiDate(moai:Moai, moaiID:String) {
+        let weekAndDayArray:[Int] = moai.switchMoaiDate(weekNum: moai.week, weekDay: moai.day)
+        
+        self.newNextMoaiDate = DateUtils.returnNextMoaiDate(weekNum: weekAndDayArray[0], weekDay: weekAndDayArray[1])
+        self.newNextMoaiDateID = DateUtils.stringFromDateoForSettingNextID(date: self.newNextMoaiDate!)
+        
+        let dic = [
+            "date":self.newNextMoaiDate,
+            "getMoneyPerson":"未定",
+            "getMoneyPersonID":"未定",
+            "location":"未定",
+            "startTime":"20:00"
+        ] as [String : Any]
+        
+        self.db.collection("moais").document(moaiID).collection("next").document(newNextMoaiDateID!).setData(dic) { (err) in
+            if let err = err {
+                print("エラーでっせ\(err)")
+                return
+            }
+            print("新しくnextにデータを追加しました。")
+        }
+        //ユーザー情報から模合情報を取得し、新しい模合情報を追加後、DBに戻す
+        self.fetchAndResetUserMoaiInfo(moaiID: moaiID)
     }
     
 }

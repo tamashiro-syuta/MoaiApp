@@ -13,11 +13,16 @@ import PKHUD  //インジケーターの表示
 
 class SignUpViewController: UIViewController {
     
+    var user:User?
+    
+    var moveVC:UIViewController?
+    var moveVCName:String?
     
     @IBOutlet weak var profileImageButton: UIButton!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var usernameTextField: UITextField!
+    @IBOutlet weak var createOrJoinSegumentControl: UISegmentedControl!
     @IBOutlet weak var registerButton: UIButton!
     @IBOutlet weak var alreadyHaveAccountButton: UIButton!
     
@@ -33,11 +38,13 @@ class SignUpViewController: UIViewController {
     }
     
     private func setUpViews() {
+        
+        self.moveVCName = "CreateRoomViewController"
+        
         profileImageButton.layer.cornerRadius = 85
         profileImageButton.layer.borderWidth = 1
         profileImageButton.layer.borderColor = UIColor.rgb(red: 240, green: 240, blue: 240).cgColor
         
-        registerButton.layer.cornerRadius = 12
         
         alreadyHaveAccountButton.addTarget(self, action: #selector(tappedAlreadyHaveAccountButton), for: .touchUpInside)
         
@@ -45,10 +52,44 @@ class SignUpViewController: UIViewController {
         passwordTextField.delegate = self
         usernameTextField.delegate = self
         
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
+        //toolbarに表示させるアイテム
+        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.donePressed))
+        let cancel = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancelPressed))
+        toolbar.setItems([cancel , space, done ], animated: true)
+        
+        emailTextField.inputAccessoryView = toolbar
+        passwordTextField.inputAccessoryView = toolbar
+        usernameTextField.inputAccessoryView = toolbar
+        
+        createOrJoinSegumentControl.selectedSegmentTintColor = .barColor()
+        
         //全てのテキストフィールドに値が入ってないとボタンが押せなくする処理
         registerButton.isEnabled = false
-        registerButton.backgroundColor = .rgb(red: 100, green: 100, blue: 100)
+        registerButton.layer.cornerRadius = 12
+        registerButton.backgroundColor = .barColor()
     }
+    
+    @objc func donePressed() {
+        view.endEditing(true)
+    }
+    
+    @objc func cancelPressed() {
+        view.endEditing(true)
+    }
+    
+    @IBAction func selectedControl(_ sender: UISegmentedControl) {
+        //sender.selectedSegmentIndex -> 左が０、右が１
+        if sender.selectedSegmentIndex == 0 {
+            print("模合、作ります！！")
+            self.moveVCName = "CreateRoomViewController"
+        }else if sender.selectedSegmentIndex == 1 {
+            print("模合に参加します！！")
+            self.moveVCName = "FirstJoinViewController"
+        }
+    }
+    
     
     @objc private func tappedAlreadyHaveAccountButton() {
         //LoginViewControllerへの画面遷移
@@ -93,7 +134,7 @@ class SignUpViewController: UIViewController {
             //画像データをURLとして取得（FireStoreに入れるため）
             storageRef.downloadURL { (url, err) in
                 if let err = err {
-                    print("FireStorgaeからのダウンロードに失敗しました。")
+                    print("FireStorgaeからのダウンロードに失敗しました。\(err)")
                     HUD.hide()
                     return
                 }
@@ -116,6 +157,7 @@ class SignUpViewController: UIViewController {
         Auth.auth().createUser(withEmail: email, password: password) { [self] (res, err) in
             if let err = err {
                 print("認証情報の保存に失敗しました。\(err)")
+                self.errorAlert()
                 HUD.hide()
                 return
             }
@@ -139,11 +181,28 @@ class SignUpViewController: UIViewController {
                     return
                 }
                 
-                print("FireStoreへの情報に保存に成功しました。")
-                HUD.hide()
-                //トーク画面に戻る
-                self.dismiss(animated: true, completion: nil)
-                
+                Firestore.firestore().collection("users").document(uid).getDocument { (snapshot, err) in
+                    if let err = err {
+                        print("エラーでっせ\(err)")
+                        return
+                    }
+                    guard let dic = snapshot?.data() else {
+                        print("snapshotのデータの取得に失敗")
+                        return
+                    }
+                    self.user = User(dic: dic)
+                    print("FireStoreへの情報に保存に成功しました。")
+                    HUD.hide()
+                    //模合作成 or 参加画面に遷移(画面遷移と一緒にユーザー情報を渡す)
+    //                self.dismiss(animated: true, completion: nil)
+                    if self.moveVCName == "CreateRoomViewController" {
+                        print("模合作りまーす")
+                        pushCreateRoomVC(uid: uid)
+                    }else {
+                        print("模合に参加しまーす")
+                        pushJoinRoomVC(uid: uid)
+                }
+                }
             }
         }
         
@@ -154,6 +213,40 @@ class SignUpViewController: UIViewController {
         self.view.endEditing(true)
     }
     
+    private func pushCreateRoomVC(uid: String) {
+        let CreateRoomStoryboard = UIStoryboard(name: "SignUp", bundle: nil)
+        let CreateRoomVC = CreateRoomStoryboard.instantiateViewController(withIdentifier: "CreateRoomViewController") as! CreateRoomViewController
+        CreateRoomVC.userID = uid
+        CreateRoomVC.user = user
+        self.navigationController?.navigationBar.isHidden = false
+        self.navigationController?.pushViewController(CreateRoomVC, animated: true)
+    }
+    
+    private func pushJoinRoomVC(uid: String) {
+        let FirstJoinStoryboard = UIStoryboard(name: "SignUp", bundle: nil)
+        let FirstJoinVC = FirstJoinStoryboard.instantiateViewController(withIdentifier: "FirstJoinViewController") as! FirstJoinViewController
+        FirstJoinVC.userID = uid
+        FirstJoinVC.user = self.user
+        self.navigationController?.navigationBar.isHidden = false
+        self.navigationController?.pushViewController(FirstJoinVC, animated: true)
+    }
+    
+    private func errorAlert() {
+        //この時、メールかパスワードのテキストフィールドの色を変更できたら最高
+        let alertText = "このメールアドレス、またはパスワードは、既に他のユーザーに使用されています。"
+        
+        let alert: UIAlertController = UIAlertController(title: alertText, message: "", preferredStyle:  UIAlertController.Style.alert)
+
+        let defaultAction: UIAlertAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler:{
+            // ボタンが押された時の処理を書く（クロージャ実装）
+            (action: UIAlertAction!) -> Void in
+            print("OK")
+        })
+        // ③ UIAlertControllerにActionを追加
+        alert.addAction(defaultAction)
+        // ④ Alertを表示
+        present(alert, animated: true, completion: nil)
+    }
     
 }
 
@@ -169,10 +262,10 @@ extension SignUpViewController: UITextFieldDelegate {
         
         if emailIsEmpty || passwordIsEmpty || usernameIsEmpty {
             registerButton.isEnabled = false
-            registerButton.backgroundColor = .rgb(red: 100, green: 100, blue: 100)
+            registerButton.backgroundColor = .textColor()
         }else {
             registerButton.isEnabled = true
-            registerButton.backgroundColor = .rgb(red: 0, green: 185, blue: 0)
+            registerButton.backgroundColor = .barColor()
         }
     }
     
