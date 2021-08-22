@@ -67,18 +67,19 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        //キーボードを閉じる。
+        searchBar.resignFirstResponder()
+        //差しているピンを削除
+        self.map.removeAnnotations(self.map.annotations)
+        //表示している経路を削除
+        self.map.removeOverlays(self.map.overlays)
+        
         //入力された文字を取り出す
-        if let searchKey = searchBar.text {
+        if searchBar.text != "" {
+            let searchKey = searchBar.text
             print("検索開始でっせ！！！")
             print(searchKey)
             
-            //差しているピンを削除
-            let allPins = self.map.annotations
-            self.map.removeAnnotations(allPins)
-            
-            //キーボードを閉じる。
-            searchBar.resignFirstResponder()
-                    
             //検索条件を作成する。
             let request = MKLocalSearch.Request()
             request.naturalLanguageQuery = searchKey
@@ -92,12 +93,6 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
              
                 for placemark in (result?.mapItems)! {
                     if(error == nil) {
-                        //検索された場所にピンを刺す。
-//                        let annotation = MKPointAnnotation()
-//                        annotation.coordinate = CLLocationCoordinate2DMake(placemark.placemark.coordinate.latitude, placemark.placemark.coordinate.longitude)
-//                        annotation.title = placemark.placemark.name
-//                        annotation.subtitle = placemark.placemark.title
-//                        self.map.addAnnotation(annotation)
                         guard let location = placemark.placemark.location else {return}
                         let name = placemark.placemark.name
                         self.setPin(location: location, pinTitle: name ?? "")
@@ -122,7 +117,14 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
             
         }
         self.map.addAnnotation(pin)
-        self.map.region = MKCoordinateRegion(center: targetCoordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)
+        guard let currentPoint = locationManager.location else {return}
+        if currentPoint != nil {
+            let halfWayPoint = self.halfwayPoint(first: location, second: currentPoint)
+            let distance = location.distance(from: currentPoint)
+            self.map.region = MKCoordinateRegion(center: halfWayPoint.coordinate, latitudinalMeters: distance * 1.5, longitudinalMeters: distance * 1.5)
+        }else {
+            self.map.region = MKCoordinateRegion(center: targetCoordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)
+        }
     }
     
     /// ピンをタップした時に呼ばれる(ピンの詳細情報を出したりする)
@@ -137,6 +139,14 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
             let longitude = anotation.coordinate.longitude
             let location = CLLocation(latitude: latitude, longitude: longitude)
             self.showRoute(dest: location)
+            guard let currentPoint = locationManager.location else {return}
+            if currentPoint != nil {
+                let halfWayPoint = self.halfwayPoint(first: location, second: currentPoint)
+                let distance = location.distance(from: currentPoint)
+                self.map.region = MKCoordinateRegion(center: halfWayPoint.coordinate, latitudinalMeters: distance * 1.5, longitudinalMeters: distance * 1.5)
+            }else {
+                self.map.region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)
+            }
         }
     }
 
@@ -165,11 +175,26 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
             }
             let route = directionResonse.routes[0]
             self.route = route
+            //経路表示
             self.map.addOverlay(route.polyline, level: .aboveRoads)
             let time = route.expectedTravelTime / 60
             //多分、下のは、アラート的な何かでメッセージを表示するやつだと思う。
 //            self.showToast(message: "所要時間は「" + String(time.rounded()) + "」分です。", font: .systemFont(ofSize: 12.0))
             }
+    }
+    
+    //2点間の中心地を割り出す
+    func halfwayPoint(first:CLLocation, second:CLLocation) -> CLLocation {
+        let firstLatitude = first.coordinate.latitude
+        let firstLongitude = first.coordinate.longitude
+        let secondLatitude = second.coordinate.latitude
+        let secondLongitude = second.coordinate.longitude
+        
+        let latitude = (firstLatitude + secondLatitude)/2
+        let longitude = (firstLongitude + secondLongitude)/2
+        
+        let between2Point = CLLocation(latitude: latitude, longitude: longitude)
+        return between2Point
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
