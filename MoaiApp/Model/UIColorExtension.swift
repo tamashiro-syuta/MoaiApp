@@ -33,4 +33,7 @@ extension UIColor {
         return self.init(red: 75 / 255, green: 176 / 255, blue: 179 / 255, alpha: 70 )
     }
     
+    static func labelBackGroundColor() -> UIColor {
+        return self.init(red: 158 / 255, green: 227 / 255, blue: 230 / 255, alpha: 90 )
+    }
 }

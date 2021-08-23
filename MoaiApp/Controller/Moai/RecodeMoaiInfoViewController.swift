@@ -67,7 +67,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         dateTextField.placeholder = DateUtils.stringFromDate(date: self.nextMoai!.date.dateValue())
         startTimeTextField.placeholder = self.nextMoai?.startTime
         getMoneyPersonTextField.placeholder = self.nextMoai?.getMoneyPerson
-        locationTextField.placeholder = self.nextMoai?.location
+        locationTextField.placeholder = self.nextMoai?.locationName
         
         getMoneyPersonPickerView.delegate = self
         getMoneyPersonPickerView.tag = 1
@@ -153,7 +153,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         var newStartTime:String = self.nextMoai!.startTime
         var newGetMoneyPerson:String = self.nextMoai!.getMoneyPerson
         var newGetMoneyPersonID:String = self.nextMoai!.getMoneyPersonID
-        var newLocation:String = self.nextMoai!.location
+        var newLocation:String = self.nextMoai!.locationName
 
         if self.dateTextField.text != "" {
             //Date型のselectedDateの値をTimestamp型に変換

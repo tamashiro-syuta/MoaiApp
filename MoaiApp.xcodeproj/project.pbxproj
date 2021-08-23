@@ -50,6 +50,8 @@
 		48CA14CE26BBDBBF00ABA246 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 48CA14CC26BBDBBF00ABA246 /* loading.json */; };
 		48DE010D26830FFF00B4E62E /* Moai.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48DE010C26830FFF00B4E62E /* Moai.storyboard */; };
 		48DE01112683103C00B4E62E /* MoaiBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE01102683103C00B4E62E /* MoaiBaseViewController.swift */; };
+		48E088CD26D3111B0072091B /* PastMoai.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48E088CC26D3111B0072091B /* PastMoai.storyboard */; };
+		48E088D026D31DCC0072091B /* PastMoaiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E088CF26D31DCC0072091B /* PastMoaiViewController.swift */; };
 		48E7FD5E2690C40600E4FF2B /* MoaiRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E7FD5D2690C40400E4FF2B /* MoaiRecord.swift */; };
 		48ECBCC72697F08B00FA65CC /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ECBCC62697F08B00FA65CC /* MapViewController.swift */; };
 		48ECBCCC2697F0C200FA65CC /* Map.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48ECBCCB2697F0C200FA65CC /* Map.storyboard */; };
@@ -104,6 +106,8 @@
 		48CA14CC26BBDBBF00ABA246 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		48DE010C26830FFF00B4E62E /* Moai.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Moai.storyboard; sourceTree = "<group>"; };
 		48DE01102683103C00B4E62E /* MoaiBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoaiBaseViewController.swift; sourceTree = "<group>"; };
+		48E088CC26D3111B0072091B /* PastMoai.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PastMoai.storyboard; sourceTree = "<group>"; };
+		48E088CF26D31DCC0072091B /* PastMoaiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastMoaiViewController.swift; sourceTree = "<group>"; };
 		48E7FD5D2690C40400E4FF2B /* MoaiRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoaiRecord.swift; sourceTree = "<group>"; };
 		48ECBCC62697F08B00FA65CC /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		48ECBCCB2697F0C200FA65CC /* Map.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Map.storyboard; sourceTree = "<group>"; };
@@ -251,6 +255,7 @@
 				4804137E26A7F031004F5BE0 /* JudgeUserInMoai.storyboard */,
 				483E5D9426B7A3D5001BAD0B /* RecodeMoaiInfo.storyboard */,
 				483E5D9E26B7E2E7001BAD0B /* ChangeNextMoai.storyboard */,
+				48E088CC26D3111B0072091B /* PastMoai.storyboard */,
 			);
 			path = Moai;
 			sourceTree = "<group>";
@@ -264,6 +269,7 @@
 				4804137B26A7EC2A004F5BE0 /* JudgeUserInMoaiViewController.swift */,
 				481D2A1026AC63DD007BF229 /* ChangeNextMoaiViewController.swift */,
 				483E5D9726B7A442001BAD0B /* RecodeMoaiInfoViewController.swift */,
+				48E088CF26D31DCC0072091B /* PastMoaiViewController.swift */,
 			);
 			path = Moai;
 			sourceTree = "<group>";
@@ -380,6 +386,7 @@
 				484388982684FF5300175415 /* Management.storyboard in Resources */,
 				48583879264A13BF00274507 /* SignUp.storyboard in Resources */,
 				482317862653EDFD00257189 /* Login.storyboard in Resources */,
+				48E088CD26D3111B0072091B /* PastMoai.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,6 +451,7 @@
 				48538EE2264ADAB700871BB0 /* User.swift in Sources */,
 				48ECBCC72697F08B00FA65CC /* MapViewController.swift in Sources */,
 				484388922684F4AD00175415 /* FirstJoinViewController.swift in Sources */,
+				48E088D026D31DCC0072091B /* PastMoaiViewController.swift in Sources */,
 				481D2A1126AC63DD007BF229 /* ChangeNextMoaiViewController.swift in Sources */,
 				481D2A1426AE7461007BF229 /* DateUtils.swift in Sources */,
 				483DFB5626BA4D0500BA0CF6 /* standardTabBarController.swift in Sources */,

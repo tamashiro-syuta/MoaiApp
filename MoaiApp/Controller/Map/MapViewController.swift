@@ -137,6 +137,8 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
             print("今、ピンをタップしてやったで")
             let latitude = anotation.coordinate.latitude
             let longitude = anotation.coordinate.longitude
+            print("latitudeは \(latitude)")
+            print("longitudeは \(longitude)")
             let location = CLLocation(latitude: latitude, longitude: longitude)
             self.showRoute(dest: location)
             guard let currentPoint = locationManager.location else {return}

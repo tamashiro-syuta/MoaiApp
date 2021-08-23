@@ -94,7 +94,7 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
         dateTextField.placeholder = date
         startTimeTextField.placeholder = startTime
         getMoneyPersonTextField.placeholder = self.nextMoai?.getMoneyPerson
-        locationTextField.placeholder = self.nextMoai?.location
+        locationTextField.placeholder = self.nextMoai?.locationName
         
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
         //toolbarに表示させるアイテム
@@ -233,7 +233,7 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
             var newStartTime:String = self.nextMoai!.startTime
             var newGetMoneyPerson:String = self.nextMoai!.getMoneyPerson
             var newGetMoneyPersonID:String = self.nextMoai!.getMoneyPersonID
-            var newLocation:String = self.nextMoai!.location
+            var newLocation:String = self.nextMoai!.locationName
             
             //値が更新されているもののみアップデートする
             if self.dateTextField.text != "" {

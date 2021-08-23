@@ -50,7 +50,12 @@ class detailsNextMoaiViewController: UIViewController {
         let date = DateUtils.stringFromDate(date: (self.nextMoai?.date.dateValue())!)
         let startTime = DateUtils.fetchStartTimeFromDate(date: (self.nextMoai?.date.dateValue())!)
         dateLabel.text = " " + date + " " + startTime + " 〜 "
-        locationLabel.text = " " + nextMoai!.location
+        //locationがセットされてるかで表示内容を変換
+        if let locationName = nextMoai?.locationName {
+            locationLabel.text = " " + locationName
+        }else {
+            locationLabel.text = "未設定"
+        }
         
     }
     
