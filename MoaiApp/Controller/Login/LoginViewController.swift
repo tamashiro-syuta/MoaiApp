@@ -54,12 +54,17 @@ class LoginViewController: UIViewController {
             //chatListViewが呼ばれる度にchatroomの情報を更新していると無駄に通信して良くないので
             //再ログインした時にログイン画面にいく手前のviewの情報を取得し、そこのメソッドを呼ぶ
             //こうすることで、ログインした時だけデータをロードする仕様
-            let nav = self.presentingViewController as! UINavigationController
-            let chatListViewController = nav.viewControllers[nav.viewControllers.count - 1 ] as? ChatListViewController
-            chatListViewController?.fetchChatroomsInfoFromFireStore()
-            self.dismiss(animated: true, completion: nil)
+            self.pushManagementVC()
         }
         
+    }
+    
+    private func pushManagementVC() {
+        print("タブバーに画面遷移するよ")
+        let tabBarController = standardTabBarController()
+        self.navigationController?.navigationBar.isHidden = true
+        
+        self.navigationController?.pushViewController(tabBarController, animated: true)
     }
     
     //画面をタップするとテキストフィールドの編集を終わらせてくれる処理
