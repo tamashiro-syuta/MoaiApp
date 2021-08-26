@@ -109,46 +109,53 @@ class SignUpViewController: UIViewController {
     }
     
     @IBAction func tappedRegisterButton(_ sender: Any) {
-        //画像をfirebaseに保存
-        let image = profileImageButton.imageView?.image ?? UIImage(named: "niwatori")
-        //画像のクオリティを0.3倍に変更
-        guard let uploadImage = image?.jpegData(compressionQuality: 0.3) else {return}
         
         HUD.show(.progress)
-        
-        //ファイルネームを任意で設定して保存するための定数
-        let fileName = NSUUID().uuidString
-        //storage(画像を保存するとこ)に"profile_image"フォルダとその中にfileNameの情報を入れたものをインスタンス化
-        let storageRef = Storage.storage().reference().child("profile_image").child(fileName)
-        
-        //インスタンス化したstorageRefのfileNameの中にuploadImageの情報を紐づけ
-        storageRef.putData(uploadImage, metadata: nil) { (metadate, err) in
-            if let err = err {
-                print("Firestorageへの情報の保存に失敗しました。\(err)")
-                HUD.hide()
-                return
-            }
-            
-            //成功した後の処理
 
-            //画像データをURLとして取得（FireStoreに入れるため）
-            storageRef.downloadURL { (url, err) in
+        let image = profileImageButton.imageView?.image ?? nil
+        
+        //画像があればDBに保存
+        if image != nil {
+            //画像のクオリティを0.3倍に変更
+            guard let uploadImage = image?.jpegData(compressionQuality: 0.3) else {return}
+            //ファイルネームを任意で設定して保存するための定数
+            let fileName = NSUUID().uuidString
+            //storage(画像を保存するとこ)に"profile_image"フォルダとその中にfileNameの情報を入れたものをインスタンス化
+            let storageRef = Storage.storage().reference().child("profile_image").child(fileName)
+            
+            //インスタンス化したstorageRefのfileNameの中にuploadImageの情報を紐づけ
+            storageRef.putData(uploadImage, metadata: nil) { (metadate, err) in
                 if let err = err {
-                    print("FireStorgaeからのダウンロードに失敗しました。\(err)")
+                    print("Firestorageへの情報の保存に失敗しました。\(err)")
                     HUD.hide()
                     return
                 }
-                //URLを文字列に変換
-                guard let urlString = url?.absoluteString else {return}
-                //URLをfirestoreに保存
-                self.createUserToFirestore(profileImageUrl: urlString)
+                
+                //成功した後の処理
+
+                //画像データをURLとして取得（FireStoreに入れるため）
+                storageRef.downloadURL { (url, err) in
+                    if let err = err {
+                        print("FireStorgaeからのURLのダウンロードに失敗しました。\(err)")
+                        HUD.hide()
+                        return
+                    }
+                    //URLを文字列に変換
+                    guard let urlString = url?.absoluteString else {return}
+                    //URLをfirestoreに保存
+                    self.createUserToFirestore(profileImageUrl: urlString)
+                }
             }
+        }else {
+            //firebaseStrageに既に保存してあるURL（にわとりの画像）
+            let urlString = "https://firebasestorage.googleapis.com/v0/b/moaiapp-4614e.appspot.com/o/profile_image%2F6968D2D7-66FF-498F-9A70-40D5AE75E1DE?alt=media&token=70811fec-05de-4e11-a61d-a1d2897ab057"
+            self.createUserToFirestore(profileImageUrl: urlString)
         }
     }
  
     
     private func createUserToFirestore(profileImageUrl: String){
-        //テキストフィールドの値と画像をDBに格納（textFieldは下のコードで取り出すので、画像のURLだけ引数として指定してる）
+        //テキストフィールドの値と画像のURLをDBに格納（textFieldは下のコードで取り出すので、画像のURLだけ引数として指定してる）
         
         //user情報を認証
         guard let email = emailTextField.text else {return}

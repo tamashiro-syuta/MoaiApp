@@ -9,6 +9,7 @@ import UIKit
 import Firebase
 import FSCalendar
 
+//詳細画面
 class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
     
     let db = Firestore.firestore()

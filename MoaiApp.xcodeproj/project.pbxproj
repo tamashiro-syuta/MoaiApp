@@ -236,6 +236,7 @@
 		48C60873264784CA002D1258 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				48E1FF3526D726ED00842705 /* PastRecode */,
 				48ECBCC52697F06F00FA65CC /* Map */,
 				48DE010F2683101A00B4E62E /* Moai */,
 				482318112657F65C00257189 /* Login */,
@@ -269,9 +270,16 @@
 				4804137B26A7EC2A004F5BE0 /* JudgeUserInMoaiViewController.swift */,
 				481D2A1026AC63DD007BF229 /* ChangeNextMoaiViewController.swift */,
 				483E5D9726B7A442001BAD0B /* RecodeMoaiInfoViewController.swift */,
-				48E088CF26D31DCC0072091B /* PastMoaiViewController.swift */,
 			);
 			path = Moai;
+			sourceTree = "<group>";
+		};
+		48E1FF3526D726ED00842705 /* PastRecode */ = {
+			isa = PBXGroup;
+			children = (
+				48E088CF26D31DCC0072091B /* PastMoaiViewController.swift */,
+			);
+			path = PastRecode;
 			sourceTree = "<group>";
 		};
 		48ECBCC52697F06F00FA65CC /* Map */ = {
