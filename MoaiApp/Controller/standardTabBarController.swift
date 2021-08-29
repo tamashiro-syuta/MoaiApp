@@ -27,6 +27,37 @@ class standardTabBarController: UITabBarController {
         // 背景色を変更できます！
         UITabBar.appearance().barTintColor = .barColor()
         
+        self.setVC()
+        
+    }
+    
+    private func setVC() {
+        
+        var VCArray = [UIViewController] ()
+        
+        let managementSB = UIStoryboard(name: "Management", bundle: nil)
+        let managementVC = managementSB.instantiateViewController(withIdentifier: "Management")
+        managementVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 1)
+        
+        let chatSB = UIStoryboard(name: "ChatList", bundle: nil)
+        let chatVC = chatSB.instantiateViewController(withIdentifier: "Chat")
+        chatVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 2)
+        
+        let pastMoaiSB = UIStoryboard(name: "PastMoai", bundle: nil)
+        let pastMoaiVC = pastMoaiSB.instantiateViewController(withIdentifier: "PastMoai")
+        pastMoaiVC.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 3)
+        
+        let mapSB = UIStoryboard(name: "Map", bundle: nil)
+        let mapVC = mapSB.instantiateViewController(withIdentifier: "Map")
+        mapVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 4)
+        
+        VCArray.append(managementVC)
+        VCArray.append(chatVC)
+        VCArray.append(pastMoaiVC)
+        VCArray.append(mapVC)
+        
+        self.setViewControllers(VCArray, animated: false)
+        
     }
 
 }

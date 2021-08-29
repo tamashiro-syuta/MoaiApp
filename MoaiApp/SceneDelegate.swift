@@ -46,14 +46,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             //アニメーションの追加
             let animationView = AnimationView(name: "loading")
             let animationBaseView = UIView() //アニメーション動作中の背景用のview
-            
+
             animationBaseView.frame = CGRect(x: 0, y: 0, width: window.frame.size.width, height: window.frame.size.height)
             animationBaseView.backgroundColor = .white
             animationView.frame = CGRect(x: 0, y: 0, width: window.frame.size.width, height: window.frame.size.height)
             animationBaseView.addSubview(animationView)
             animationView.contentMode = .scaleAspectFit
             animationView.loopMode = .repeat(2)
-            
+
             //windowにアニメーションを追加
             self.tabBarController?.view.addSubview(animationBaseView)
             animationView.play{ (finished) in

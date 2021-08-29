@@ -127,6 +127,8 @@ class ManagementViewController: standardViewController {
         //配列の順番をDBのmoaiのmenbersの順番と同じにするため
         self.moaiMenbersNameList.reverse()
         
+        self.getMoneyPersonTableView.reloadData()
+        
     }
     
     //viewの再読み込み
