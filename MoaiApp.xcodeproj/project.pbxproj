@@ -55,7 +55,7 @@
 		48E7FD5E2690C40600E4FF2B /* MoaiRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E7FD5D2690C40400E4FF2B /* MoaiRecord.swift */; };
 		48ECBCC72697F08B00FA65CC /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ECBCC62697F08B00FA65CC /* MapViewController.swift */; };
 		48ECBCCC2697F0C200FA65CC /* Map.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48ECBCCB2697F0C200FA65CC /* Map.storyboard */; };
-		644630A70389C178C564FD9D /* Pods_MoaiApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A8621030482798E36D65BDC /* Pods_MoaiApp.framework */; };
+		83CC11FA220279066C8781F6 /* Pods_MoaiApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 878C9D9E75FAD18FDB05BE86 /* Pods_MoaiApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -111,9 +111,9 @@
 		48E7FD5D2690C40400E4FF2B /* MoaiRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoaiRecord.swift; sourceTree = "<group>"; };
 		48ECBCC62697F08B00FA65CC /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		48ECBCCB2697F0C200FA65CC /* Map.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Map.storyboard; sourceTree = "<group>"; };
-		4A8621030482798E36D65BDC /* Pods_MoaiApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoaiApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5642086F0542BB225CE11B19 /* Pods-MoaiApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoaiApp.release.xcconfig"; path = "Target Support Files/Pods-MoaiApp/Pods-MoaiApp.release.xcconfig"; sourceTree = "<group>"; };
 		6294A8FE5E03C7C4FBE71E61 /* Pods-ChatAppWithFirebase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatAppWithFirebase.debug.xcconfig"; path = "Target Support Files/Pods-ChatAppWithFirebase/Pods-ChatAppWithFirebase.debug.xcconfig"; sourceTree = "<group>"; };
+		878C9D9E75FAD18FDB05BE86 /* Pods_MoaiApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoaiApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,7 +121,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				644630A70389C178C564FD9D /* Pods_MoaiApp.framework in Frameworks */,
+				83CC11FA220279066C8781F6 /* Pods_MoaiApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,6 +170,14 @@
 				4858387B264A17A100274507 /* SignUpViewController.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		486296A426DB921F00850153 /* PastMoai */ = {
+			isa = PBXGroup;
+			children = (
+				48E088CC26D3111B0072091B /* PastMoai.storyboard */,
+			);
+			path = PastMoai;
 			sourceTree = "<group>";
 		};
 		48C608452647828E002D1258 = {
@@ -223,6 +231,7 @@
 		48C60872264784C2002D1258 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				486296A426DB921F00850153 /* PastMoai */,
 				48ECBCCA2697F0AD00FA65CC /* Map */,
 				48DE010B26830F4500B4E62E /* Moai */,
 				4823180E2657F60900257189 /* Login */,
@@ -256,7 +265,6 @@
 				4804137E26A7F031004F5BE0 /* JudgeUserInMoai.storyboard */,
 				483E5D9426B7A3D5001BAD0B /* RecodeMoaiInfo.storyboard */,
 				483E5D9E26B7E2E7001BAD0B /* ChangeNextMoai.storyboard */,
-				48E088CC26D3111B0072091B /* PastMoai.storyboard */,
 			);
 			path = Moai;
 			sourceTree = "<group>";
@@ -312,7 +320,7 @@
 		D4D2BDFD81209D20293E4424 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4A8621030482798E36D65BDC /* Pods_MoaiApp.framework */,
+				878C9D9E75FAD18FDB05BE86 /* Pods_MoaiApp.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -328,7 +336,7 @@
 				48C6084A2647828E002D1258 /* Sources */,
 				48C6084B2647828E002D1258 /* Frameworks */,
 				48C6084C2647828E002D1258 /* Resources */,
-				AB81935828C39BBC5E3DC52C /* [CP] Embed Pods Frameworks */,
+				F35FB0478EC390D320549268 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -401,23 +409,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		AB81935828C39BBC5E3DC52C /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MoaiApp/Pods-MoaiApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MoaiApp/Pods-MoaiApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MoaiApp/Pods-MoaiApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		D84D6F42141D4EFFC04A3B71 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -438,6 +429,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F35FB0478EC390D320549268 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MoaiApp/Pods-MoaiApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MoaiApp/Pods-MoaiApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MoaiApp/Pods-MoaiApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

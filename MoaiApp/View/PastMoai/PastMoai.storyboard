@@ -45,6 +45,17 @@
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="jQl-78-C3w">
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1o6-X2-bRY">
+                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="1o6-X2-bRY" secondAttribute="trailing" id="a3Z-fs-NyO"/>
+                                                <constraint firstItem="1o6-X2-bRY" firstAttribute="top" secondItem="jQl-78-C3w" secondAttribute="top" id="bMw-qR-7NQ"/>
+                                                <constraint firstItem="1o6-X2-bRY" firstAttribute="leading" secondItem="jQl-78-C3w" secondAttribute="leading" id="hVR-nD-4Ot"/>
+                                                <constraint firstAttribute="bottom" secondItem="1o6-X2-bRY" secondAttribute="bottom" id="rli-8l-Mb9"/>
+                                            </constraints>
                                         </collectionViewCellContentView>
                                         <color key="backgroundColor" red="0.61960784310000006" green="0.89019607840000003" blue="0.90196078430000004" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>
                                     </collectionViewCell>

@@ -6,10 +6,17 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseStorage
+import PKHUD
 
 class PastMoaiViewController: standardViewController {
     
+    
     var selectedPastMoaiNumber:Int = 0
+    
+    var pastMoaiImageURLArray = [String]()
+    var pastMoaiImageArray = [Data]()
     
     var vi: UIView?  //ピッカービューで使用
     
@@ -28,17 +35,22 @@ class PastMoaiViewController: standardViewController {
         //模合を　過去にしたことがあるかの判定条件
         if self.pastRecodeArray != nil && self.pastRecodeArray?.count != 0 {
             //模合をしたことがある
-            selectedPastMoaiNumber = self.pastRecodeArray!.count - 1
-            
-            setLayout(backnumber: selectedPastMoaiNumber)
-            setupView()
-            
-            let layout = UICollectionViewFlowLayout()
-            layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-            layout.minimumInteritemSpacing = 3
-            layout.minimumLineSpacing = 3
-            
-            collectionView.collectionViewLayout = layout
+            self.fetchPastPicture()
+            HUD.flash(.progress, onView: view, delay: 1) { _ in
+                print("viewを作り始めます")
+                //viewを表示
+                self.selectedPastMoaiNumber = self.pastRecodeArray!.count - 1
+                
+                self.setLayout(backnumber: self.selectedPastMoaiNumber)
+                self.setupView()
+                
+                let layout = UICollectionViewFlowLayout()
+                layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+                layout.minimumInteritemSpacing = 3
+                layout.minimumLineSpacing = 3
+                
+                self.collectionView.collectionViewLayout = layout
+            }
         }else {
             //模合をしたことがない
             
@@ -168,6 +180,56 @@ class PastMoaiViewController: standardViewController {
         
         view.addSubview(message)
     }
+    
+    private func fetchPastPicture() {
+        guard let moaiID = self.user?.moais[1] else {
+            print("模合IDの取得に失敗しまいした。")
+            return
+        }
+        
+        let storage = Storage.storage()
+        let storageReference = storage.reference().child("past_recodes").child(moaiID).child("20210415")
+        storageReference.listAll { (result, err) in
+          if let err = err {
+            print("エラーでした〜〜〜 \(err)")
+          }
+          for prefix in result.prefixes {
+            // The prefixes under storageReference.
+            // You may call listAll(completion:) recursively on them.
+            print("prefix → \(prefix)")
+          }
+          for item in result.items {
+            // The items under storageReference.
+            print("item → \(item)")
+            print("item.fullpath → \(item.fullPath)")
+            print("itemの型は、\( type(of: item) )")
+            self.pastMoaiImageURLArray.append(item.fullPath)
+            self.getImagesFromFireStorage(ImagePath: item.fullPath)
+          }
+            
+        }
+    }
+    
+//    引数のURLは、"gs://<your-firebase-storage-bucket>/images/stars.jpg"のようなものを渡す
+    private func getImagesFromFireStorage(ImagePath: String) {
+        let storage = Storage.storage()
+        let pastMoaiImageRef = storage.reference(withPath: ImagePath)
+        
+        pastMoaiImageRef.getData(maxSize: 1 * 1024 * 1024) { (data, err) in
+            if let err = err {
+                print("エラーです〜〜〜 \(err)")
+                return
+            }else {
+                //エラーが出ない時点でdataには値が入っているから強制アンラップしても大丈夫
+                guard let image = UIImage(data: data!)?.jpegData(compressionQuality: 0.1) else {
+                    print("何か知らんけど、UIImage型に変換できんかったわ")
+                    return
+                }
+                self.pastMoaiImageArray.append(image)
+                print("self.pastMoaiImageArray → \(self.pastMoaiImageArray)")
+            }
+        }
+    }
 
 }
 
@@ -178,7 +240,8 @@ extension PastMoaiViewController: UICollectionViewDelegate, UICollectionViewData
     }
     //セルの数
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 15
+//        return 15
+        return self.pastRecodeArray?.count ?? 15
     }
     
     //セルの中身を決める
@@ -186,6 +249,15 @@ extension PastMoaiViewController: UICollectionViewDelegate, UICollectionViewData
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
         cell.backgroundColor = UIColor.barColor()
         cell.layer.cornerRadius = 5
+        
+        // Tag番号を使ってImageViewのインスタンス生成
+        let imageView = cell.contentView.viewWithTag(1) as! UIImageView
+        // 画像配列の番号で指定された要素の名前の画像をUIImageとする
+        
+        let cellImage = UIImage(data: self.pastMoaiImageArray[indexPath.row])
+        // UIImageをUIImageViewのimageとして設定
+        imageView.image = cellImage
+        
         return cell
     }
     
@@ -194,6 +266,11 @@ extension PastMoaiViewController: UICollectionViewDelegate, UICollectionViewData
         let horizontalSpace : CGFloat = 10
         let cellSize : CGFloat = self.view.bounds.width / 3 - horizontalSpace
         return CGSize(width: cellSize, height: cellSize)
+    }
+    
+    // セルが選択された時の挙動
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        <#code#>
     }
     
     
