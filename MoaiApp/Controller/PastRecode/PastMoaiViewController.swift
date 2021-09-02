@@ -357,7 +357,7 @@ extension PastMoaiViewController: UIImagePickerControllerDelegate & UINavigation
         guard let uploadImage = image.jpegData(compressionQuality: 0.7) else {return}
         //ファイルネームを任意で設定して保存するための定数
         let fileName = NSUUID().uuidString
-        let storageReference = self.storage.child(moaiID).child("20210415").child(fileName)
+        let storageReference = self.storage.child(moaiID).child(self.pastMoaiDate!).child(fileName)
         
         //インスタンス化したstorageRefのfileNameの中にuploadImageの情報を紐づけ
         storageReference.putData(uploadImage, metadata: nil) { (metadate, err) in
