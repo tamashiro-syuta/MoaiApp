@@ -12,8 +12,11 @@ import PKHUD
 
 class PastMoaiViewController: standardViewController {
     
+    let storage = Storage.storage().reference().child("past_recodes")
     
     var selectedPastMoaiNumber:Int = 0
+    
+    var pastMoaiDate:String?
     
     var pastMoaiImageURLArray = [String]()
     var pastMoaiImageArray = [Data]()
@@ -35,13 +38,16 @@ class PastMoaiViewController: standardViewController {
         //模合を　過去にしたことがあるかの判定条件
         if self.pastRecodeArray != nil && self.pastRecodeArray?.count != 0 {
             //模合をしたことがある
-            self.fetchPastPicture()
-            HUD.flash(.progress, onView: view, delay: 1) { _ in
-                print("viewを作り始めます")
-                //viewを表示
-                self.selectedPastMoaiNumber = self.pastRecodeArray!.count - 1
+//            self.fetchPastPicture()
+            
+            print("viewを作り始めます")
+            //viewを表示
+            self.selectedPastMoaiNumber = self.pastRecodeArray!.count - 1
+            self.setLayout(backnumber: self.selectedPastMoaiNumber)
+            self.fetchPastPicture(pastMoaiDate: self.pastMoaiDate!)
+            
+            HUD.flash(.progress, onView: view, delay: 1.5) { _ in
                 
-                self.setLayout(backnumber: self.selectedPastMoaiNumber)
                 self.setupView()
                 
                 let layout = UICollectionViewFlowLayout()
@@ -75,6 +81,15 @@ class PastMoaiViewController: standardViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
 
+    }
+    
+    //画像のアップロード
+    @IBAction func addPictures(_ sender: Any) {
+        //端末の画像フォルダにアクセスしてプロフィール画像を設定
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.allowsEditing = true
+        self.present(imagePickerController, animated: true, completion: nil)
     }
     
     //ナビゲーションのタイトルをタップした時の処理
@@ -113,6 +128,13 @@ class PastMoaiViewController: standardViewController {
     
     @objc func donePressed() {
         self.vi?.isHidden = true
+        
+        //画像取得
+        self.fetchPastPicture(pastMoaiDate: self.pastMoaiDate!)
+        
+        HUD.flash(.progress,onView: self.collectionView, delay: 1) { _ in
+            self.collectionView.reloadData()
+        }
     }
     
     private func setLayout(backnumber:Int) {
@@ -126,7 +148,9 @@ class PastMoaiViewController: standardViewController {
             self.pastMoaiInfoLabel.text = text
             
             let date = DateUtils.stringFromDate(date: record.date.dateValue())
+            self.pastMoaiDate = DateUtils.stringFromDateoForSettingNextID(date: record.date.dateValue())
             setNavigationBar(title: date)
+//            fetchPastPicture(pastMoaiDate: pastMoaiDate)
         }
     }
     
@@ -141,7 +165,7 @@ class PastMoaiViewController: standardViewController {
             print("pastRecodeArrayにはちゃんと値があるからボタンとして機能させるンゴよ")
             filterButton.addTarget(self, action: #selector(tappedTitleButton), for: .touchUpInside)//タップされた時に関数動く
         }
-        filterButton.addTarget(self, action: #selector(tappedTitleButton), for: .touchUpInside)//タップされた時に関数動く
+//        filterButton.addTarget(self, action: #selector(tappedTitleButton), for: .touchUpInside)//タップされた時に関数動く
         view.addSubview(filterButton)//メインのviewにviewをのせる
         //タイトルとなるViewを生成
         let label = UILabel(frame: CGRect(x: 0, y: 13, width: 160, height: 18))
@@ -181,32 +205,31 @@ class PastMoaiViewController: standardViewController {
         view.addSubview(message)
     }
     
-    private func fetchPastPicture() {
+    //引数は、20210415のような形にする
+    private func fetchPastPicture(pastMoaiDate: String) {
         guard let moaiID = self.user?.moais[1] else {
             print("模合IDの取得に失敗しまいした。")
             return
         }
         
-        let storage = Storage.storage()
-        let storageReference = storage.reference().child("past_recodes").child(moaiID).child("20210415")
+        let storageReference = self.storage.child(moaiID).child(pastMoaiDate)
         storageReference.listAll { (result, err) in
-          if let err = err {
-            print("エラーでした〜〜〜 \(err)")
-          }
-          for prefix in result.prefixes {
-            // The prefixes under storageReference.
-            // You may call listAll(completion:) recursively on them.
-            print("prefix → \(prefix)")
-          }
-          for item in result.items {
-            // The items under storageReference.
-            print("item → \(item)")
-            print("item.fullpath → \(item.fullPath)")
-            print("itemの型は、\( type(of: item) )")
-            self.pastMoaiImageURLArray.append(item.fullPath)
-            self.getImagesFromFireStorage(ImagePath: item.fullPath)
-          }
+            if let err = err {
+              print("エラーでした〜〜〜 \(err)")
+            }
+        
+            //配列の初期化（別日の画像やURLが入っているかもしれないから）
+            self.pastMoaiImageArray.removeAll()
+            self.pastMoaiImageURLArray.removeAll()
             
+            for item in result.items {
+              // The items under storageReference.
+              print("item → \(item)")
+              print("item.fullpath → \(item.fullPath)")
+              print("itemの型は、\( type(of: item) )")
+              self.pastMoaiImageURLArray.append(item.fullPath)
+              self.getImagesFromFireStorage(ImagePath: item.fullPath)
+            }
         }
     }
     
@@ -228,6 +251,7 @@ class PastMoaiViewController: standardViewController {
                 self.pastMoaiImageArray.append(image)
                 print("self.pastMoaiImageArray → \(self.pastMoaiImageArray)")
             }
+//            self.collectionView.reloadData()
         }
     }
 
@@ -241,7 +265,7 @@ extension PastMoaiViewController: UICollectionViewDelegate, UICollectionViewData
     //セルの数
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 //        return 15
-        return self.pastRecodeArray?.count ?? 15
+        return self.pastMoaiImageURLArray.count
     }
     
     //セルの中身を決める
@@ -249,6 +273,9 @@ extension PastMoaiViewController: UICollectionViewDelegate, UICollectionViewData
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
         cell.backgroundColor = UIColor.barColor()
         cell.layer.cornerRadius = 5
+        
+        print("indexPath.rowは、\(indexPath.row)")
+        print("self.pastMoaiImageArray.countは、\(self.pastMoaiImageArray.count)")
         
         // Tag番号を使ってImageViewのインスタンス生成
         let imageView = cell.contentView.viewWithTag(1) as! UIImageView
@@ -270,7 +297,7 @@ extension PastMoaiViewController: UICollectionViewDelegate, UICollectionViewData
     
     // セルが選択された時の挙動
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        <#code#>
+        print("セルがタップされたよ")
     }
     
     
@@ -289,9 +316,9 @@ extension PastMoaiViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         return (self.pastRecodeArray?.count)!
     }
     
-    //各行のタイトル
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return self.pastRecodeIDDateArray?[row]
+    //各行のタイトルとテキストカラー
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        return NSAttributedString(string: (self.pastRecodeIDDateArray?[row])!, attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
     }
     
     // UIViewPickerのrowが選択された時のメソッド
@@ -299,6 +326,54 @@ extension PastMoaiViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         //選択されたものに応じて、引数を指定し、ラベルのUI更新のメソッドを呼び出す。
         self.setLayout(backnumber: row)
     }
-    
-    
 }
+
+
+extension PastMoaiViewController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        //もし、info[.editedImage]が空じゃなかったら中の処理をする
+        if let editImage = info[.editedImage] as? UIImage {
+            //firebaseに保存
+            uploadImages(image: editImage)
+        }else if let originalImage = info[.originalImage] as? UIImage {
+            uploadImages(image: originalImage)
+        }
+        
+        dismiss(animated: true, completion: nil)
+    }
+    
+    private func uploadImages(image: UIImage) {
+        
+        guard let moaiID = self.user?.moais[1] else {
+            print("模合IDの取得に失敗しまいした。")
+            return
+        }
+        //画像のクオリティを0.3倍に変更
+        guard let uploadImage = image.jpegData(compressionQuality: 0.7) else {return}
+        //ファイルネームを任意で設定して保存するための定数
+        let fileName = NSUUID().uuidString
+        let storageReference = self.storage.child(moaiID).child("20210415").child(fileName)
+        
+        //インスタンス化したstorageRefのfileNameの中にuploadImageの情報を紐づけ
+        storageReference.putData(uploadImage, metadata: nil) { (metadate, err) in
+            if let err = err {
+                print("Firestorageへの情報の保存に失敗しました。\(err)")
+//                HUD.hide()
+                return
+            }
+            
+            //成功した後の処理
+//            HUD.hide()
+            print("画像の保存に成功しました。")
+        }
+        
+        HUD.flash(.progress, onView: view, delay: 2) { _ in
+            //DB処理が終了する前に呼ばれているのが原因で更新しても画像が増えない
+//            self.fetchPastPicture()
+            self.collectionView.reloadData()
+            print("呼ばれたンゴよよ〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜")
+        }
+    }
+}
+

@@ -70,7 +70,7 @@ class ManagementViewController: standardViewController {
         
         self.navigationItem.rightBarButtonItem?.isEnabled = false
         
-        HUD.flash(.progress, onView: view, delay: 1) { _ in
+        HUD.flash(.progress, onView: view, delay: 1.5) { _ in
             //HUDを非表示にした後の処理
             self.setupView()
             self.makeGetMoneyPersonList()
@@ -107,7 +107,7 @@ class ManagementViewController: standardViewController {
         pastMoaisButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
         
         
-        let nextMoaiDate = DateUtils.stringFromDate(date: (self.nextMoai?.date.dateValue())!)
+        let nextMoaiDate = DateUtils.stringFromDate(date: (self.nextMoai?.date.dateValue())! )
         self.nextMoaiDateLabel.text = nextMoaiDate
         
         
