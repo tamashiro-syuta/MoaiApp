@@ -129,6 +129,10 @@ class PastMoaiViewController: standardViewController {
     @objc func donePressed() {
         self.vi?.isHidden = true
         
+        reloadImageOnCollectionView()
+    }
+    
+    private func reloadImageOnCollectionView() {
         //画像取得
         self.fetchPastPicture(pastMoaiDate: self.pastMoaiDate!)
         
@@ -359,20 +363,12 @@ extension PastMoaiViewController: UIImagePickerControllerDelegate & UINavigation
         storageReference.putData(uploadImage, metadata: nil) { (metadate, err) in
             if let err = err {
                 print("Firestorageへの情報の保存に失敗しました。\(err)")
-//                HUD.hide()
                 return
             }
             
-            //成功した後の処理
-//            HUD.hide()
             print("画像の保存に成功しました。")
-        }
-        
-        HUD.flash(.progress, onView: view, delay: 2) { _ in
-            //DB処理が終了する前に呼ばれているのが原因で更新しても画像が増えない
-//            self.fetchPastPicture()
-            self.collectionView.reloadData()
-            print("呼ばれたンゴよよ〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜")
+            //画像を更新
+            self.reloadImageOnCollectionView()
         }
     }
 }
