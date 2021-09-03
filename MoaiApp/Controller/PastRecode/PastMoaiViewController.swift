@@ -10,6 +10,17 @@ import Firebase
 import FirebaseStorage
 import PKHUD
 
+//過去の模合の画像とURLをセットにまとめたもの
+struct pastImage {
+  let image: Data
+  let url: String
+
+  init(image: Data, url: String) {
+    self.image = image
+    self.url = url
+  }
+}
+
 class PastMoaiViewController: standardViewController {
     
     let storage = Storage.storage().reference().child("past_recodes")
@@ -18,8 +29,7 @@ class PastMoaiViewController: standardViewController {
     
     var pastMoaiDate:String?
     
-    var pastMoaiImageURLArray = [String]()
-    var pastMoaiImageArray = [Data]()
+    var pastMoaiImageArray = [pastImage]()
     
     var vi: UIView?  //ピッカービューで使用
     
@@ -154,7 +164,6 @@ class PastMoaiViewController: standardViewController {
             let date = DateUtils.stringFromDate(date: record.date.dateValue())
             self.pastMoaiDate = DateUtils.stringFromDateoForSettingNextID(date: record.date.dateValue())
             setNavigationBar(title: date)
-//            fetchPastPicture(pastMoaiDate: pastMoaiDate)
         }
     }
     
@@ -224,14 +233,12 @@ class PastMoaiViewController: standardViewController {
         
             //配列の初期化（別日の画像やURLが入っているかもしれないから）
             self.pastMoaiImageArray.removeAll()
-            self.pastMoaiImageURLArray.removeAll()
             
             for item in result.items {
               // The items under storageReference.
               print("item → \(item)")
               print("item.fullpath → \(item.fullPath)")
               print("itemの型は、\( type(of: item) )")
-              self.pastMoaiImageURLArray.append(item.fullPath)
               self.getImagesFromFireStorage(ImagePath: item.fullPath)
             }
         }
@@ -252,10 +259,10 @@ class PastMoaiViewController: standardViewController {
                     print("何か知らんけど、UIImage型に変換できんかったわ")
                     return
                 }
-                self.pastMoaiImageArray.append(image)
-                print("self.pastMoaiImageArray → \(self.pastMoaiImageArray)")
+                let imageAndURL = pastImage(image: image, url: ImagePath)
+                self.pastMoaiImageArray.append(imageAndURL)
+                print("self.pastMoaiImageArray2 →→→→→ \(self.pastMoaiImageArray)")
             }
-//            self.collectionView.reloadData()
         }
     }
 
@@ -268,8 +275,7 @@ extension PastMoaiViewController: UICollectionViewDelegate, UICollectionViewData
     }
     //セルの数
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return 15
-        return self.pastMoaiImageURLArray.count
+        return self.pastMoaiImageArray.count
     }
     
     //セルの中身を決める
@@ -279,13 +285,11 @@ extension PastMoaiViewController: UICollectionViewDelegate, UICollectionViewData
         cell.layer.cornerRadius = 5
         
         print("indexPath.rowは、\(indexPath.row)")
-        print("self.pastMoaiImageArray.countは、\(self.pastMoaiImageArray.count)")
         
         // Tag番号を使ってImageViewのインスタンス生成
         let imageView = cell.contentView.viewWithTag(1) as! UIImageView
         // 画像配列の番号で指定された要素の名前の画像をUIImageとする
-        
-        let cellImage = UIImage(data: self.pastMoaiImageArray[indexPath.row])
+        let cellImage = UIImage(data: self.pastMoaiImageArray[indexPath.row].image)
         // UIImageをUIImageViewのimageとして設定
         imageView.image = cellImage
         
@@ -301,7 +305,17 @@ extension PastMoaiViewController: UICollectionViewDelegate, UICollectionViewData
     
     // セルが選択された時の挙動
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("セルがタップされたよ")
+        print("\(indexPath.row)番目のセルがタップされたから画面遷移するよ")
+        let storyboard = UIStoryboard(name: "ShowImage", bundle: nil)
+        let showImageVC = storyboard.instantiateViewController(withIdentifier: "ShowImageViewController") as! ShowImageViewController
+        
+        showImageVC.modalTransitionStyle = .crossDissolve
+        showImageVC.modalPresentationStyle = .fullScreen
+        
+        showImageVC.pastMoaiImageArray = self.pastMoaiImageArray
+        showImageVC.orderNumber = indexPath.row
+        self.present(showImageVC, animated: true, completion: nil)
+        
     }
     
     

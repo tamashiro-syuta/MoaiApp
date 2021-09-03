@@ -51,10 +51,15 @@ class standardTabBarController: UITabBarController {
         let mapVC = mapSB.instantiateViewController(withIdentifier: "Map")
         mapVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 4)
         
+        let savingsSB = UIStoryboard(name: "Savings", bundle: nil)
+        let savingsVC = savingsSB.instantiateViewController(withIdentifier: "Savings")
+        savingsVC.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 5)
+        
         VCArray.append(managementVC)
         VCArray.append(chatVC)
         VCArray.append(pastMoaiVC)
         VCArray.append(mapVC)
+        VCArray.append(savingsVC)
         
         self.setViewControllers(VCArray, animated: false)
         
