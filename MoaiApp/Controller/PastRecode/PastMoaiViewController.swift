@@ -361,6 +361,7 @@ extension PastMoaiViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     // UIViewPickerのrowが選択された時のメソッド
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         //選択されたものに応じて、引数を指定し、ラベルのUI更新のメソッドを呼び出す。
+        self.selectedPastMoaiNumber = row
         self.setLayout(backnumber: row)
     }
 }

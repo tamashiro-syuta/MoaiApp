@@ -55,21 +55,6 @@ class PastMoaiDetailsViewController: UIViewController {
         recodeDetailsArray.append(cells(isShown: true, sectionName: "支払い済み", rowArray: paid))
         recodeDetailsArray.append(cells(isShown: true, sectionName: "未払い", rowArray: unpaid))
         recodeDetailsArray.append(cells(isShown: true, sectionName: "備考", rowArray: [note]))
-//        let recodeDetailsArray = [
-//            cells(isShown: true, sectionName: self.mySectionRows[0].mySection, rowArray: self.mySectionRows[0].myRow),
-//            cells(isShown: false, sectionName: self.mySectionRows[1].mySection, rowArray: self.mySectionRows[1].myRow),
-//            cells(isShown: false, sectionName: self.mySectionRows[2].mySection, rowArray: self.mySectionRows[2].myRow),
-//            cells(isShown: false, sectionName: self.mySectionRows[3].mySection, rowArray: self.mySectionRows[3].myRow),
-//            cells(isShown: false, sectionName: self.mySectionRows[4].mySection, rowArray: self.mySectionRows[4].myRow),
-//            cells(isShown: false, sectionName: self.mySectionRows[5].mySection, rowArray: self.mySectionRows[5].myRow)
-//        ]
-        
-//        self.recodeDetailsArray.append([data])
-//        self.recodeDetailsArray.append([getMoneyPerson])
-//        self.recodeDetailsArray.append([location])
-//        self.recodeDetailsArray.append(paid)
-//        self.recodeDetailsArray.append(unpaid)
-//        self.recodeDetailsArray.append([note])
         
         print("self.recodeDetailsArray → \(recodeDetailsArray)")
 
