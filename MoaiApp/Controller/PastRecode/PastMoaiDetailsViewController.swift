@@ -41,14 +41,14 @@ class PastMoaiDetailsViewController: UIViewController {
         let paid: [String] = self.pastRecode!.paid
         let unpaid: [String] = self.pastRecode!.unpaid
         let note = self.pastRecode!.note
-        
-        self.mySectionRows.append(("日時",[data] ) )
-        self.mySectionRows.append(("受取",[getMoneyPerson] ) )
-        self.mySectionRows.append(("場所",[location] ) )
-        self.mySectionRows.append(("支払い済み", paid ) )
-        self.mySectionRows.append(("未払い", unpaid ) )
-        self.mySectionRows.append(("備考",[note] ) )
-        
+//
+//        self.mySectionRows.append(("日時",[data] ) )
+//        self.mySectionRows.append(("受取",[getMoneyPerson] ) )
+//        self.mySectionRows.append(("場所",[location] ) )
+//        self.mySectionRows.append(("支払い済み", paid ) )
+//        self.mySectionRows.append(("未払い", unpaid ) )
+//        self.mySectionRows.append(("備考",[note] ) )
+//
         recodeDetailsArray.append(cells(isShown: true, sectionName: "日時", rowArray: [data]))
         recodeDetailsArray.append(cells(isShown: true, sectionName: "受取", rowArray: [getMoneyPerson]))
         recodeDetailsArray.append(cells(isShown: true, sectionName: "場所", rowArray: [location]))
@@ -93,7 +93,7 @@ class PastMoaiDetailsViewController: UIViewController {
 extension PastMoaiDetailsViewController:UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return self.mySectionRows.count
+        return self.recodeDetailsArray.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -103,12 +103,12 @@ extension PastMoaiDetailsViewController:UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return mySectionRows[section].mySection
+        return recodeDetailsArray[section].sectionName
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = mySectionRows[indexPath.section].myRow[indexPath.row]
+        cell.textLabel?.text = recodeDetailsArray[indexPath.section].rowArray[indexPath.row]
         return cell
     }
     
@@ -134,7 +134,6 @@ extension PastMoaiDetailsViewController:UITableViewDelegate, UITableViewDataSour
         }
         //courseArray[section].isShownの値を反転させます。
         recodeDetailsArray[section].isShown.toggle()
-        print("recodeDetailsArray[section].isShownは、", recodeDetailsArray[section].isShown)
 
         //これ以降で表示、非表示を切り替えます。
         detailsTableView.beginUpdates()
