@@ -57,6 +57,8 @@
 		48E7FD5E2690C40600E4FF2B /* MoaiRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E7FD5D2690C40400E4FF2B /* MoaiRecord.swift */; };
 		48E810A726E1C81C00B717D6 /* ShowImage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48E810A626E1C81C00B717D6 /* ShowImage.storyboard */; };
 		48E810AA26E1C87D00B717D6 /* ShowImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E810A926E1C87D00B717D6 /* ShowImageViewController.swift */; };
+		48E810AD26E33B7100B717D6 /* PastMoaiDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48E810AC26E33B7100B717D6 /* PastMoaiDetails.storyboard */; };
+		48E810B026E33BA400B717D6 /* PastMoaiDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E810AF26E33BA400B717D6 /* PastMoaiDetailsViewController.swift */; };
 		48ECBCC72697F08B00FA65CC /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ECBCC62697F08B00FA65CC /* MapViewController.swift */; };
 		48ECBCCC2697F0C200FA65CC /* Map.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48ECBCCB2697F0C200FA65CC /* Map.storyboard */; };
 		83CC11FA220279066C8781F6 /* Pods_MoaiApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 878C9D9E75FAD18FDB05BE86 /* Pods_MoaiApp.framework */; };
@@ -117,6 +119,8 @@
 		48E7FD5D2690C40400E4FF2B /* MoaiRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoaiRecord.swift; sourceTree = "<group>"; };
 		48E810A626E1C81C00B717D6 /* ShowImage.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ShowImage.storyboard; sourceTree = "<group>"; };
 		48E810A926E1C87D00B717D6 /* ShowImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowImageViewController.swift; sourceTree = "<group>"; };
+		48E810AC26E33B7100B717D6 /* PastMoaiDetails.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PastMoaiDetails.storyboard; sourceTree = "<group>"; };
+		48E810AF26E33BA400B717D6 /* PastMoaiDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastMoaiDetailsViewController.swift; sourceTree = "<group>"; };
 		48ECBCC62697F08B00FA65CC /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		48ECBCCB2697F0C200FA65CC /* Map.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Map.storyboard; sourceTree = "<group>"; };
 		5642086F0542BB225CE11B19 /* Pods-MoaiApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoaiApp.release.xcconfig"; path = "Target Support Files/Pods-MoaiApp/Pods-MoaiApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -185,6 +189,7 @@
 			children = (
 				48E088CC26D3111B0072091B /* PastMoai.storyboard */,
 				48E810A626E1C81C00B717D6 /* ShowImage.storyboard */,
+				48E810AC26E33B7100B717D6 /* PastMoaiDetails.storyboard */,
 			);
 			path = PastMoai;
 			sourceTree = "<group>";
@@ -314,6 +319,7 @@
 			children = (
 				48E088CF26D31DCC0072091B /* PastMoaiViewController.swift */,
 				48E810A926E1C87D00B717D6 /* ShowImageViewController.swift */,
+				48E810AF26E33BA400B717D6 /* PastMoaiDetailsViewController.swift */,
 			);
 			path = PastRecode;
 			sourceTree = "<group>";
@@ -429,6 +435,7 @@
 				4823182F2657FCD100257189 /* GoogleService-Info.plist in Resources */,
 				484388982684FF5300175415 /* Management.storyboard in Resources */,
 				489CD2B926E0BB3C00232B55 /* Savings.storyboard in Resources */,
+				48E810AD26E33B7100B717D6 /* PastMoaiDetails.storyboard in Resources */,
 				48583879264A13BF00274507 /* SignUp.storyboard in Resources */,
 				482317862653EDFD00257189 /* Login.storyboard in Resources */,
 				48E088CD26D3111B0072091B /* PastMoai.storyboard in Resources */,
@@ -494,6 +501,7 @@
 				489CD2BD26E0BB7400232B55 /* SavingsViewController.swift in Sources */,
 				485838572647E8BD00274507 /* ChatRoomViewController.swift in Sources */,
 				48538EE8264B82D400871BB0 /* UserListViewController.swift in Sources */,
+				48E810B026E33BA400B717D6 /* PastMoaiDetailsViewController.swift in Sources */,
 				484388BA2688C40700175415 /* ManagementViewController.swift in Sources */,
 				48538EE2264ADAB700871BB0 /* User.swift in Sources */,
 				48ECBCC72697F08B00FA65CC /* MapViewController.swift in Sources */,

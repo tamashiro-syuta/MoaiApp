@@ -34,6 +34,7 @@ class PastMoaiViewController: standardViewController {
     var vi: UIView?  //ピッカービューで使用
     
     @IBOutlet weak var pastMoaiInfoLabel: UILabel!
+    @IBOutlet weak var pastMoaiInfoButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var addFileButton: UIButton!
     @IBOutlet weak var blurView: UIVisualEffectView!
@@ -42,7 +43,7 @@ class PastMoaiViewController: standardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("self.pastRecodeArray?.countは \(self.pastRecodeArray?.count)")
+        print("self.pastRecodeArrayは \(self.pastRecodeArray)")
         print("self.moai?.groupNameは \(self.moai?.groupName)")
         
         //模合を　過去にしたことがあるかの判定条件
@@ -85,7 +86,9 @@ class PastMoaiViewController: standardViewController {
     }
     
     private func setupView() {
-        pastMoaiInfoLabel.layer.cornerRadius = pastMoaiInfoLabel.bounds.height / 3
+        pastMoaiInfoLabel.layer.cornerRadius = 20
+        self.pastMoaiInfoLabel.layer.borderWidth = 2.0    // 枠線の幅
+        self.pastMoaiInfoLabel.layer.borderColor = UIColor.black.cgColor   // 枠線の色
         addFileButton.layer.cornerRadius = addFileButton.bounds.height / 3
         
         collectionView.delegate = self
@@ -158,7 +161,7 @@ class PastMoaiViewController: standardViewController {
             print("例外な値だよとアラートを出す")
         }else {
             let record =  self.pastRecodeArray![backnumber]
-            let text = "受取：" + "\(record.getMoneyPerson)" + "\n" + "場所：" + "\(record.locationName)"
+            let text = " 受取：" + "\(record.getMoneyPerson)" + "\n" + " 場所：" + "\(record.locationName)"
             self.pastMoaiInfoLabel.text = text
             
             let date = DateUtils.stringFromDate(date: record.date.dateValue())
@@ -265,6 +268,22 @@ class PastMoaiViewController: standardViewController {
             }
         }
     }
+    
+    @IBAction func pushPastMoaiInfoButton(_ sender: Any) {
+        self.showPastMoaiDetails(backnumber: self.selectedPastMoaiNumber)
+    }
+    
+    private func showPastMoaiDetails(backnumber: Int) {
+        let record =  self.pastRecodeArray![backnumber]
+        
+        let PastMoaiDetailsSB = UIStoryboard(name: "PastMoaiDetails", bundle: nil)
+        let PastMoaiDetailsVC = PastMoaiDetailsSB.instantiateViewController(withIdentifier: "PastMoaiDetailsViewController") as! PastMoaiDetailsViewController
+        
+        PastMoaiDetailsVC.pastRecode = record
+        
+        self.navigationController?.pushViewController(PastMoaiDetailsVC, animated: true)
+    }
+    
 
 }
 

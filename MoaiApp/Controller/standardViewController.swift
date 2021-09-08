@@ -45,7 +45,7 @@ class standardViewController :UIViewController {
         self.sample(num: 1)
         //初期化された段階でユーザーの情報を取得する
         fetchUserInfo()
-      }
+    }
 //
 //    override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: Bundle!) {
 //        super.init(nibName: nil, bundle: nil)

@@ -242,7 +242,7 @@
                             <constraint firstItem="GeX-29-s4N" firstAttribute="top" secondItem="Rmz-ii-xuY" secondAttribute="bottom" constant="15" id="pzg-kH-5CM"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="lOT-ag-cdN"/>
+                    <navigationItem key="navigationItem" id="L78-kL-UOp"/>
                     <connections>
                         <outlet property="blurView" destination="cum-Q0-COI" id="sFf-NL-DyP"/>
                         <outlet property="entryButton" destination="Vc2-SJ-R5G" id="qTY-oI-q8A"/>

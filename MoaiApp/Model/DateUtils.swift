@@ -26,6 +26,15 @@ class DateUtils {
         return formatter.string(from: date)
     }
     
+    // Date -> String("M 月 d 日（EEE）")
+    class func yyyyMMDDFromDate(date: Date) -> String {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.locale = Locale(identifier: "ja_JP")
+        formatter.dateFormat = "yyyy 年 MM 月 dd 日（EEE）"
+        return formatter.string(from: date)
+    }
+    
     // Date -> String("yyyyMMdd")
     class func stringFromDateoForSettingNextID(date: Date) -> String {
         let formatter: DateFormatter = DateFormatter()
