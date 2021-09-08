@@ -55,6 +55,7 @@ class ManagementViewController: standardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("viewDidLoad")
+
     }
     
     //viewが更新された度に呼ばれる
@@ -64,9 +65,9 @@ class ManagementViewController: standardViewController {
         print("viewWillAppear")
         
         //ユーザー情報の取得（模合に参加してるならmanagementVCに、してないならMoaiに画面遷移）
-        self.fetchLoginUserInfo()
+//        self.fetchLoginUserInfo()
         
-        self.blurView.alpha = 1
+//        self.blurView.alpha = 1
         
         self.navigationItem.rightBarButtonItem?.isEnabled = false
         
@@ -251,60 +252,6 @@ class ManagementViewController: standardViewController {
     @objc func donePressed() {
         self.vi?.isHidden = true
     }
-    
-    
-    
-    
-    
-    
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DB操作 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
-    //ユーザー情報の取得
-    func fetchLoginUserInfo() {
-        self.db.collection("users").document(self.userID ?? "").getDocument { (snapshots, err) in
-            if let err = err {
-                print("エラーでした~~\(err)")
-                return
-            }else {
-                guard let dic = snapshots?.data() else {
-                    print("snapshotsの値が取得できませんでした！！")
-                    return
-                }
-                self.user = User(dic: dic)
-                
-                //ユーザーの模合の参加判定
-                if self.user?.moais.count == 1 {
-                    print("ユーザーは模合に入ってなんかいねぇよ！！！")
-                    return
-                }else {
-                    print("ユーザーは模合にちゃんと入ってるよ！！！")
-                    //模合情報を取得
-                    self.fetchUsersMoaiInfo(user: self.user!)
-                    self.fetchPastRecord()
-                    self.fetchNextMoaiInfo()
-                }
-            }
-        }
-    }
-    
-    //模合のメンバーをIDでなく、名前で配列に入れる
-    private func makeMoaiMenbersNameList() {
-        //viewの再読み込み時にデータが人数より増えるのを防ぐため、一度初期化
-        self.moaiMenbersNameList = []
-        guard let moaiMenbers = self.moai?.menbers else {return}
-        for menber in moaiMenbers {
-            //print("menberに格納されている値はこちら　\(menber)")
-            self.db.collection("users").document(menber).getDocument { (snapshots, err) in
-                if let err = err {
-                    print("模合に所属するユーザー情報の取得に失敗しました。\(err)")
-                    return
-                }
-                let dic = snapshots?.data()
-                self.moaiMenbersNameList.append(dic?["username"] as! String)
-            }
-        }
-    }
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~  DB操作終了  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     
     private func makePastRecodeIDtoDateArray(array: Array<Any>) {
@@ -380,16 +327,6 @@ class ManagementViewController: standardViewController {
 }
 
 
-
-
-
-
-
-
-
-
-
-
 extension ManagementViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     // UIViewPickerの列(横方向)数を指定
@@ -427,14 +364,6 @@ extension ManagementViewController: UIPickerViewDelegate, UIPickerViewDataSource
         self.setupPastMoaisView(backnumber: row)
     }
 }
-
-
-
-
-
-
-
-
 
 extension ManagementViewController: UITableViewDelegate,UITableViewDataSource {
     
