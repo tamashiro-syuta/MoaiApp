@@ -141,7 +141,7 @@ class ManagementViewController: standardViewController {
         recodeMoaiInfoVC.nextMoai = self.nextMoai
         recodeMoaiInfoVC.nextMoaiID = self.nextMoaiID
         recodeMoaiInfoVC.moai = self.moai
-        recodeMoaiInfoVC.moaiMenbersNameList = self.moaiMenbersNameList
+        recodeMoaiInfoVC.memberArray = self.memberArray as! [[String : Any]]
         self.navigationController?.pushViewController(recodeMoaiInfoVC, animated: true)
         
     }

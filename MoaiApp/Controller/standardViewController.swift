@@ -31,6 +31,8 @@ class standardViewController :UIViewController {
     var pastRecodeIDStringArray: [String]?  // 20210417みたいな形で取り出してる
     var pastRecodeIDDateArray: [String]?  //◯月◯日みたいな形で取り出してる
     var nextMoaiEntryArray: [Bool]? // ブーリアン型の配列
+    
+    var memberArray: [ [String:Any] ]? // 模合メンバーの名前の配列（  ex)[["name": "テスト9", "id": "tMfuNFOxckUtupgmxIkgbNcLMap1"], ... ]  ）
     var moaiMenbersNameList: [String] = [] //模合メンバーの名前の配列
     
     override func viewDidLoad() {
@@ -165,19 +167,34 @@ class standardViewController :UIViewController {
     //模合のメンバーをIDでなく、名前で配列に入れる
     private func makeMoaiMenbersNameList() {
         //viewの再読み込み時にデータが人数より増えるのを防ぐため、一度初期化
-        self.moaiMenbersNameList = []
-        guard let moaiMenbers = self.moai?.menbers else {return}
-        for menber in moaiMenbers {
-            //print("menberに格納されている値はこちら　\(menber)")
-            self.db.collection("users").document(menber).getDocument { (snapshots, err) in
+        self.memberArray = []
+        for member in self.moai!.menbers {
+            self.db.collection("users").document(member).getDocument { (snapshot, err) in
                 if let err = err {
-                    print("模合に所属するユーザー情報の取得に失敗しました。\(err)")
+                    print("エラーです \(err)")
                     return
+                }else {
+                    let username = snapshot?.data()?["username"] as! String
+                    let dictionary:Dictionary<String,String> = ["id": member, "name": username] //[member:username]
+                    self.memberArray?.append(dictionary)
+                    
+                    print("self.memberArray　→→→ \(self.memberArray)")
+                    
                 }
-                let dic = snapshots?.data()
-                self.moaiMenbersNameList.append(dic?["username"] as! String)
             }
         }
+//        guard let moaiMenbers = self.moai?.menbers else {return}
+//        for menber in moaiMenbers {
+//            //print("menberに格納されている値はこちら　\(menber)")
+//            self.db.collection("users").document(menber).getDocument { (snapshots, err) in
+//                if let err = err {
+//                    print("模合に所属するユーザー情報の取得に失敗しました。\(err)")
+//                    return
+//                }
+//                let dic = snapshots?.data()
+//                self.moaiMenbersNameList.append(dic?["username"] as! String)
+//            }
+//        }
     }
     
     private func makePastRecodeIDtoDateArray(array: Array<Any>) {

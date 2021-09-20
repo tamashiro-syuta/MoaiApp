@@ -14,7 +14,7 @@ class Moai {
     let menbers:[String]
     let week: String
     let day: String
-    let amount: String
+    let amount: Int
     let createdAt: Timestamp
     let password: String
     let next: [Bool]
@@ -24,7 +24,7 @@ class Moai {
         self.menbers = dic["menbers"] as? [String] ?? [""]
         self.week = dic["week"] as? String ?? ""
         self.day = dic["day"] as? String ?? ""
-        self.amount = dic["amount"] as? String ?? ""
+        self.amount = dic["amount"] as? Int ?? 0
         self.createdAt = dic["createdAt"] as? Timestamp ?? Timestamp()
         self.password = dic["password"] as? String ?? ""
         self.next = dic["next"] as? [Bool] ?? [false]
