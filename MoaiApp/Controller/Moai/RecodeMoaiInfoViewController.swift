@@ -96,8 +96,6 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         
         locationTextField.inputAccessoryView = toolbar
         
-        setupPaidPeopleSV()
-        
         //メンバーの数だけ配列にfalseを入れる
         for i in 0..<memberArray!.count {
             payOrNotArray?.append(false)
@@ -109,7 +107,12 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
     }
     
     // 支払い済みの人をスイッチで記入する機能を、模合のメンバーに応じてど動的に配置する
-    private func setupPaidPeopleSV() {
+    private func setupPaidPeopleSV(members: [ [String:Any] ]) {
+        //paidPeopleSVのサブビューを削除（メソッドを複数回使用した時にサブビューが二重にならないように！）
+        var subviews = paidPeopleStackView.subviews
+        for subview in subviews {
+            subview.removeFromSuperview()
+        }
         paidPeopleStackView.backgroundColor = .white
         //paidPeopleSVの高さの変更
         let paidPeopleSVHeight:CGFloat = CGFloat(60 * (self.moai?.menbers.count)!)
@@ -119,8 +122,8 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         contentViewHeightConstraint.constant = contentViewHeight + paidPeopleSVHeight - 100
         
         //メンバーの数だけラベルとスイッチを配置
-        for (i,member) in self.memberArray!.enumerated() {
-            let stackViewFrame = CGRect(x: 0, y: 0, width: self.paidPeopleStackView.frame.width, height: 50)
+        for (i,member) in members.enumerated() {
+            let stackViewFrame = CGRect(x: 0, y: 0, width: self.paidPeopleStackView.frame.width, height: 30)
             let stackViewH = UIStackView(frame: stackViewFrame)
             //水平方向に設定
             stackViewH.axis = .horizontal
@@ -130,6 +133,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
             
             let label = UILabel()
             label.sizeToFit()
+            label.textColor = .textColor()
             let paySwitchFrame = CGRect(x: 10, y: 20, width: 60, height: 30)
             let paySwitch = UISwitch(frame: paySwitchFrame)
             paySwitch.addTarget(self, action: #selector(self.changeSwitch), for: UIControl.Event.valueChanged)
@@ -446,6 +450,20 @@ extension RecodeMoaiInfoViewController: UIPickerViewDelegate,UIPickerViewDataSou
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        //PaidSVに選択されたユーザー以外の名前とスイッチを配置
+        var newMemberArray:[ [String:Any] ]  = []
+        for member in memberArray! {
+            //選択したメンバーの名前とメンバーが一致したら
+            if member["name"] as! String == memberArray?[row]["name"] as! String{
+                //配列にメンバーを追加
+                print("\(member["name"] as! String)は、配列にいれないよ〜〜〜んだ")
+            }else {
+                newMemberArray.append(member)
+            }
+        }
+        print("newMemberArray →→→ \(newMemberArray)")
+        self.setupPaidPeopleSV(members: newMemberArray)
+        
         return self.getMoneyPersonTextField.text = memberArray![row]["name"] as! String
     }
     
@@ -484,6 +502,15 @@ extension UIView {
             border.frame = CGRect(x: 0, y: self.frame.height - width, width: self.frame.width, height: width)
             border.backgroundColor = color.cgColor
             self.layer.addSublayer(border)
+        }
+    }
+}
+
+//配列から値を指定して削除できる拡張機能
+extension Array where Element: Equatable {
+    mutating func remove(value: Element) {
+        if let i = self.index(of: value) {
+            self.remove(at: i)
         }
     }
 }

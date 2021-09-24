@@ -109,7 +109,7 @@ class standardViewController :UIViewController {
                 }
                 self.moai = Moai(dic: dic)
             }
-            self.makeMoaiMenbersNameList()
+            self.makeMoaiMenbersList()
             guard let next = self.moai?.next else {return}
             self.nextMoaiEntryArray = next
         }
@@ -165,7 +165,7 @@ class standardViewController :UIViewController {
     }
     
     //模合のメンバーをIDでなく、名前で配列に入れる
-    private func makeMoaiMenbersNameList() {
+    private func makeMoaiMenbersList() {
         //viewの再読み込み時にデータが人数より増えるのを防ぐため、一度初期化
         self.memberArray = []
         for member in self.moai!.menbers {
@@ -183,18 +183,11 @@ class standardViewController :UIViewController {
                 }
             }
         }
-//        guard let moaiMenbers = self.moai?.menbers else {return}
-//        for menber in moaiMenbers {
-//            //print("menberに格納されている値はこちら　\(menber)")
-//            self.db.collection("users").document(menber).getDocument { (snapshots, err) in
-//                if let err = err {
-//                    print("模合に所属するユーザー情報の取得に失敗しました。\(err)")
-//                    return
-//                }
-//                let dic = snapshots?.data()
-//                self.moaiMenbersNameList.append(dic?["username"] as! String)
-//            }
-//        }
+    }
+    
+    //既に模合代を受け取った人のリスト
+    private func makeAlreadyReceivedList() {
+        
     }
     
     private func makePastRecodeIDtoDateArray(array: Array<Any>) {
