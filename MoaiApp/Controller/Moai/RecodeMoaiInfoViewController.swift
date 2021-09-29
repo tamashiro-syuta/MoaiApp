@@ -21,10 +21,6 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
     //メンバーの名前とスイッチを紐づけるための配列
     var memberArray: [ [String:Any] ]?
     
-    var payOrNotArray: [Bool]?
-    
-//    var moaiMenbersNameList:[String]?
-    
     var nextMoai:MoaiRecord?
     var nextMoaiID:String?
     
@@ -64,6 +60,13 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         
         self.setupCalendar()
         
+        //PaidPeopleSVの高さを０に設定し、初期状態では見えなくする
+        let paidPeopleSVHeight:CGFloat = 0
+        paidPeopleSVHeightConstraint.constant = paidPeopleSVHeight
+        let contentViewHeight = contentView.frame.height
+        // 下の制約の「-100」はデフォルトで設定しているpaidPeopleSVの高さの部分を引いてる
+        contentViewHeightConstraint.constant = contentViewHeight + paidPeopleSVHeight - 100
+        
         choiceDateCalendar.delegate = self
         choiceDateCalendar.dataSource = self
         
@@ -96,13 +99,14 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         
         locationTextField.inputAccessoryView = toolbar
         
-        //メンバーの数だけ配列にfalseを入れる
+        //受取人を除いたメンバーの数だけ配列にfalseを入れる
         for i in 0..<memberArray!.count {
-            payOrNotArray?.append(false)
-//            memberArray![i]["payOrNot"] = false
-            memberArray?[i].updateValue(false, forKey: "payOrNot")
-            print("memberArrayの値　→→→ \(memberArray)")
+//            payOrNotArray.append(false)
+            
+            //Any型を許容する場合、IntやBoolは使えないので、stirngで"false"と指定する
+            memberArray?[i].updateValue("false", forKey: "payOrNot")
         }
+        print("memberArrayの値　→→→ \(memberArray)")
         
     }
     
@@ -113,6 +117,14 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         for subview in subviews {
             subview.removeFromSuperview()
         }
+        //payOrNotの正誤を全てfalseに設定（PaidPeopleSVのビューを更新する際にこちらを変更しないと正しい処理にならないため）
+        //全てのメンバーのpayOrNotをfalseにする
+        for i in 0..<members.count {
+            memberArray?[i].updateValue("false", forKey: "payOrNot")
+        }
+        print("memberArray -> \(memberArray)")
+
+        
         paidPeopleStackView.backgroundColor = .white
         //paidPeopleSVの高さの変更
         let paidPeopleSVHeight:CGFloat = CGFloat(60 * (self.moai?.menbers.count)!)
@@ -123,57 +135,66 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         
         //メンバーの数だけラベルとスイッチを配置
         for (i,member) in members.enumerated() {
-            let stackViewFrame = CGRect(x: 0, y: 0, width: self.paidPeopleStackView.frame.width, height: 30)
-            let stackViewH = UIStackView(frame: stackViewFrame)
-            //水平方向に設定
-            stackViewH.axis = .horizontal
-            //横にバランスよく配置
-            stackViewH.contentMode = .scaleToFill
-            stackViewH.distribution = .fillEqually
             
-            let label = UILabel()
-            label.sizeToFit()
-            label.textColor = .textColor()
-            let paySwitchFrame = CGRect(x: 10, y: 20, width: 60, height: 30)
-            let paySwitch = UISwitch(frame: paySwitchFrame)
-            paySwitch.addTarget(self, action: #selector(self.changeSwitch), for: UIControl.Event.valueChanged)
-            //UISwitchのタグ番号をメンバーの配列に沿うようにセット
-            paySwitch.tag = i
-            print("UIswitchのタグは\(paySwitch.tag)番です")
-            label.text = member["name"] as! String
-            paySwitch.onTintColor = UIColor.barColor()
-            
-            //stackViewにラベルとスイッチを追加
-            stackViewH.addArrangedSubview(label)
-            stackViewH.addArrangedSubview(paySwitch)
-            
-            //もとのstackViewにstackViewHを追加
-            self.paidPeopleStackView.addArrangedSubview(stackViewH)
+            //memberが受取と一致しなかったら下の処理(ラベルとスイッチの設置)を行う
+            if member["name"] as! String != self.getMoneyPersonTextField.text {
+                print("\(member["name"])は、受取人じゃないから、ラベルとスイッチを貼るね〜〜〜〜")
+                let stackViewFrame = CGRect(x: 0, y: 0, width: self.paidPeopleStackView.frame.width, height: 30)
+                let stackViewH = UIStackView(frame: stackViewFrame)
+                //水平方向に設定
+                stackViewH.axis = .horizontal
+                //横にバランスよく配置
+                stackViewH.contentMode = .scaleToFill
+                stackViewH.distribution = .fillEqually
+                
+                let label = UILabel()
+                label.sizeToFit()
+                label.textColor = .textColor()
+                let paySwitchFrame = CGRect(x: 10, y: 20, width: 60, height: 30)
+                let paySwitch = UISwitch(frame: paySwitchFrame)
+                paySwitch.addTarget(self, action: #selector(self.changeSwitch), for: UIControl.Event.valueChanged)
+                //UISwitchのタグ番号をメンバーの配列に沿うようにセット
+                paySwitch.tag = i
+                print("\(member["name"])のUIswitchのタグは\(paySwitch.tag)番です")
+                label.text = member["name"] as! String
+                paySwitch.onTintColor = UIColor.barColor()
+                
+                //stackViewにラベルとスイッチを追加
+                stackViewH.addArrangedSubview(label)
+                stackViewH.addArrangedSubview(paySwitch)
+                
+                //もとのstackViewにstackViewHを追加
+                self.paidPeopleStackView.addArrangedSubview(stackViewH)
+            }
         }
     }
     
     @objc func changeSwitch(sender: UISwitch) {
         //押された番号の配列の正誤を反転させる
-        self.payOrNotArray?[sender.tag].toggle()
-        guard let payOrNot = memberArray?[sender.tag]["payOrNot"] else {
-            print("なんでやねん！！！！！！！！！！！！")
-            return
-        }
-        if payOrNot as! Bool == false {
-            memberArray?[sender.tag]["payOrNot"] = true
+        print("sender,tag -> \(sender.tag)")
+        if self.memberArray?[sender.tag]["payOrNot"] as! String == "false" {
+            print("false -> true")
+            self.memberArray?[sender.tag].updateValue("true", forKey: "payOrNot")
+            print(self.memberArray?[sender.tag]["payOrNot"])
         }else {
-            memberArray?[sender.tag]["payOrNot"] = false
+            print("true -> false")
+            self.memberArray?[sender.tag].updateValue("false", forKey: "payOrNot")
+            print(self.memberArray?[sender.tag]["payOrNot"])
         }
         print("\(memberArray?[sender.tag]["name"])の支払い状況は、\(memberArray?[sender.tag]["payOrNot"])です。")
+        print("memberArray -> \(memberArray)")
     }
     
     @IBAction func recode(_ sender: Any) {
+        print("ボタン押したよ")
         //nextのデータを値が更新されているもののみアップデートする
         var newDate:Timestamp = self.nextMoai!.date
         var newGetMoneyPerson:String = self.nextMoai!.getMoneyPerson
         var newGetMoneyPersonID:String = self.nextMoai!.getMoneyPersonID
         var newLocation:String = self.nextMoai!.locationName
         var newNote:String = self.nextMoai!.note
+        
+        print("ボタン押したよ")
 
         //テキストフィールドの値によって処理を変更
         if self.dateTextField.text != "" {
@@ -209,31 +230,33 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
             present(alert, animated: true, completion: nil)
         }
         
-        //UISwitchの状態によって、支払い済みか未払いか判別する（payOrNot配列に値によって）
-//        var paid:[ [String:Any] ] = []
+        //UISwitchの状態によって、支払い済みか未払いか判別する
         var paidsID: [String] = []
         var paidsName: [String] = []
-//        var unpaid:[ [String:Any] ] = []
         var unpaidsID:[String] = []
         var unpaidsName: [String] = []
+        //メンバーを支払い済みかそうでないかを分ける
         for member in memberArray! {
-            guard let payOrNot = member["payOrNot"] else {return}
-            if payOrNot as! Bool == true {
-                let pay = [ "name":member["name"], "id":member["id"] ]
-//                paid.append(pay as [String : Any])
-                paidsName.append(member["name"] as! String)
-                paidsID.append(member["id"] as! String)
-            }else {
-                let unpay = [ "name":member["name"], "id":member["id"] ]
-//                unpaid.append(unpay as [String : Any])
-                unpaidsName.append(member["name"] as! String)
-                unpaidsID.append(member["id"] as! String)
+            if member["name"] as! String != self.getMoneyPersonTextField.text {
+                print("member -> \(member)")
+                //メンバーのpayOrNotじゃなくて、別の配列で判定する
+                if member["payOrNot"] as! String == "true" {
+                    paidsName.append(member["name"] as! String)
+                    paidsID.append(member["id"] as! String)
+                }else {
+                    unpaidsName.append(member["name"] as! String)
+                    unpaidsID.append(member["id"] as! String)
+                }
+                print("paidsName -> \(paidsName)")
+                print("paidsID -> \(paidsID)")
+                print("paidsName -> \(paidsName)")
+                print("unpaidsID -> \(unpaidsID)")
             }
         }
         if unpaidsName.count == 0 {
-//            unpaid.append( ["name":"なし"] )
             unpaidsName.append("なし")
         }
+        
         print("paidsID　→→→→→　\(paidsID)")
         print("paidsName　→→→→→　\(paidsName)")
         print("unpaidsID　→→→→　\(unpaidsID)")
@@ -257,7 +280,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
             self.addNewRecodeToNext()
             
             //元の画面に戻る
-            self.dismiss(animated: true, completion: nil)
+            self.navigationController?.popViewController(animated: true)
             
         })
         let cancelAction: UIAlertAction = UIAlertAction(title: "取り消し", style: UIAlertAction.Style.cancel, handler:{
@@ -450,24 +473,10 @@ extension RecodeMoaiInfoViewController: UIPickerViewDelegate,UIPickerViewDataSou
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        self.getMoneyPersonTextField.text = memberArray![row]["name"] as! String
         //PaidSVに選択されたユーザー以外の名前とスイッチを配置
-        var newMemberArray:[ [String:Any] ]  = []
-        for member in memberArray! {
-            //選択したメンバーの名前とメンバーが一致したら
-            if member["name"] as! String == memberArray?[row]["name"] as! String{
-                //配列にメンバーを追加
-                print("\(member["name"] as! String)は、配列にいれないよ〜〜〜んだ")
-            }else {
-                newMemberArray.append(member)
-            }
-        }
-        print("newMemberArray →→→ \(newMemberArray)")
-        self.setupPaidPeopleSV(members: newMemberArray)
-        
-        return self.getMoneyPersonTextField.text = memberArray![row]["name"] as! String
+        self.setupPaidPeopleSV(members: memberArray!)
     }
-    
-    
 }
 
 
