@@ -18,16 +18,16 @@ class DateUtils {
     }
 
     // Date -> String("M 月 d 日（EEE）")
-    class func stringFromDate(date: Date) -> String {
+    class func MddEEEFromDate(date: Date) -> String {
         let formatter: DateFormatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .gregorian)
         formatter.locale = Locale(identifier: "ja_JP")
-        formatter.dateFormat = "M 月 d 日（EEE）"
+        formatter.dateFormat = "M 月 dd 日（EEE）"
         return formatter.string(from: date)
     }
     
-    // Date -> String("M 月 d 日（EEE）")
-    class func yyyyMMDDFromDate(date: Date) -> String {
+    // Date -> String("yyyy年 MM 月 dd 日（EEE）")
+    class func yyyyMMddEEEFromDate(date: Date) -> String {
         let formatter: DateFormatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .gregorian)
         formatter.locale = Locale(identifier: "ja_JP")
@@ -36,7 +36,7 @@ class DateUtils {
     }
     
     // Date -> String("yyyyMMdd")
-    class func stringFromDateoForSettingNextID(date: Date) -> String {
+    class func stringFromDateoForSettingRecodeID(date: Date) -> String {
         let formatter: DateFormatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .gregorian)
         formatter.locale = Locale(identifier: "ja_JP")
@@ -54,7 +54,7 @@ class DateUtils {
         return formatter.string(from: date)
     }
     
-    // 次回の模合の日付をDate型で返す
+    // 次回の模合の日付をDate型で返す(要修正)
     class func returnNextMoaiDate(weekNum: Int, weekDay:Int) -> Date {
         let cal = Calendar.current
         let now = Date()

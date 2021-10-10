@@ -159,7 +159,7 @@ class FirstJoinViewController: UIViewController {
                         return
                     }
                     //多分、ここでユーザー情報の更新すはず！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！１
-                    self.fetchUserNewInfo()
+                    self.fetchNewUserInfo()
                     print("ちゃんとできてるかな〜〜〜？？　\(self.user?.moais.count)")
                     
                 }
@@ -168,30 +168,61 @@ class FirstJoinViewController: UIViewController {
         print("ユーザーに模合の保存完了！！")
     }
     
+    //模合にユーザー情報を追加
     private func addUserInfoToMoai() {
-        var newMenbers = self.moai?.menbers
-        var newNext = self.moai!.next //模合管理機能(次回の参加確認機能)で使うため
-        if self.userID != nil {
-            newMenbers?.append(self.userID ?? "")
-            newNext.append(false)
-        }
-        let newMenberData = ["menbers":newMenbers]
-        let newNextData = ["next":newNext]
-        self.db.collection("moais").document(self.moaiID!).updateData(newMenberData) { (err) in
+        let member:[String:Any] = [
+            "id": self.userID,
+            "name":self.user?.username,
+            "next":false, //Firestoreのmap型では、1,2で表してたので、もしかするとIntで入れないと行けないかも
+            "saving":false
+        ]
+        print(member)
+        
+        //DBのmembersに要素を追加
+        var newMembers = self.moai?.members
+        newMembers?.append(member)
+        let newMembersData:[String:Any] = ["members":newMembers]
+        self.db.collection("moais").document(self.moaiID!).updateData(newMembersData) { (err) in
             if let err = err {
-                print("エラーでした~~\(err)")
+                print("これ、エラーっすね　\(err)")
                 return
-            }
-            self.db.collection("moais").document(self.moaiID!).updateData(newNextData) { (err) in
-                if let err = err {
-                    print("エラーです \(err)")
-                    return
-                }
+            }else {
+                print("模合にユーザーの情報を保存しました。")
                 self.fetchNewMoaiInfo()
             }
         }
-        print("模合にユーザー情報の保存完了！！")
     }
+    
+    //ユーザー情報を模合に追加
+//    private func addUserInfoToMoai2() {
+//        //模合のメンバーを取得
+//        var newMenbers = self.moai?.menbers
+//        //模合の参加可否を取得
+//        var newNext = self.moai!.next //模合管理機能(次回の参加確認機能)で使うため
+//        //userIDが存在していれば、上で生成した変数にユーザーの情報を追加
+//        if self.userID != nil {
+//            newMenbers?.append(self.userID ?? "")
+//            newNext.append(false)
+//        }
+//        //編集した変数を辞書型に変換
+//        let newMenberData = ["menbers":newMenbers]
+//        let newNextData = ["next":newNext]
+//        //DBの値をアップデート
+//        self.db.collection("moais").document(self.moaiID!).updateData(newMenberData) { (err) in
+//            if let err = err {
+//                print("エラーでした~~\(err)")
+//                return
+//            }
+//            self.db.collection("moais").document(self.moaiID!).updateData(newNextData) { (err) in
+//                if let err = err {
+//                    print("エラーです \(err)")
+//                    return
+//                }
+//                self.fetchNewMoaiInfo()
+//            }
+//        }
+//        print("模合にユーザー情報の保存完了！！")
+//    }
     
     //ユーザーを追加した新しい模合の情報を取得
     private func fetchNewMoaiInfo() {
@@ -206,29 +237,11 @@ class FirstJoinViewController: UIViewController {
             }
             //模合情報をユーザーを追加した新しい模合情報に書き換えた
             self.moai = Moai(dic: dic)
-            self.makeMoaiMenbersNameList()
-            guard let next = self.moai?.next else {return}
-            self.nextMoaiEntryArray = next
-        }
-    }
-    
-    private func makeMoaiMenbersNameList() {
-        guard let moaiMenbers = self.moai?.menbers else {return}
-        for menber in moaiMenbers {
-            //print("menberに格納されている値はこちら　\(menber)")
-            self.db.collection("users").document(menber).getDocument { (snapshots, err) in
-                if let err = err {
-                    print("模合に所属するユーザー情報の取得に失敗しました。\(err)")
-                    return
-                }
-                let dic = snapshots?.data()
-                self.moaiMenbersNameList.append(dic?["username"] as! String)
-            }
         }
     }
     
     //模合情報を付け加えたユーザーの情報を取得
-    private func fetchUserNewInfo() {
+    private func fetchNewUserInfo() {
         self.db.collection("users").document(self.userID!).getDocument { (snapshot, err) in
             if let err = err {
                 print("エラーでした~~\(err)")

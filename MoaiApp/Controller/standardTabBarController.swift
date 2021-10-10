@@ -27,6 +27,11 @@ class standardTabBarController: UITabBarController {
         // 背景色を変更できます！
         UITabBar.appearance().barTintColor = .barColor()
         
+        //1秒後に処理(viewControllerを生成するのが早い説？？)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            //ここに処理
+//            self.setVC()
+        }
         self.setVC()
         
     }

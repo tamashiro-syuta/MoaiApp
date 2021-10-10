@@ -35,9 +35,9 @@ class PastMoaiDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let data = DateUtils.yyyyMMDDFromDate(date: (self.pastRecode?.date.dateValue())!)
-        let getMoneyPerson = self.pastRecode!.getMoneyPerson
-        let location = self.pastRecode!.locationName
+        let data = DateUtils.yyyyMMddEEEFromDate(date: (self.pastRecode?.date.dateValue())!)
+        let getMoneyPerson = self.pastRecode!.getMoneyPerson["name"] as! String
+        let location = self.pastRecode!.location["name"] as! String
         let paid: [String] = self.pastRecode!.paid
         let unpaid: [String] = self.pastRecode!.unpaid
         let note = self.pastRecode!.note
@@ -50,7 +50,7 @@ class PastMoaiDetailsViewController: UIViewController {
 //        self.mySectionRows.append(("備考",[note] ) )
 //
         recodeDetailsArray.append(cells(isShown: true, sectionName: "日時", rowArray: [data]))
-        recodeDetailsArray.append(cells(isShown: true, sectionName: "受取", rowArray: [getMoneyPerson]))
+        recodeDetailsArray.append(cells(isShown: true, sectionName: "受取", rowArray: [getMoneyPerson] ))
         recodeDetailsArray.append(cells(isShown: true, sectionName: "場所", rowArray: [location]))
         recodeDetailsArray.append(cells(isShown: true, sectionName: "支払い済み", rowArray: paid))
         recodeDetailsArray.append(cells(isShown: true, sectionName: "未払い", rowArray: unpaid))

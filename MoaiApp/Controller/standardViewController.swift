@@ -8,6 +8,20 @@
 import UIKit
 import Firebase
 
+struct Members:Codable {
+    let id:String
+    let name:String
+    let next:Bool
+    let saving:Bool
+    
+    init(dic: [String: Any]) {
+        self.id = dic["id"] as? String ?? ""
+        self.name = dic["name"] as? String ?? ""
+        self.next = dic["next"] as? Bool ?? false
+        self.saving = dic["saving"] as? Bool ?? false
+    }
+}
+
 class standardViewController :UIViewController {
     
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -28,12 +42,12 @@ class standardViewController :UIViewController {
     var nextMoai: MoaiRecord? //次回の模合の情報
     var nextMoaiID: String?
     var pastRecodeArray: [MoaiRecord]?  //古いデータが「0番目」、新しいのが「n番目」になってる
-    var pastRecodeIDStringArray: [String]?  // 20210417みたいな形で取り出してる
+//    var pastRecodeIDStringArray: [String]?  // 20210417みたいな形で取り出してる
     var pastRecodeIDDateArray: [String]?  //◯月◯日みたいな形で取り出してる
     var nextMoaiEntryArray: [Bool]? // ブーリアン型の配列
     
     var memberArray: [ [String:Any] ]? // 模合メンバーの名前の配列（  ex)[["name": "テスト9", "id": "tMfuNFOxckUtupgmxIkgbNcLMap1"], ... ]  ）
-    var moaiMenbersNameList: [String] = [] //模合メンバーの名前の配列
+    var moaiMembersNameList: [String] = [] //模合メンバーの名前の配列
     
     override func viewDidLoad() {
         print("viewDidLoadが呼ばれました")
@@ -95,7 +109,7 @@ class standardViewController :UIViewController {
         }
     }
     
-    //ユーザーの模合情報の取得(後々は、複数入っている場合の模合情報を取れるようにする（配列の番号指定の部分を変数に置き換えして）)
+    //ユーザーの模合情報の取得(後々は、複数入っている場合の模合情報を取れるようにする（配列(moai)の番号指定の部分を変数に置き換えして）)
     func fetchUsersMoaiInfo(user: User) {
         guard let moaiID = self.user?.moais[1] else {return}
         self.db.collection("moais").document(moaiID).getDocument { (snapshot, err) in
@@ -108,10 +122,8 @@ class standardViewController :UIViewController {
                     return
                 }
                 self.moai = Moai(dic: dic)
+                print("self.moai.members -> \(self.moai?.members)")
             }
-            self.makeMoaiMenbersList()
-            guard let next = self.moai?.next else {return}
-            self.nextMoaiEntryArray = next
         }
     }
     
@@ -121,7 +133,7 @@ class standardViewController :UIViewController {
         guard let moaiID = self.user?.moais[1] else {return}
         self.db.collection("moais").document(moaiID).collection("pastRecords").getDocuments { (querySnapshots, err) in
             if let err = err {
-                print("過去の模合情報の取得でエラーが出ました。\(err)")
+                print("過去の模合情報の取得(fetchPastRecord)でエラーが出ました。\(err)")
                 return
             }else {
                 var array1 = [MoaiRecord]()
@@ -139,8 +151,8 @@ class standardViewController :UIViewController {
                 }
                 //古いデータが「0番目」、新しいのが「n番目」になってる
                 self.pastRecodeArray = array1
-                self.pastRecodeIDStringArray = array2
-                self.makePastRecodeIDtoDateArray(array: self.pastRecodeIDStringArray!)
+//                self.pastRecodeIDStringArray = array2
+//                self.makePastRecodeIDtoDateArray(array: self.pastRecodeIDStringArray!)
             }
         }
     }
@@ -149,7 +161,7 @@ class standardViewController :UIViewController {
         guard let moaiID = self.user?.moais[1] else {return}
         self.db.collection("moais").document(moaiID).collection("next").getDocuments { (querySnapshots, err) in
             if let err = err {
-                print("次回の模合情報の取得でエラーが出ました。\(err)")
+                print("次回の模合情報の取得(fetchNextMoaiInfo)でエラーが出ました。\(err)")
                 return
             }else {
                 guard let querySnapshots = querySnapshots else {return}
@@ -165,25 +177,25 @@ class standardViewController :UIViewController {
     }
     
     //模合のメンバーをIDでなく、名前で配列に入れる
-    private func makeMoaiMenbersList() {
-        //viewの再読み込み時にデータが人数より増えるのを防ぐため、一度初期化
-        self.memberArray = []
-        for member in self.moai!.menbers {
-            self.db.collection("users").document(member).getDocument { (snapshot, err) in
-                if let err = err {
-                    print("エラーです \(err)")
-                    return
-                }else {
-                    let username = snapshot?.data()?["username"] as! String
-                    let dictionary:Dictionary<String,String> = ["id": member, "name": username] //[member:username]
-                    self.memberArray?.append(dictionary)
-                    
-                    print("self.memberArray　→→→ \(self.memberArray)")
-                    
-                }
-            }
-        }
-    }
+//    private func makeMoaiMenbersList() {
+//        //viewの再読み込み時にデータが人数より増えるのを防ぐため、一度初期化
+//        self.memberArray = []
+//        for member in self.moai!.menbers {
+//            self.db.collection("users").document(member).getDocument { (snapshot, err) in
+//                if let err = err {
+//                    print("エラーです \(err)")
+//                    return
+//                }else {
+//                    let username = snapshot?.data()?["username"] as! String
+//                    let dictionary:Dictionary<String,String> = ["id": member, "name": username] //[member:username]
+//                    self.memberArray?.append(dictionary)
+//
+//                    print("self.memberArray　→→→ \(self.memberArray)")
+//
+//                }
+//            }
+//        }
+//    }
     
     //既に模合代を受け取った人のリスト
     private func makeAlreadyReceivedList() {

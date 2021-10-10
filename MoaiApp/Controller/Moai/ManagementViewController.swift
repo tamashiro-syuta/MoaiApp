@@ -11,10 +11,6 @@ import PKHUD
 
 class ManagementViewController: standardViewController {
     
-    
-//    let db = Firestore.firestore()
-//    let userID = Auth.auth().currentUser?.uid
-    
     //pastMoaisButtonの横のアイコンで使用
     let downImage = UIImage(systemName: "arrowtriangle.down.fill")
     let upImage = UIImage(systemName: "arrowtriangle.up.fill")
@@ -30,26 +26,28 @@ class ManagementViewController: standardViewController {
 //    var nextMoaiEntryArray: [Bool]? // ブーリアン型の配列
 //    var moaiMenbersNameList: [String] = [] //模合メンバーの名前の配列
     
+    
+    @IBOutlet weak var nextDateStackView: UIStackView!
+    @IBOutlet weak var getMoneyPeopleStackView: UIStackView!
+    
     @IBOutlet weak var nextMoaiDateLabel: UILabel!
     @IBOutlet weak var entryButton: UIButton!
     @IBOutlet weak var notEntryButton: UIButton!
-    @IBOutlet weak var pastMoaisButton: UIButton!
-    @IBOutlet weak var pastMoaiLabel: UILabel!
     @IBOutlet weak var getMoneyPersonTableView: UITableView!
+    @IBOutlet weak var getMoneyPersonLabel: UILabel!
     @IBOutlet weak var blurView: UIVisualEffectView!
     
-    //模合代を誰が徴収したかの確認(誰が何日にもらって的なやつ)のための辞書型の変数
-    //FireBaseからデータを取得して入れる
-    var GetMoneyPersonList: Array = [
-        ["A","7/1"],
-        ["B","×"],
-        ["C","2/13"]
-    ]
+//    @IBOutlet weak var cellHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var getMoneyPeopleSVHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var getMoneyPeopleLabelHeightConstraint: NSLayoutConstraint!
+    
 
     let today = Date()
     var nextMoaiDate: String?
     
-    var vi: UIView?  //過去の模合のスクロールビューで使用
+    var membersWithDate: [ [String:Any] ] = []
+    
+//    var vi: UIView?  //過去の模合のスクロールビューで使用
     
     //viewが初めて呼ばれた１回目だけ呼ばれるメソッド
     override func viewDidLoad() {
@@ -64,22 +62,39 @@ class ManagementViewController: standardViewController {
         
         print("viewWillAppear")
         
-        //ユーザー情報の取得（模合に参加してるならmanagementVCに、してないならMoaiに画面遷移）
-//        self.fetchLoginUserInfo()
-        
-//        self.blurView.alpha = 1
-        
         self.navigationItem.rightBarButtonItem?.isEnabled = false
         
-        HUD.flash(.progress, onView: view, delay: 1.5) { _ in
+        HUD.flash(.progress, onView: view, delay: 2) { _ in
             //HUDを非表示にした後の処理
             self.setupView()
-            self.makeGetMoneyPersonList()
+            self.addDateToMembers()
             self.getMoneyPersonTableView.dataSource = self
             self.getMoneyPersonTableView.delegate = self
+            self.setupGetMoneyPersonSV()
             self.navigationItem.rightBarButtonItem?.isEnabled = true
             self.blurView.alpha = 0
             print("現在、ログインしているユーザー　\(self.user?.username)")
+            print("self.moai.members -> \(self.moai?.members)")
+            print("self.pastRecodeArray -> \(self.pastRecodeArray)")
+//            print("self.pastRecodeIDStringArray -> \(self.pastRecodeIDStringArray)")
+//            print("self.pastRecodeIDDateArray -> \(self.pastRecodeIDDateArray)")
+            print("↓　pastRecode  ↓")
+            for item in self.pastRecodeArray! {
+                print("item.amount -> \(item.amount)")
+                print("item.createdAt -> \(item.createdAt.dateValue())")
+                print("item.date -> \(item.date.dateValue())")
+                print("item.getMoneyPerson['name'] -> \(item.getMoneyPerson["name"])")
+                print("item.getMoneyPerson['id'] -> \(item.getMoneyPerson["id"])")
+//                print("item.getMoneyPersonID -> \(item.getMoneyPersonID)")
+                print("item.location['name'] -> \(item.location["name"])")
+                print("item.location['geoPoint'] -> \(item.location["geoPoint"] as! GeoPoint)")
+//                print("item.locationName -> \(item.locationName)")
+                print("item.note -> \(item.note)")
+                print("item.paid -> \(item.paid)")
+                print("item.unpaid -> \(item.unpaid)")
+            }
+            print("self.nextMoai -> \(self.nextMoai)")
+            print("self.nextMoaiID -> \(self.nextMoaiID)")
         }
         
         //1秒後に処理
@@ -100,36 +115,39 @@ class ManagementViewController: standardViewController {
         reloadViewButton.tintColor = .white
         self.navigationItem.rightBarButtonItem = reloadViewButton
         
-        //ボタンに文字と画像を設置
-        pastMoaisButton.setTitle("過去の模合", for: .normal)
-        pastMoaisButton.setImage(downImage, for: .normal)
-        //画像と文字絵を被らないように配置
-        pastMoaisButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 180, bottom: 0, right: 0)
-        pastMoaisButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
         
-        
-        let nextMoaiDate = DateUtils.stringFromDate(date: (self.nextMoai?.date.dateValue())! )
+        let nextMoaiDate = DateUtils.MddEEEFromDate(date: (self.nextMoai?.date.dateValue())! )
         self.nextMoaiDateLabel.text = nextMoaiDate
-        
-        
-        if self.pastRecodeArray == nil || self.pastRecodeArray?.count == 0 {
-            self.setupPastMoaisView(backnumber: 0)
-            //ボタンの無効化
-            self.pastMoaisButton.isEnabled = false
-        }else {
-            guard let pastRecodeArrayCount = self.pastRecodeArray?.count else {return}
-            let pastTotalTimes = pastRecodeArrayCount - 1
-            self.setupPastMoaisView(backnumber: pastTotalTimes)
-        }
         
         self.navigationItem.title = self.moai?.groupName
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
         //配列の順番をDBのmoaiのmenbersの順番と同じにするため
-        self.moaiMenbersNameList.reverse()
+        self.moaiMembersNameList.reverse()
         
         self.getMoneyPersonTableView.reloadData()
         
+        //枠線
+        self.getMoneyPersonLabel.layer.cornerRadius = 10
+        self.getMoneyPersonLabel.layer.borderWidth = 4
+        self.getMoneyPersonLabel.layer.borderColor = UIColor.textColor2().cgColor
+        
+    }
+    
+    //getMoneyPeopleSVの高さを模合のメンバー数に応じて動的に処理
+    private func setupGetMoneyPersonSV() {
+        print("self.getMoneyPeopleSVHeightConstraintの型は、\(type(of: self.getMoneyPeopleSVHeightConstraint))")
+        
+        //セル1つ分の高さ
+        let cellHeight:Int = 50
+        let getMoneyPersonSVHeight:CGFloat = CGFloat( CGFloat(cellHeight * (self.moai?.members.count)!) + self.getMoneyPeopleLabelHeightConstraint.constant )
+        //セルの高さ * 人数 + ラベルの高さ
+        self.getMoneyPeopleSVHeightConstraint.constant = getMoneyPersonSVHeight
+        
+        //tableViewをタップできなくする
+        self.getMoneyPersonTableView.allowsSelection = false
+        //tableViewをスクロールできなくする
+        self.getMoneyPersonTableView.isScrollEnabled = false
     }
     
     //viewの再読み込み
@@ -158,9 +176,10 @@ class ManagementViewController: standardViewController {
     @IBAction func detailsNextMoai(_ sender: Any) {
         let detailsNextMoaiVC = storyboard?.instantiateViewController(identifier: "detailsNextMoaiViewController") as! detailsNextMoaiViewController
 
+        detailsNextMoaiVC.moai = self.moai
         detailsNextMoaiVC.nextMoai = self.nextMoai
-        detailsNextMoaiVC.judgeEntryArray = self.nextMoaiEntryArray
-        detailsNextMoaiVC.moaiMenbersNameList = self.moaiMenbersNameList
+//        detailsNextMoaiVC.judgeEntryArray = self.nextMoaiEntryArray
+//        detailsNextMoaiVC.moaiMenbersNameList = self.moaiMembersNameList
         navigationController?.pushViewController(detailsNextMoaiVC, animated: true)
     }
     
@@ -170,116 +189,27 @@ class ManagementViewController: standardViewController {
         let changeNextMoaiVC = storyboard.instantiateViewController(identifier: "ChangeNextMoaiViewController") as! ChangeNextMoaiViewController
         changeNextMoaiVC.user = self.user
         changeNextMoaiVC.moai = self.moai
-        changeNextMoaiVC.moaiMenbersNameList = self.moaiMenbersNameList
+        changeNextMoaiVC.moaiMenbersNameList = self.moaiMembersNameList
         changeNextMoaiVC.nextMoai = self.nextMoai
         changeNextMoaiVC.nextMoaiID = self.nextMoaiID
         print(self.nextMoaiID)
         navigationController?.pushViewController(changeNextMoaiVC, animated: true)
     }
     
-    
-    
-
-    //過去の模合の情報からn番目の情報をUIに移すメソッド
-    private func setupPastMoaisView(backnumber: Int) {
+    //ユーザーがtrueかfalseか判別すれば良い
+    private func entryOrNot2(Bool:Bool) {
         
-        if self.pastRecodeArray == nil || self.pastRecodeArray?.count == 0 {
-            if backnumber == 0 {
-                //pastRecodeArrayがnilの時の挙動
-                let title = " 次が初めての模合です！！"
-                pastMoaiLabel.text = title
-                pastMoaiLabel.font = UIFont.systemFont(ofSize: 25)
-            }
-        }else {
-            if backnumber < 0 || backnumber > self.pastRecodeArray!.count {
-                //引数に正常な値が入ってない時の挙動
-                //アラートで出した方が良い？？
-                print("ちゃんとした値にしやがれカス")
-                return
-            }else {
-                //引数で指定した番号の模合情報をインスタンス化(上で引数が正常な値かチェックしてるから強制アンラップしても大丈夫)
-                let selectedPastRecode: MoaiRecord = (self.pastRecodeArray?[backnumber])!
-                let date = DateUtils.stringFromDate(date: selectedPastRecode.date.dateValue()) //TimeStampからDateに直したものを文字列化
-                print("dateはちゃんと取れてるかな〜〜？？\(date)")
-                let getPerson = selectedPastRecode.getMoneyPerson
-                let location = selectedPastRecode.location
-                let title = "  開催日：\(date)" + "\n" + "  受け取り：\(getPerson)" + "\n" + "  場所：\(location)"
-                
-                pastMoaiLabel.text = title
-                pastMoaiLabel.font = UIFont.systemFont(ofSize: 25)
-                return
-            }
-        }
-    }
-
-    
-    
-    @IBAction func pickOneOfPastMoais(_ sender: Any) {
-        //ダウンスクロールメニューを表示し、その中から過去の模合を選択し、し終わると、その詳細を表示する
-
-        //self.pickerView.isHidden = false
-        let pickerView = UIPickerView()
-        pickerView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: pickerView.bounds.size.height + 80)
-                // Connect data:
-        pickerView.delegate   = self
-        pickerView.dataSource = self
-        pickerView.tag = 1
-        
-        self.vi = UIView(frame: pickerView.bounds)
-        vi?.backgroundColor = UIColor.white
-        vi?.addSubview(pickerView)
-        
-        let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 150))
-        toolBar.barStyle = UIBarStyle.default
-        toolBar.isTranslucent = true
-        toolBar.tintColor = UIColor.black
-        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.donePressed))
-        toolBar.setItems([space, done ], animated: true)
-        toolBar.isUserInteractionEnabled = true
-        toolBar.sizeToFit()
-        
-        vi?.addSubview(toolBar)
-        view.addSubview(vi!)
-        let screenSize = UIScreen.main.bounds.size
-        vi?.frame.origin.y = screenSize.height
-        UIView.animate(withDuration: 0.3) {
-            self.vi?.frame.origin.y = screenSize.height - (self.vi?.bounds.size.height)!
-        }
-        print("push")
-    }
-    
-    @objc func donePressed() {
-        self.vi?.isHidden = true
-    }
-
-    
-    private func makePastRecodeIDtoDateArray(array: Array<Any>) {
-        //これ入れないと、配列に値を入れれなくなって、空になるから消さない。
-        self.pastRecodeIDDateArray = ["◯年◯月◯日みたいな形で取り出すよ"]
-        self.pastRecodeIDDateArray?.removeFirst()
-        
-        let dateFormatter1 = DateFormatter()
-        dateFormatter1.dateFormat = "yyyyMMdd"  //"E, d MMM yyyy HH:mm:ss Z"
-        
-        let dateFormatter2 = DateFormatter()
-        dateFormatter2.dateStyle = .long
-        dateFormatter2.timeStyle = .none
-        dateFormatter2.locale = Locale(identifier: "ja_JP")
-        
-        for item in array {
-            //DateFormatterで文字列を◯年◯月◯日に直す。必要なら、DBのIDの形も変えてよし
-            //arrayには、20210409の形でデータが入っている
-            let pastDate1 = dateFormatter1.date(from: item as! String)
-            let pastDate2 = dateFormatter2.string(from: pastDate1!)
-            self.pastRecodeIDDateArray?.append(pastDate2)
-        }
     }
     
     private func entryOrNot(Bool: Bool) {
+        print("nextMoaiEntryArray -> \(nextMoaiEntryArray)")
+        print("memberArray -> \(memberArray)")
         guard let myName = self.user?.username else {return}
+        print("myName -> \(myName)")
         //ログインしているユーザーが配列の何番目かを取得
-        guard let myNumber = self.moaiMenbersNameList.index(of: myName) else {return}
+        print("moaiMemberNameList -> \(moaiMembersNameList)")
+        guard let myNumber = self.moaiMembersNameList.firstIndex(of: myName) else {return}
+        print("myNumber -> \(myNumber)")
         //配列の中身を更新
         nextMoaiEntryArray?[myNumber] = Bool
         //DBのnextの値を上で更新した配列に切り替える
@@ -297,90 +227,57 @@ class ManagementViewController: standardViewController {
         }
     }
     
-    private func makeGetMoneyPersonList() {
-        //配列の値を一旦、全て削除する
-        self.GetMoneyPersonList.removeAll()
+    private func addDateToMembers() {
         
         if self.pastRecodeArray == nil || self.pastRecodeArray?.count == 0 {
-            self.GetMoneyPersonList = [ ["初めての模合終了","後に利用できます。"] ]
+            //処理終了
+            return
         }else {
-            //GetMoneyPersonListの作成
-            guard let pastRecodeArray = self.pastRecodeArray else {return}
-            for menberName in self.moaiMenbersNameList {
-                var count = 0
-                for pastRecode in pastRecodeArray {
-                    if menberName == pastRecode.getMoneyPerson {
-                        let date = DateUtils.stringFromDate(date: pastRecode.date.dateValue())
-                        self.GetMoneyPersonList.append([menberName,date])
-                        print(self.GetMoneyPersonList.last)
+            membersWithDate = self.moai!.members
+            for i in 0..<(membersWithDate.count) {
+                for recode in self.pastRecodeArray! {
+                    if membersWithDate[i]["name"] as! String == recode.getMoneyPerson["name"]! && membersWithDate[i]["id"] as! String == recode.getMoneyPerson["id"]! {
+                        //日付を文字列に変換
+                        let date:String = DateUtils.MddEEEFromDate(date: recode.date.dateValue() )
+                        membersWithDate[i].updateValue(date, forKey: "date")
+                        break //for文(recodeの)を抜ける
                     }else {
-                        count += 1
-                        //countが配列の数と同じ＝１回ももらってない
-                        if count == pastRecodeArray.count {
-                            self.GetMoneyPersonList.append([menberName,"    ×    "])
-                        }
+                        //なかったら、"×"を入れる
+                        membersWithDate[i].updateValue("×", forKey: "date")
                     }
                 }
             }
+            print("date型を入れてみたよ〜〜〜〜〜♪♪♪")
+            print("membersWithDate -> -> -> ->  \(membersWithDate)")
         }
-    }
-}
-
-
-extension ManagementViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-    
-    // UIViewPickerの列(横方向)数を指定
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    // UIViewPickerの行(縦方向)数を指定
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return self.pastRecodeArray!.count
-    }
-    
-    // UIViewPickerの幅のサイズを返すメソッド
-        func pickerView(_ pickerView: UIPickerView, widthForComponent component:Int) -> CGFloat {
-            switch component {
-            //1列目の幅
-            case 0:
-                return (UIScreen.main.bounds.size.width-20)/2
-            //2列目の幅
-            case 1:
-                return (UIScreen.main.bounds.size.width-20)/2
-            default:
-                return (UIScreen.main.bounds.size.width-20)/2
-            }
-        }
-    
-    //各行のタイトル
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return self.pastRecodeIDDateArray?[row]
-    }
-    
-    // UIViewPickerのrowが選択された時のメソッド
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        //選択されたものに応じて、引数を指定し、ラベルのUI更新のメソッドを呼び出す。
-        self.setupPastMoaisView(backnumber: row)
     }
 }
 
 extension ManagementViewController: UITableViewDelegate,UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return GetMoneyPersonList.count
+        return membersWithDate.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
-        let label1 = cell.contentView.viewWithTag(1) as! UILabel
-        let label2 = cell.contentView.viewWithTag(2) as! UILabel
-        label1.frame.size.width = cell.frame.size.width / 2
-        label2.frame.size.width = cell.frame.size.width / 2
         
-        label1.text = GetMoneyPersonList[indexPath.row][0]
-        label2.text = GetMoneyPersonList[indexPath.row][1]
-        
+        if membersWithDate.count == 0 {
+            //元々２つあったセルのうち、1つを削除
+            let label2 = cell.contentView.viewWithTag(2) as! UILabel
+            label2.removeFromSuperview()
+            //残った1つにテキストをつける
+            let label1 = cell.contentView.viewWithTag(1) as! UILabel
+            label1.text = "初めての模合が終了した後に利用できます。"
+        }else {
+            let label1 = cell.contentView.viewWithTag(1) as! UILabel
+            let label2 = cell.contentView.viewWithTag(2) as! UILabel
+            label1.frame.size.width = cell.frame.size.width / 2
+            label2.frame.size.width = cell.frame.size.width / 2
+            
+            label1.text = membersWithDate[indexPath.row]["name"] as! String
+            label2.text = membersWithDate[indexPath.row]["date"] as! String
+        }
         return cell
     }
     

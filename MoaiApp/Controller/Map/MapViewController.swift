@@ -63,7 +63,7 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
     
     //ユーザーの場所が更新された時に呼ばれるメソッド
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        self.map.region = MKCoordinateRegion(center: locationManager.location!.coordinate, latitudinalMeters: 3000, longitudinalMeters: 3000)
+//        self.map.region = MKCoordinateRegion(center: locationManager.location!.coordinate, latitudinalMeters: 3000, longitudinalMeters: 3000)
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

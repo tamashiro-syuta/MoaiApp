@@ -161,11 +161,11 @@ class PastMoaiViewController: standardViewController {
             print("例外な値だよとアラートを出す")
         }else {
             let record =  self.pastRecodeArray![backnumber]
-            let text = " 受取：" + "\(record.getMoneyPerson)" + "\n" + " 場所：" + "\(record.locationName)"
+            let text = " 受取：" + "\(record.getMoneyPerson["name"]!)" + "\n" + " 場所：" + "\(record.location["name"]!)"
             self.pastMoaiInfoLabel.text = text
             
-            let date = DateUtils.stringFromDate(date: record.date.dateValue())
-            self.pastMoaiDate = DateUtils.stringFromDateoForSettingNextID(date: record.date.dateValue())
+            let date = DateUtils.yyyyMMddEEEFromDate(date: record.date.dateValue())
+            self.pastMoaiDate = DateUtils.stringFromDateoForSettingRecodeID(date: record.date.dateValue())
             setNavigationBar(title: date)
         }
     }
@@ -173,7 +173,7 @@ class PastMoaiViewController: standardViewController {
     private func setNavigationBar(title:String) {
         //ナビゲーションのタイトルを設定
         //元となるViewを生成(ここにボタンやviewを乗せていく)
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: 160, height: 46))
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 46))
         //ボタンを生成
         let filterButton = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 46))
         if self.pastRecodeArray != nil && self.pastRecodeArray?.count != 0 {
@@ -184,14 +184,14 @@ class PastMoaiViewController: standardViewController {
 //        filterButton.addTarget(self, action: #selector(tappedTitleButton), for: .touchUpInside)//タップされた時に関数動く
         view.addSubview(filterButton)//メインのviewにviewをのせる
         //タイトルとなるViewを生成
-        let label = UILabel(frame: CGRect(x: 0, y: 13, width: 160, height: 18))
+        let label = UILabel(frame: CGRect(x: 0, y: 13, width: 200, height: 18))
         label.text = title
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.textColor = UIColor.black
         view.addSubview(label)
         //三角形のimageを生成
-        let imageView = UIImageView(frame: CGRect(x: 70, y: 30, width: 10, height: 12))
+        let imageView = UIImageView(frame: CGRect(x: 85, y: 30, width: 10, height: 12))
         imageView.image = UIImage(systemName: "arrowtriangle.down.fill")?.withRenderingMode(.alwaysTemplate)
         imageView.tintColor = .white
         view.addSubview(imageView)
@@ -283,8 +283,6 @@ class PastMoaiViewController: standardViewController {
         
         self.navigationController?.pushViewController(PastMoaiDetailsVC, animated: true)
     }
-    
-
 }
 
 extension PastMoaiViewController: UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
@@ -355,7 +353,8 @@ extension PastMoaiViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     //各行のタイトルとテキストカラー
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-        return NSAttributedString(string: (self.pastRecodeIDDateArray?[row])!, attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+//        return NSAttributedString(string: (self.pastRecodeIDDateArray?[row])!, attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+        return NSAttributedString(string: (DateUtils.yyyyMMddEEEFromDate(date: (self.pastRecodeArray?[row].date.dateValue())!)), attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
     }
     
     // UIViewPickerのrowが選択された時のメソッド

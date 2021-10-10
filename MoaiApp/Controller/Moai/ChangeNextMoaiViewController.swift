@@ -67,9 +67,9 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
         
         self.setupStackViews()
         
-        self.menberIDArray = self.moai?.menbers
-        self.menberIDArray?.insert("未定", at: 0)
-        self.moaiMenbersNameList?.insert("未定", at: 0)
+//        self.menberIDArray = self.moai?.menbers
+//        self.menberIDArray?.insert("未定", at: 0)
+//        self.moaiMenbersNameList?.insert("未定", at: 0)
         
         self.moaiID = self.user?.moais[1]
         
@@ -89,12 +89,12 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
         
         locationTextField.frame.size.width = viewsWidth! - 60
         
-        let date = DateUtils.stringFromDate(date: (self.nextMoai?.date.dateValue())!)
+        let date = DateUtils.MddEEEFromDate(date: (self.nextMoai?.date.dateValue())!)
         let startTime = DateUtils.fetchStartTimeFromDate(date: (self.nextMoai?.date.dateValue())!)
         dateTextField.placeholder = date
         startTimeTextField.placeholder = startTime
-        getMoneyPersonTextField.placeholder = self.nextMoai?.getMoneyPerson
-        locationTextField.placeholder = self.nextMoai?.locationName
+        getMoneyPersonTextField.placeholder = self.nextMoai?.getMoneyPerson["name"] as! String
+        locationTextField.placeholder = self.nextMoai?.location["name"] as! String
         
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
         //toolbarに表示させるアイテム
@@ -231,9 +231,9 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
             
             var newDate:Timestamp = self.nextMoai!.date
             var newStartTime:String = self.nextMoai!.startTime
-            var newGetMoneyPerson:String = self.nextMoai!.getMoneyPerson
-            var newGetMoneyPersonID:String = self.nextMoai!.getMoneyPersonID
-            var newLocation:String = self.nextMoai!.locationName
+            var newGetMoneyPerson:[String:String] = self.nextMoai!.getMoneyPerson
+//            var newGetMoneyPersonID:String = self.nextMoai!.getMoneyPersonID
+            var newLocation:[String:Any] = self.nextMoai!.location
             
             //値が更新されているもののみアップデートする
             if self.dateTextField.text != "" {
@@ -245,12 +245,12 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
                 newStartTime = self.startTimeTextField.text!
             }
             if self.getMoneyPersonTextField.text != "" {
-                newGetMoneyPerson = self.getMoneyPersonTextField.text!
+                newGetMoneyPerson["name"] = self.getMoneyPersonTextField.text!
                 let menbersIndex = self.moaiMenbersNameList?.firstIndex(of: self.getMoneyPersonTextField.text!)
-                newGetMoneyPersonID = self.menberIDArray![menbersIndex!]
+                newGetMoneyPerson["id"] = self.menberIDArray![menbersIndex!]
             }
             if self.locationTextField.text != "" {
-                newLocation = self.locationTextField.text!
+                newLocation["name"] = self.locationTextField.text!
             }
             
             //更新用データ
@@ -258,7 +258,7 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
                 "date": newDate ,
                 "startTime": newStartTime,
                 "getMoneyPerson": newGetMoneyPerson,
-                "getMoneyPersonID": newGetMoneyPersonID,
+//                "getMoneyPersonID": newGetMoneyPersonID,
                 "location": newLocation,
             ] as [String : Any]
             
@@ -293,7 +293,7 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
             }
         }
         //新しく更新したデータを追加
-        let nextMoaiDate = DateUtils.stringFromDateoForSettingNextID(date: self.selectedDate?[0] as! Date)
+        let nextMoaiDate = DateUtils.stringFromDateoForSettingRecodeID(date: self.selectedDate?[0] as! Date)
         self.db.collection("moais").document((self.user?.moais[1])!).collection("next").document(nextMoaiDate).setData(newNextMoaiDic) {err in
             if let err = err {
                 print("エラーでっせ \(err)")
@@ -359,13 +359,13 @@ extension ChangeNextMoaiViewController: FSCalendarDelegate,FSCalendarDataSource 
         self.calendarView.addSubview(calendarToolbar)
         
         guard let nextMoaiDate = self.nextMoai?.date.dateValue() else {return}
-        self.selectedDate = [nextMoaiDate, DateUtils.stringFromDate(date: nextMoaiDate)]
+        self.selectedDate = [nextMoaiDate, DateUtils.MddEEEFromDate(date: nextMoaiDate)]
     }
     
     //日付を選択した時の処理
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         // 処理
-        self.selectedDate = [date , DateUtils.stringFromDate(date: date)]
+        self.selectedDate = [date , DateUtils.MddEEEFromDate(date: date)]
         dateTextField.text = selectedDate?[1] as! String
         
         print("selectedDateは\(selectedDate)")

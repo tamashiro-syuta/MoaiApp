@@ -181,7 +181,7 @@ class CreateRoomViewController: UIViewController {
         let weekAndDayArray:[Int] = moai.switchMoaiDate(weekNum: moai.week, weekDay: moai.day)
         
         self.newNextMoaiDate = DateUtils.returnNextMoaiDate(weekNum: weekAndDayArray[0], weekDay: weekAndDayArray[1])
-        self.newNextMoaiDateID = DateUtils.stringFromDateoForSettingNextID(date: self.newNextMoaiDate!)
+        self.newNextMoaiDateID = DateUtils.stringFromDateoForSettingRecodeID(date: self.newNextMoaiDate!)
         
         let dic = [
             "date":self.newNextMoaiDate,

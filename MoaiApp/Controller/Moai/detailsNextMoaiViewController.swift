@@ -9,9 +9,10 @@ import UIKit
 
 class detailsNextMoaiViewController: UIViewController {
     
+    var moai:Moai?
     var nextMoai:MoaiRecord?
-    var judgeEntryArray: [Bool]?
-    var moaiMenbersNameList:[String]?
+    var judgeEntryArray: [Bool] = []  //self.moaiのnextから取得できるので消去
+//    var moaiMenbersNameList:[String]?
     
     var EntryMenbersArray: [String]?
     var notEntryMenbersArray: [String]?
@@ -47,12 +48,12 @@ class detailsNextMoaiViewController: UIViewController {
     }
     
     private func setupViews() {
-        let date = DateUtils.stringFromDate(date: (self.nextMoai?.date.dateValue())!)
+        let date = DateUtils.MddEEEFromDate(date: (self.nextMoai?.date.dateValue())!)
         let startTime = DateUtils.fetchStartTimeFromDate(date: (self.nextMoai?.date.dateValue())!)
         dateLabel.text = " " + date + " " + startTime + " 〜 "
         //locationがセットされてるかで表示内容を変換
-        if let locationName = nextMoai?.locationName {
-            locationLabel.text = " " + locationName
+        if nextMoai?.location["name"] as! String  != nil || nextMoai?.location["name"] as! String == ""{
+            locationLabel.text = " " + (nextMoai?.location["name"] as! String)
         }else {
             locationLabel.text = "未設定"
         }
@@ -61,13 +62,31 @@ class detailsNextMoaiViewController: UIViewController {
     
     //judgeEntryArrayとmenbersArrayから参加予定の人の配列と不参加予定の人の配列を作成
     private func makeEntryMenberArrayAndNot() {
+        self.judgeEntryArray.removeAll()
+        for member in self.moai!.members {
+            //false -> 0, true -> 1
+            if member["next"] as! Int == 0 {
+                print("\(member["name"])は、falseです。")
+                self.judgeEntryArray.append(false)
+            }else {
+                print("\(member["name"])は、trueです。")
+                self.judgeEntryArray.append(true)
+            }
+        }
+        print("self.judgeEntryArray -> \(self.judgeEntryArray)")
         var dic = [String: Bool]()
         var array1:[String] = []
         var array2:[String] = []
-        guard let arrayCount = self.moaiMenbersNameList?.count else {return}
-        for i in 0...arrayCount - 1 {
-            dic[self.moaiMenbersNameList![i]] = self.judgeEntryArray![i]
+//        guard let arrayCount
+//        guard let arrayCount = self.moaiMenbersNameList?.count else {return}
+        print("self.moai?.members.count -> \(self.moai?.members.count)")
+        for i in 0...(self.moai?.members.count)! - 1 {
+            print("\(i)番目の処理")
+            dic[self.moai!.members[i]["name"] as! String] = self.judgeEntryArray[i]
         }
+//        for i in 0...arrayCount - 1 {
+//            dic[self.moaiMenbersNameList![i]] = self.judgeEntryArray![i]
+//        }
         for item in dic {
             if item.value == true {
                 print(item.key)

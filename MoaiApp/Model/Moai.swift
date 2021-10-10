@@ -8,26 +8,41 @@
 import Foundation
 import Firebase
 
+//余裕があれば、membersを構造体にして、「.」で参照できるようにしたい
+//struct Members:Codable {
+//    let id:String
+//    let name:String
+//    let next:Bool
+//    let saving:Bool
+//
+//    init(dic: [String: Any]) {
+//        self.id = dic["id"] as? String ?? ""
+//        self.name = dic["name"] as? String ?? ""
+//        self.next = dic["next"] as? Bool ?? false
+//        self.saving = dic["saving"] as? Bool ?? false
+//    }
+//}
+
 class Moai {
     
     let groupName:String
-    let menbers:[String]
+    //プロパティは、id、name、next、savingの4つ（nextとsavingはBool型で、返ってくる時は1(true),2(false)で返ってくる）
+    let members:[ [String:Any] ]
     let week: String
     let day: String
     let amount: Int
     let createdAt: Timestamp
     let password: String
-    let next: [Bool]
+    
     
     init(dic: [String: Any]) {
         self.groupName = dic["groupName"] as? String ?? ""
-        self.menbers = dic["menbers"] as? [String] ?? [""]
+        self.members = dic["members"] as? [ [String:Any] ] ?? []
         self.week = dic["week"] as? String ?? ""
         self.day = dic["day"] as? String ?? ""
         self.amount = dic["amount"] as? Int ?? 0
         self.createdAt = dic["createdAt"] as? Timestamp ?? Timestamp()
         self.password = dic["password"] as? String ?? ""
-        self.next = dic["next"] as? [Bool] ?? [false]
     }
     
     func switchMoaiDate(weekNum: String, weekDay: String) -> [Int]  {

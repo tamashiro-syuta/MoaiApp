@@ -75,10 +75,10 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         getMoneyPersonTextField.delegate = self
         locationTextField.delegate = self
 
-        dateTextField.placeholder = DateUtils.stringFromDate(date: self.nextMoai!.date.dateValue())
+        dateTextField.placeholder = DateUtils.MddEEEFromDate(date: self.nextMoai!.date.dateValue())
         noteTextField.placeholder = self.nextMoai?.note
-        getMoneyPersonTextField.placeholder = self.nextMoai?.getMoneyPerson
-        locationTextField.placeholder = self.nextMoai?.locationName
+        getMoneyPersonTextField.placeholder = self.nextMoai?.getMoneyPerson["name"] as! String
+        locationTextField.placeholder = self.nextMoai?.location["name"] as! String
         
         getMoneyPersonPickerView.delegate = self
         
@@ -127,7 +127,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         
         paidPeopleStackView.backgroundColor = .white
         //paidPeopleSVの高さの変更
-        let paidPeopleSVHeight:CGFloat = CGFloat(60 * (self.moai?.menbers.count)!)
+        let paidPeopleSVHeight:CGFloat = CGFloat(60 * (self.moai?.members.count)!)
         paidPeopleSVHeightConstraint.constant = paidPeopleSVHeight
         let contentViewHeight = contentView.frame.height
         // 下の制約の「-100」はデフォルトで設定しているpaidPeopleSVの高さの部分を引いてる
@@ -189,9 +189,9 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         print("ボタン押したよ")
         //nextのデータを値が更新されているもののみアップデートする
         var newDate:Timestamp = self.nextMoai!.date
-        var newGetMoneyPerson:String = self.nextMoai!.getMoneyPerson
-        var newGetMoneyPersonID:String = self.nextMoai!.getMoneyPersonID
-        var newLocation:String = self.nextMoai!.locationName
+        var newGetMoneyPerson:[String:String] = self.nextMoai!.getMoneyPerson
+//        var newGetMoneyPersonID:String = self.nextMoai!.getMoneyPersonID
+        var newLocation:[String:Any] = self.nextMoai!.location
         var newNote:String = self.nextMoai!.note
         
         print("ボタン押したよ")
@@ -203,22 +203,22 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
             newDate = selectedDateTypeOfTimestamp
         }
         if self.getMoneyPersonTextField.text != "" {
-            newGetMoneyPerson = self.getMoneyPersonTextField.text!
+            newGetMoneyPerson["name"] = self.getMoneyPersonTextField.text!
             for member in memberArray! {
                 if member["name"] as! String == self.getMoneyPersonTextField.text {
-                    newGetMoneyPersonID = member["id"]! as! String
+                    newGetMoneyPerson["id"] = member["id"]! as! String
                 }
             }
         }
         if self.locationTextField.text != "" {
-            newLocation = self.locationTextField.text!
+            newLocation["name"] = self.locationTextField.text!
         }
         if self.noteTextField.text != "" {
             newNote = self.noteTextField.text!
         }
         
         //未定の状態なら記録できないようにする
-        if newGetMoneyPerson == "未定" || newGetMoneyPersonID == "未定" || newLocation == "未定" {
+        if newGetMoneyPerson["name"] == "未定" || newGetMoneyPerson["id"] == "未定" || newLocation["name"] as! String == "未定" {
             print("未定の状態のやつあるから、記録しませーん")
             let alert: UIAlertController = UIAlertController(title: "'未定'の箇所があります。", message: nil, preferredStyle: UIAlertController.Style.alert)
             let OKAction: UIAlertAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler:{
@@ -263,7 +263,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         print("unpaidsName　→→→→→　\(unpaidsName)")
         
         
-        let changedInfo = "日付：\(DateUtils.stringFromDate(date: newDate.dateValue()))" + "\n" + "模合代受け取り：\(newGetMoneyPerson)" + "\n" + "場所：\(newLocation)" + "\n" + "備考：\(newNote)" + "\n" + "支払い済み：\(paidsName.joined(separator: ","))" + "\n" + "未払い：\(unpaidsName.joined(separator: ","))"
+        let changedInfo = "日付：\(DateUtils.MddEEEFromDate(date: newDate.dateValue()))" + "\n" + "模合代受け取り：\(newGetMoneyPerson)" + "\n" + "場所：\(newLocation)" + "\n" + "備考：\(newNote)" + "\n" + "支払い済み：\(paidsName.joined(separator: ","))" + "\n" + "未払い：\(unpaidsName.joined(separator: ","))"
         
         let alert: UIAlertController = UIAlertController(title: "以下の内容はでよろしいですか？", message: changedInfo, preferredStyle:  UIAlertController.Style.alert)
         let joinAction: UIAlertAction = UIAlertAction(title: "はい", style: UIAlertAction.Style.default, handler:{
@@ -271,7 +271,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
             (action: UIAlertAction!) -> Void in
             
             //nextに入っていたデータをpastRecodeに入れる
-            self.addRecodeToPastRecode(paidCount: paidsID.count, newDate: newDate, newGetMoneyPerson: newGetMoneyPerson, newGetMoneyPersonID: newGetMoneyPersonID, newLocation: newLocation, newNote: newNote, paidsID: paidsID, unpaidsID: unpaidsID)
+            self.addRecodeToPastRecode(paidCount: paidsID.count, newDate: newDate, newGetMoneyPerson: newGetMoneyPerson, newLocation: newLocation, newNote: newNote, paidsID: paidsID, unpaidsID: unpaidsID)
             
             //nextにあったデータの削除
             self.removeNextMoaiInfo()
@@ -316,7 +316,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
     }
     
     //DBにデータを保存するメソッド
-    private func addRecodeToPastRecode(paidCount: Int, newDate:Timestamp, newGetMoneyPerson:String, newGetMoneyPersonID:String ,newLocation:String, newNote:String, paidsID:[String], unpaidsID:[String]) {
+    private func addRecodeToPastRecode(paidCount: Int, newDate:Timestamp, newGetMoneyPerson:[String:String], newLocation:[String:Any], newNote:String, paidsID:[String], unpaidsID:[String]) {
         guard let moaiID = self.moaiID else {
             print("なんや知らんけど、moaiID取れて無いっすわ")
             return
@@ -326,7 +326,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
             "amount": self.moai!.amount * paidCount, //模合の代金×払った人数
             "date":newDate,
             "getMoneyPerson":newGetMoneyPerson,
-            "getMoneyPersonID":newGetMoneyPersonID,
+//            "getMoneyPersonID":newGetMoneyPersonID,
             "location":newLocation,
             "note": newNote,
             "paid":paidsID,
@@ -367,7 +367,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         let weekAndDayArray:[Int] = moai.switchMoaiDate(weekNum: moai.week, weekDay: moai.day)
         
         self.newNextMoaiDate = DateUtils.returnNextMoaiDate(weekNum: weekAndDayArray[0], weekDay: weekAndDayArray[1])
-        self.newNextMoaiDateID = DateUtils.stringFromDateoForSettingNextID(date: self.newNextMoaiDate!)
+        self.newNextMoaiDateID = DateUtils.stringFromDateoForSettingRecodeID(date: self.newNextMoaiDate!)
         
         let dic = [
             "amount": 0,
@@ -431,7 +431,7 @@ extension RecodeMoaiInfoViewController: FSCalendarDelegate,FSCalendarDataSource 
     //日付を選択した時の処理
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         // 処理
-        self.selectedDate = [date , DateUtils.stringFromDate(date: date)]
+        self.selectedDate = [date , DateUtils.MddEEEFromDate(date: date)]
         dateTextField.text = selectedDate?[1] as! String
         
         print("selectedDateは\(selectedDate)")

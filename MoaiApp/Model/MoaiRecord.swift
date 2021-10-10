@@ -13,10 +13,11 @@ class MoaiRecord {
     let amount: Int
     let date:Timestamp
     let startTime:String
-    let getMoneyPerson: String
-    let getMoneyPersonID: String
-    let locationName: String //nilを許容する
-    let location: GeoPoint? //nilを許容する
+    let getMoneyPerson: [String:String]
+//    let getMoneyPersonID: String
+    let location: [String:Any]
+//    let locationName: String //nilを許容する
+//    let location: GeoPoint? //nilを許容する
     let paid: [String]
     let unpaid: [String]
     let note: String
@@ -26,10 +27,11 @@ class MoaiRecord {
         self.amount = dic["amount"] as? Int ?? 0
         self.date = dic["date"] as? Timestamp ?? Timestamp()
         self.startTime = dic["startTime"] as? String ?? ""
-        self.getMoneyPerson = dic["getMoneyPerson"] as? String ?? ""
-        self.getMoneyPersonID = dic["getMoneyPersonID"] as? String ?? ""
-        self.locationName = dic["locationName"] as? String ?? "未定"
-        self.location = dic["location"] as? GeoPoint
+        self.getMoneyPerson = dic["getMoneyPerson"] as? [String:String] ?? ["name":"未定" , "id":"未定"]
+//        self.getMoneyPersonID = dic["getMoneyPersonID"] as? String ?? ""
+//        self.locationName = dic["locationName"] as? String ?? "未定"
+//        self.location = dic["location"] as? GeoPoint
+        self.location = dic["location"] as? [String:Any] ?? ["name":"", "geoPoint":GeoPoint(latitude: 0, longitude: 0)]
         self.paid = dic["paid"] as? [String] ?? []   //初期値は空の配列
         self.unpaid = dic["unpaid"] as? [String] ?? []   //初期値は空の配列
         self.note = dic["note"] as? String ?? ""
