@@ -196,28 +196,26 @@ class ManagementViewController: standardViewController {
         navigationController?.pushViewController(changeNextMoaiVC, animated: true)
     }
     
-    //ユーザーがtrueかfalseか判別すれば良い
-    private func entryOrNot2(Bool:Bool) {
+    //ユーザーの"next"が1(true)か2(false)か判別すれば良い
+    private func entryOrNot(Bool:Bool) {
         
-    }
-    
-    private func entryOrNot(Bool: Bool) {
-        print("nextMoaiEntryArray -> \(nextMoaiEntryArray)")
-        print("memberArray -> \(memberArray)")
-        guard let myName = self.user?.username else {return}
-        print("myName -> \(myName)")
-        //ログインしているユーザーが配列の何番目かを取得
-        print("moaiMemberNameList -> \(moaiMembersNameList)")
-        guard let myNumber = self.moaiMembersNameList.firstIndex(of: myName) else {return}
-        print("myNumber -> \(myNumber)")
-        //配列の中身を更新
-        nextMoaiEntryArray?[myNumber] = Bool
-        //DBのnextの値を上で更新した配列に切り替える
-        self.db.collection("moais").document((self.user?.moais[1])!).updateData(["next": self.nextMoaiEntryArray ]) { (err) in
-            if let err = err {
-                print("参加ボタン、不参加ボタンで起きたエラー → \(err)")
+        var newMembers:[ [String:Any] ] = self.moai!.members
+        
+        for i in 0..<(self.moai!.members.count) {
+            if self.moai?.members[i]["id"] as? String == userID {
+                newMembers[i]["next"] = Bool
+                print("newMembers[i][next]  -->  \(newMembers[i]["next"])")
             }
         }
+        
+        self.db.collection("moais").document((self.user?.moais[1])!).updateData(["members" : newMembers]) { (err) in
+            if let err = err {
+                print("エラーです。\(err)")
+                return
+            }
+            print("entryOrNot完了")
+        }
+        
         if Bool == true {
             entryButton.alpha = 0.5
             notEntryButton.alpha = 1.0
