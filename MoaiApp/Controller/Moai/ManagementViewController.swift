@@ -95,6 +95,20 @@ class ManagementViewController: standardViewController {
 //            }
 //            print("self.nextMoai -> \(self.nextMoai)")
 //            print("self.nextMoaiID -> \(self.nextMoaiID)")
+            
+            
+            //ユーザーの参加、不参加によって、ボタンのalpha値を変更
+            for i in 0...(self.moai?.members.count)! - 1 {
+                if self.moai?.members[i]["id"] as? String == self.userID {
+                    if self.moai?.members[i]["next"] as! Bool == true {
+                        self.entryButton.alpha = 0.5
+                        self.notEntryButton.alpha = 1.0
+                    }else {
+                        self.entryButton.alpha = 1.0
+                        self.notEntryButton.alpha = 0.5
+                    }
+                }
+            }
         }
         
         //1秒後に処理
