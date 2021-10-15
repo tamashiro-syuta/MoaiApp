@@ -44,10 +44,10 @@ class standardViewController :UIViewController {
     var pastRecodeArray: [MoaiRecord]?  //古いデータが「0番目」、新しいのが「n番目」になってる
 //    var pastRecodeIDStringArray: [String]?  // 20210417みたいな形で取り出してる
     var pastRecodeIDDateArray: [String]?  //◯月◯日みたいな形で取り出してる
-    var nextMoaiEntryArray: [Bool]? // ブーリアン型の配列
+//    var nextMoaiEntryArray: [Bool]? // ブーリアン型の配列
     
-    var memberArray: [ [String:Any] ]? // 模合メンバーの名前の配列（  ex)[["name": "テスト9", "id": "tMfuNFOxckUtupgmxIkgbNcLMap1"], ... ]  ）
-    var moaiMembersNameList: [String] = [] //模合メンバーの名前の配列
+//    var memberArray: [ [String:Any] ]? // 模合メンバーの名前の配列（  ex)[["name": "テスト9", "id": "tMfuNFOxckUtupgmxIkgbNcLMap1"], ... ]  ）
+//    var moaiMembersNameList: [String] = [] //模合メンバーの名前の配列
     
     override func viewDidLoad() {
         print("viewDidLoadが呼ばれました")

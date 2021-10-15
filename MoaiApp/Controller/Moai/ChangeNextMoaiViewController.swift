@@ -230,7 +230,7 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
             print("joinActionの実行中だよ")
             
             var newDate:Timestamp = self.nextMoai!.date
-            var newStartTime:String = self.nextMoai!.startTime
+            var newStartTime:String =  "aiueo" //self.nextMoai!.startTime
             var newGetMoneyPerson:[String:String] = self.nextMoai!.getMoneyPerson
 //            var newGetMoneyPersonID:String = self.nextMoai!.getMoneyPersonID
             var newLocation:[String:Any] = self.nextMoai!.location

@@ -18,8 +18,9 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
     
     var moai:Moai?
     var moaiID:String?
+    var newMembers:[ [String:Any] ] = []
     //メンバーの名前とスイッチを紐づけるための配列
-    var memberArray: [ [String:Any] ]?
+//    var memberArray: [ [String:Any] ]?
     
     var nextMoai:MoaiRecord?
     var nextMoaiID:String?
@@ -31,6 +32,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
     var choiceDateCalendar: FSCalendar = FSCalendar()
     var selectedDate: [Any]? = nil
     
+    var datePicker = UIDatePicker()
     var getMoneyPersonPickerView = UIPickerView()
     
     
@@ -41,6 +43,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
     @IBOutlet weak var dateStackView: UIStackView!
     @IBOutlet weak var getMoneyPersonStackView: UIStackView!
     @IBOutlet weak var locationStackView: UIStackView!
+    @IBOutlet weak var startTimeStackView: UIStackView!
     @IBOutlet weak var paidPeopleStackView: UIStackView!
     @IBOutlet weak var noteStackView: UIStackView!
     @IBOutlet weak var recodeButtonStackView: UIStackView!
@@ -50,6 +53,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var getMoneyPersonTextField: UITextField!
     @IBOutlet weak var locationTextField: UITextField!
+    @IBOutlet weak var startTimeTextField: UITextField!
     @IBOutlet weak var noteTextField: UITextField!
     
     
@@ -67,6 +71,11 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         // 下の制約の「-100」はデフォルトで設定しているpaidPeopleSVの高さの部分を引いてる
         contentViewHeightConstraint.constant = contentViewHeight + paidPeopleSVHeight - 100
         
+        //startTimeTextFieldの初期値の処理(DBの値を成形し文字列型に変換)
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        let startTime = formatter.string(from: self.nextMoai!.date.dateValue())
+        
         choiceDateCalendar.delegate = self
         choiceDateCalendar.dataSource = self
         
@@ -79,9 +88,25 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         noteTextField.placeholder = self.nextMoai?.note
         getMoneyPersonTextField.placeholder = self.nextMoai?.getMoneyPerson["name"] as! String
         locationTextField.placeholder = self.nextMoai?.location["name"] as! String
+        startTimeTextField.placeholder = startTime
         
         getMoneyPersonPickerView.delegate = self
         
+        setToolbar()
+
+        //受取人を除いたメンバーの数だけ配列にfalseを入れる
+        newMembers = self.moai!.members
+        for i in 0...(newMembers.count - 1) {
+            newMembers[i]["payOrNot"] = false
+        }
+//        for i in 0..<memberArray!.count {
+//            //Any型を許容する場合、IntやBoolは使えないので、stirngで"false"と指定する
+//            memberArray?[i].updateValue("false", forKey: "payOrNot")
+//        }
+//        print("memberArrayの値　→→→ \(memberArray)")
+    }
+    
+    private func setToolbar() {
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
         //toolbarに表示させるアイテム
         let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -99,15 +124,15 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         
         locationTextField.inputAccessoryView = toolbar
         
-        //受取人を除いたメンバーの数だけ配列にfalseを入れる
-        for i in 0..<memberArray!.count {
-//            payOrNotArray.append(false)
-            
-            //Any型を許容する場合、IntやBoolは使えないので、stirngで"false"と指定する
-            memberArray?[i].updateValue("false", forKey: "payOrNot")
-        }
-        print("memberArrayの値　→→→ \(memberArray)")
+        //datePickerの設定
+        datePicker.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height / 3)
+        datePicker.datePickerMode = UIDatePicker.Mode.time
+        datePicker.preferredDatePickerStyle = .wheels
+        datePicker.timeZone = NSTimeZone.local
+        datePicker.locale = NSLocale(localeIdentifier: "ja_JP") as Locale
         
+        startTimeTextField.inputView = datePicker
+        startTimeTextField.inputAccessoryView = toolbar
     }
     
     // 支払い済みの人をスイッチで記入する機能を、模合のメンバーに応じてど動的に配置する
@@ -119,10 +144,13 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         }
         //payOrNotの正誤を全てfalseに設定（PaidPeopleSVのビューを更新する際にこちらを変更しないと正しい処理にならないため）
         //全てのメンバーのpayOrNotをfalseにする
-        for i in 0..<members.count {
-            memberArray?[i].updateValue("false", forKey: "payOrNot")
+//        for i in 0..<members.count {
+//            memberArray?[i].updateValue("false", forKey: "payOrNot")
+//        }
+//        print("memberArray -> \(memberArray)")
+        for i in 0...newMembers.count - 1 {
+            newMembers[i].updateValue(false, forKey: "payOrNot")
         }
-        print("memberArray -> \(memberArray)")
 
         
         paidPeopleStackView.backgroundColor = .white
@@ -172,17 +200,27 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
     @objc func changeSwitch(sender: UISwitch) {
         //押された番号の配列の正誤を反転させる
         print("sender,tag -> \(sender.tag)")
-        if self.memberArray?[sender.tag]["payOrNot"] as! String == "false" {
-            print("false -> true")
-            self.memberArray?[sender.tag].updateValue("true", forKey: "payOrNot")
-            print(self.memberArray?[sender.tag]["payOrNot"])
+        if newMembers[sender.tag]["payOrNot"] as? Bool == false {
+            print("false --> true")
+            newMembers[sender.tag].updateValue(true, forKey: "payOrNot")
+            print(newMembers[sender.tag]["payOrNot"])
         }else {
-            print("true -> false")
-            self.memberArray?[sender.tag].updateValue("false", forKey: "payOrNot")
-            print(self.memberArray?[sender.tag]["payOrNot"])
+            print("true --> false")
+            newMembers[sender.tag].updateValue(false, forKey: "payOrNot")
+            print(newMembers[sender.tag]["payOrNot"])
         }
-        print("\(memberArray?[sender.tag]["name"])の支払い状況は、\(memberArray?[sender.tag]["payOrNot"])です。")
-        print("memberArray -> \(memberArray)")
+        print("\(newMembers[sender.tag]["name"])の支払い状況 --> \(newMembers[sender.tag]["payOrNot"])")
+//        if self.memberArray?[sender.tag]["payOrNot"] as! String == "false" {
+//            print("false -> true")
+//            self.memberArray?[sender.tag].updateValue("true", forKey: "payOrNot")
+//            print(self.memberArray?[sender.tag]["payOrNot"])
+//        }else {
+//            print("true -> false")
+//            self.memberArray?[sender.tag].updateValue("false", forKey: "payOrNot")
+//            print(self.memberArray?[sender.tag]["payOrNot"])
+//        }
+//        print("\(memberArray?[sender.tag]["name"])の支払い状況は、\(memberArray?[sender.tag]["payOrNot"])です。")
+//        print("memberArray -> \(memberArray)")
     }
     
     @IBAction func recode(_ sender: Any) {
@@ -204,7 +242,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         }
         if self.getMoneyPersonTextField.text != "" {
             newGetMoneyPerson["name"] = self.getMoneyPersonTextField.text!
-            for member in memberArray! {
+            for member in newMembers {
                 if member["name"] as! String == self.getMoneyPersonTextField.text {
                     newGetMoneyPerson["id"] = member["id"]! as! String
                 }
@@ -236,11 +274,11 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         var unpaidsID:[String] = []
         var unpaidsName: [String] = []
         //メンバーを支払い済みかそうでないかを分ける
-        for member in memberArray! {
+        for member in newMembers {
             if member["name"] as! String != self.getMoneyPersonTextField.text {
                 print("member -> \(member)")
                 //メンバーのpayOrNotじゃなくて、別の配列で判定する
-                if member["payOrNot"] as! String == "true" {
+                if member["payOrNot"] as! Bool == true {
                     paidsName.append(member["name"] as! String)
                     paidsID.append(member["id"] as! String)
                 }else {
@@ -263,7 +301,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         print("unpaidsName　→→→→→　\(unpaidsName)")
         
         
-        let changedInfo = "日付：\(DateUtils.MddEEEFromDate(date: newDate.dateValue()))" + "\n" + "模合代受け取り：\(newGetMoneyPerson)" + "\n" + "場所：\(newLocation)" + "\n" + "備考：\(newNote)" + "\n" + "支払い済み：\(paidsName.joined(separator: ","))" + "\n" + "未払い：\(unpaidsName.joined(separator: ","))"
+        let changedInfo = "日付：\(DateUtils.MddEEEFromDate(date: newDate.dateValue()))" + "\n" + "模合代受け取り：\(newGetMoneyPerson["name"])" + "\n" + "場所：\(newLocation["name"]!)" + "\n" + "備考：\(newNote)" + "\n" + "支払い済み：\(paidsName.joined(separator: ","))" + "\n" + "未払い：\(unpaidsName.joined(separator: ","))"
         
         let alert: UIAlertController = UIAlertController(title: "以下の内容はでよろしいですか？", message: changedInfo, preferredStyle:  UIAlertController.Style.alert)
         let joinAction: UIAlertAction = UIAlertAction(title: "はい", style: UIAlertAction.Style.default, handler:{
@@ -294,6 +332,10 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
     }
     
     @objc private func donePressed() {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        let date = formatter.string(from: datePicker.date)
+        startTimeTextField.text = date
         view.endEditing(true)
     }
     
@@ -311,7 +353,10 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         if locationTextField.isEditing == true {
             locationTextField.text = ""
         }
-        
+        if startTimeTextField.isEditing == true {
+            startTimeTextField.text = ""
+        }
+
         view.endEditing(true)
     }
     
@@ -464,18 +509,22 @@ extension RecodeMoaiInfoViewController: UIPickerViewDelegate,UIPickerViewDataSou
     
     //行数
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return memberArray!.count
+//        return memberArray!.count
+        return (self.moai?.members.count)!
     }
     
     //表示内容
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return memberArray![row]["name"] as! String
+//        return memberArray![row]["name"] as! String
+        return self.moai?.members[row]["name"] as? String
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        self.getMoneyPersonTextField.text = memberArray![row]["name"] as! String
-        //PaidSVに選択されたユーザー以外の名前とスイッチを配置
-        self.setupPaidPeopleSV(members: memberArray!)
+//        self.getMoneyPersonTextField.text = memberArray![row]["name"] as! String
+//        //PaidSVに選択されたユーザー以外の名前とスイッチを配置
+//        self.setupPaidPeopleSV(members: memberArray!)
+        self.getMoneyPersonTextField.text = self.moai?.members[row]["name"] as? String
+        self.setupPaidPeopleSV(members: newMembers)
     }
 }
 

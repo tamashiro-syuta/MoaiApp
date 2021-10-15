@@ -31,6 +31,7 @@ class Moai {
     let week: String
     let day: String
     let amount: Int
+    let defaultStartTime:[String:Int]
     let createdAt: Timestamp
     let password: String
     
@@ -41,6 +42,7 @@ class Moai {
         self.week = dic["week"] as? String ?? ""
         self.day = dic["day"] as? String ?? ""
         self.amount = dic["amount"] as? Int ?? 0
+        self.defaultStartTime = dic["startTime"] as? [String:Int] ?? ["hour":20, "minute":00]
         self.createdAt = dic["createdAt"] as? Timestamp ?? Timestamp()
         self.password = dic["password"] as? String ?? ""
     }

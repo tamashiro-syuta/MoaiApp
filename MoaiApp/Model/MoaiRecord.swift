@@ -12,7 +12,6 @@ class MoaiRecord {
     
     let amount: Int
     let date:Timestamp
-    let startTime:String
     let getMoneyPerson: [String:String]
 //    let getMoneyPersonID: String
     let location: [String:Any]
@@ -26,7 +25,6 @@ class MoaiRecord {
     init(dic: [String: Any]) {
         self.amount = dic["amount"] as? Int ?? 0
         self.date = dic["date"] as? Timestamp ?? Timestamp()
-        self.startTime = dic["startTime"] as? String ?? ""
         self.getMoneyPerson = dic["getMoneyPerson"] as? [String:String] ?? ["name":"未定" , "id":"未定"]
 //        self.getMoneyPersonID = dic["getMoneyPersonID"] as? String ?? ""
 //        self.locationName = dic["locationName"] as? String ?? "未定"

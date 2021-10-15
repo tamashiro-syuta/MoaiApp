@@ -78,23 +78,23 @@ class ManagementViewController: standardViewController {
             print("self.pastRecodeArray -> \(self.pastRecodeArray)")
 //            print("self.pastRecodeIDStringArray -> \(self.pastRecodeIDStringArray)")
 //            print("self.pastRecodeIDDateArray -> \(self.pastRecodeIDDateArray)")
-            print("↓　pastRecode  ↓")
-            for item in self.pastRecodeArray! {
-                print("item.amount -> \(item.amount)")
-                print("item.createdAt -> \(item.createdAt.dateValue())")
-                print("item.date -> \(item.date.dateValue())")
-                print("item.getMoneyPerson['name'] -> \(item.getMoneyPerson["name"])")
-                print("item.getMoneyPerson['id'] -> \(item.getMoneyPerson["id"])")
-//                print("item.getMoneyPersonID -> \(item.getMoneyPersonID)")
-                print("item.location['name'] -> \(item.location["name"])")
-                print("item.location['geoPoint'] -> \(item.location["geoPoint"] as! GeoPoint)")
-//                print("item.locationName -> \(item.locationName)")
-                print("item.note -> \(item.note)")
-                print("item.paid -> \(item.paid)")
-                print("item.unpaid -> \(item.unpaid)")
-            }
-            print("self.nextMoai -> \(self.nextMoai)")
-            print("self.nextMoaiID -> \(self.nextMoaiID)")
+//            print("↓　pastRecode  ↓")
+//            for item in self.pastRecodeArray! {
+//                print("item.amount -> \(item.amount)")
+//                print("item.createdAt -> \(item.createdAt.dateValue())")
+//                print("item.date -> \(item.date.dateValue())")
+//                print("item.getMoneyPerson['name'] -> \(item.getMoneyPerson["name"])")
+//                print("item.getMoneyPerson['id'] -> \(item.getMoneyPerson["id"])")
+////                print("item.getMoneyPersonID -> \(item.getMoneyPersonID)")
+//                print("item.location['name'] -> \(item.location["name"])")
+//                print("item.location['geoPoint'] -> \(item.location["geoPoint"] as! GeoPoint)")
+////                print("item.locationName -> \(item.locationName)")
+//                print("item.note -> \(item.note)")
+//                print("item.paid -> \(item.paid)")
+//                print("item.unpaid -> \(item.unpaid)")
+//            }
+//            print("self.nextMoai -> \(self.nextMoai)")
+//            print("self.nextMoaiID -> \(self.nextMoaiID)")
         }
         
         //1秒後に処理
@@ -123,7 +123,7 @@ class ManagementViewController: standardViewController {
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
         //配列の順番をDBのmoaiのmenbersの順番と同じにするため
-        self.moaiMembersNameList.reverse()
+//        self.moaiMembersNameList.reverse()
         
         self.getMoneyPersonTableView.reloadData()
         
@@ -159,7 +159,7 @@ class ManagementViewController: standardViewController {
         recodeMoaiInfoVC.nextMoai = self.nextMoai
         recodeMoaiInfoVC.nextMoaiID = self.nextMoaiID
         recodeMoaiInfoVC.moai = self.moai
-        recodeMoaiInfoVC.memberArray = self.memberArray as! [[String : Any]]
+//        recodeMoaiInfoVC.memberArray = self.memberArray
         self.navigationController?.pushViewController(recodeMoaiInfoVC, animated: true)
         
     }
@@ -189,7 +189,7 @@ class ManagementViewController: standardViewController {
         let changeNextMoaiVC = storyboard.instantiateViewController(identifier: "ChangeNextMoaiViewController") as! ChangeNextMoaiViewController
         changeNextMoaiVC.user = self.user
         changeNextMoaiVC.moai = self.moai
-        changeNextMoaiVC.moaiMenbersNameList = self.moaiMembersNameList
+//        changeNextMoaiVC.moaiMenbersNameList = self.moaiMembersNameList
         changeNextMoaiVC.nextMoai = self.nextMoai
         changeNextMoaiVC.nextMoaiID = self.nextMoaiID
         print(self.nextMoaiID)
