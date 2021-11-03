@@ -219,7 +219,7 @@
                             </visualEffectView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="g9o-0s-9zc"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" systemColor="systemGray5Color"/>
                         <constraints>
                             <constraint firstItem="cum-Q0-COI" firstAttribute="top" secondItem="g9o-0s-9zc" secondAttribute="top" id="17l-HP-9zp"/>
                             <constraint firstItem="cum-Q0-COI" firstAttribute="leading" secondItem="g9o-0s-9zc" secondAttribute="leading" id="1c2-w9-0wo"/>

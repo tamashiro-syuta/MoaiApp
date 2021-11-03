@@ -47,7 +47,6 @@ class ManagementViewController: standardViewController {
     
     var membersWithDate: [ [String:Any] ] = []
     
-//    var vi: UIView?  //過去の模合のスクロールビューで使用
     
     //viewが初めて呼ばれた１回目だけ呼ばれるメソッド
     override func viewDidLoad() {
@@ -76,25 +75,6 @@ class ManagementViewController: standardViewController {
             print("現在、ログインしているユーザー　\(self.user?.username)")
             print("self.moai.members -> \(self.moai?.members)")
             print("self.pastRecodeArray -> \(self.pastRecodeArray)")
-//            print("self.pastRecodeIDStringArray -> \(self.pastRecodeIDStringArray)")
-//            print("self.pastRecodeIDDateArray -> \(self.pastRecodeIDDateArray)")
-//            print("↓　pastRecode  ↓")
-//            for item in self.pastRecodeArray! {
-//                print("item.amount -> \(item.amount)")
-//                print("item.createdAt -> \(item.createdAt.dateValue())")
-//                print("item.date -> \(item.date.dateValue())")
-//                print("item.getMoneyPerson['name'] -> \(item.getMoneyPerson["name"])")
-//                print("item.getMoneyPerson['id'] -> \(item.getMoneyPerson["id"])")
-////                print("item.getMoneyPersonID -> \(item.getMoneyPersonID)")
-//                print("item.location['name'] -> \(item.location["name"])")
-//                print("item.location['geoPoint'] -> \(item.location["geoPoint"] as! GeoPoint)")
-////                print("item.locationName -> \(item.locationName)")
-//                print("item.note -> \(item.note)")
-//                print("item.paid -> \(item.paid)")
-//                print("item.unpaid -> \(item.unpaid)")
-//            }
-//            print("self.nextMoai -> \(self.nextMoai)")
-//            print("self.nextMoaiID -> \(self.nextMoaiID)")
             
             
             //ユーザーの参加、不参加によって、ボタンのalpha値を変更
@@ -110,15 +90,6 @@ class ManagementViewController: standardViewController {
                 }
             }
         }
-        
-        //1秒後に処理
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//            //ここに処理
-//            self.setupView()
-//            self.makeGetMoneyPersonList()
-//            self.getMoneyPersonTableView.dataSource = self
-//            self.getMoneyPersonTableView.delegate = self
-//        }
     }
     
     //「次回の模合は」の部分のview
