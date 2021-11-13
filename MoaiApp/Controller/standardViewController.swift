@@ -44,6 +44,7 @@ class standardViewController :UIViewController {
     var pastRecodeArray: [MoaiRecord]?  //古いデータが「0番目」、新しいのが「n番目」になってる
 //    var pastRecodeIDStringArray: [String]?  // 20210417みたいな形で取り出してる
     var pastRecodeIDDateArray: [String]?  //◯月◯日みたいな形で取り出してる
+    var savingsArray: [Savings] = []
 //    var nextMoaiEntryArray: [Bool]? // ブーリアン型の配列
     
 //    var memberArray: [ [String:Any] ]? // 模合メンバーの名前の配列（  ex)[["name": "テスト9", "id": "tMfuNFOxckUtupgmxIkgbNcLMap1"], ... ]  ）
@@ -104,6 +105,7 @@ class standardViewController :UIViewController {
                     self.fetchUsersMoaiInfo(user: self.user!)
                     self.fetchPastRecord()
                     self.fetchNextMoaiInfo()
+                    self.fetchSavings()
                 }
             }
         }
@@ -171,6 +173,30 @@ class standardViewController :UIViewController {
                     let documentID = document.documentID
                     self.nextMoai = MoaiRecord(dic: dic)
                     self.nextMoaiID = documentID
+                }
+            }
+        }
+    }
+    
+    func fetchSavings() {
+        guard let moaiID = self.user?.moais[1] else {return}
+        self.db.collection("moais").document(moaiID).collection("savings").getDocuments { (querySnapshots, err) in
+            if let err = err {
+                print("次回の模合情報の取得(fetchNextMoaiInfo)でエラーが出ました。\(err)")
+                return
+            }else {
+                guard let querySnapshots = querySnapshots else {return}
+                for document in querySnapshots.documents {
+                    
+                    let mapData = document.data() as! [String:Any]
+                    let ID = document.documentID
+                    let paidAmounts = mapData["paidAmounts"]
+                    
+                    let dic = ["ID":ID, "paidAmounts":paidAmounts] as [String:Any]
+                    let saving = Savings(dic: dic)
+                    print("saving.ID --> \(saving.ID)")
+                    print("saving.paidAmounts --> \(saving.paidAmounts)")
+                    self.savingsArray.append(saving)
                 }
             }
         }

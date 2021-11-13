@@ -28,6 +28,7 @@ class CreateRoomViewController: UIViewController {
     var day:String = ""
     var amount:String?
     var password:String?
+    var savingAmount:Int = 0  //実施しない場合は0を取る設定なので初期値として0を入れる
     let dataSource1 = ["第１","第２","第３","第４"]
     let dataSource2 = ["月曜日","火曜日","水曜日","木曜日","金曜日","土曜日","日曜日"]
     
@@ -35,6 +36,8 @@ class CreateRoomViewController: UIViewController {
     @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var savingsTextField: UITextField!
+    
     let pickerView1 = UIPickerView()
     let pickerView2 = UIPickerView()
     
@@ -74,8 +77,10 @@ class CreateRoomViewController: UIViewController {
         dateTextField.inputAccessoryView = toolbar
         amountTextField.inputAccessoryView = toolbar
         passwordTextField.inputAccessoryView = toolbar
+        savingsTextField.inputAccessoryView = toolbar
         
         amountTextField.keyboardType = UIKeyboardType.numberPad
+        savingsTextField.keyboardType = UIKeyboardType.numberPad
     }
     
     @IBAction func create(_ sender: Any) {
@@ -93,7 +98,8 @@ class CreateRoomViewController: UIViewController {
                 "createdAt": Timestamp(),
                 "password": password,
                 "menbers": [userID],
-                "next": [false]
+                "next": [false],
+                "savingAmount": savingsTextField.text ?? 0
             ] as [String : Any]
             
             //新規模合グループ作成

@@ -29,6 +29,9 @@
 		48538EE2264ADAB700871BB0 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48538EE1264ADAB700871BB0 /* User.swift */; };
 		48538EE5264B81A600871BB0 /* UserList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48538EE4264B81A600871BB0 /* UserList.storyboard */; };
 		48538EE8264B82D400871BB0 /* UserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48538EE7264B82D400871BB0 /* UserListViewController.swift */; };
+		4854E909273AC86B006D660F /* Savings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4854E908273AC86B006D660F /* Savings.swift */; };
+		4854E90C273F6195006D660F /* RecodeSaving.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4854E90B273F6194006D660F /* RecodeSaving.storyboard */; };
+		4854E90F273F6463006D660F /* RecodeSavingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4854E90E273F6463006D660F /* RecodeSavingViewController.swift */; };
 		485838542647E84C00274507 /* ChatRoom.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 485838532647E84C00274507 /* ChatRoom.storyboard */; };
 		485838572647E8BD00274507 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485838562647E8BD00274507 /* ChatRoomViewController.swift */; };
 		4858385A2649431900274507 /* ChatRoomTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 485838592649431900274507 /* ChatRoomTableViewCell.xib */; };
@@ -89,6 +92,9 @@
 		48538EE1264ADAB700871BB0 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		48538EE4264B81A600871BB0 /* UserList.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = UserList.storyboard; sourceTree = "<group>"; };
 		48538EE7264B82D400871BB0 /* UserListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListViewController.swift; sourceTree = "<group>"; };
+		4854E908273AC86B006D660F /* Savings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Savings.swift; sourceTree = "<group>"; };
+		4854E90B273F6194006D660F /* RecodeSaving.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RecodeSaving.storyboard; sourceTree = "<group>"; };
+		4854E90E273F6463006D660F /* RecodeSavingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecodeSavingViewController.swift; sourceTree = "<group>"; };
 		485838532647E84C00274507 /* ChatRoom.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ChatRoom.storyboard; sourceTree = "<group>"; };
 		485838562647E8BD00274507 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
 		485838592649431900274507 /* ChatRoomTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatRoomTableViewCell.xib; sourceTree = "<group>"; };
@@ -198,6 +204,7 @@
 			isa = PBXGroup;
 			children = (
 				489CD2B826E0BB3C00232B55 /* Savings.storyboard */,
+				4854E90B273F6194006D660F /* RecodeSaving.storyboard */,
 			);
 			path = Savings;
 			sourceTree = "<group>";
@@ -206,6 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				489CD2BC26E0BB7400232B55 /* SavingsViewController.swift */,
+				4854E90E273F6463006D660F /* RecodeSavingViewController.swift */,
 			);
 			path = Savings;
 			sourceTree = "<group>";
@@ -254,6 +262,7 @@
 				484388B32685B59200175415 /* Moai.swift */,
 				48E7FD5D2690C40400E4FF2B /* MoaiRecord.swift */,
 				481D2A1326AE7461007BF229 /* DateUtils.swift */,
+				4854E908273AC86B006D660F /* Savings.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -422,6 +431,7 @@
 				483E5D9F26B7E2E8001BAD0B /* ChangeNextMoai.storyboard in Resources */,
 				48ECBCCC2697F0C200FA65CC /* Map.storyboard in Resources */,
 				48DE010D26830FFF00B4E62E /* Moai.storyboard in Resources */,
+				4854E90C273F6195006D660F /* RecodeSaving.storyboard in Resources */,
 				4858385A2649431900274507 /* ChatRoomTableViewCell.xib in Resources */,
 				483E5D9526B7A3D5001BAD0B /* RecodeMoaiInfo.storyboard in Resources */,
 				48C6085E26478292002D1258 /* LaunchScreen.storyboard in Resources */,
@@ -514,6 +524,7 @@
 				4858385E2649474200274507 /* ChatRoomTableViewCell.swift in Sources */,
 				48E7FD5E2690C40600E4FF2B /* MoaiRecord.swift in Sources */,
 				48231783265375F200257189 /* Message.swift in Sources */,
+				4854E90F273F6463006D660F /* RecodeSavingViewController.swift in Sources */,
 				48E810AA26E1C87D00B717D6 /* ShowImageViewController.swift in Sources */,
 				48ABEA062647E27500B40323 /* UIColorExtension.swift in Sources */,
 				4804137C26A7EC2A004F5BE0 /* JudgeUserInMoaiViewController.swift in Sources */,
@@ -522,6 +533,7 @@
 				482317892653EF4B00257189 /* LoginViewController.swift in Sources */,
 				48B8B6A3264F917A00E863A1 /* ChatRoom.swift in Sources */,
 				4823184F2660B65C00257189 /* FirstViewController.swift in Sources */,
+				4854E909273AC86B006D660F /* Savings.swift in Sources */,
 				483E5D9826B7A442001BAD0B /* RecodeMoaiInfoViewController.swift in Sources */,
 				4804137526A2B1E6004F5BE0 /* detailsNextMoaiViewController.swift in Sources */,
 			);

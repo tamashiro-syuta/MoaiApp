@@ -27,13 +27,14 @@ class Moai {
     
     let groupName:String
     //プロパティは、id、name、next、savingの4つ（nextとsavingはBool型で、返ってくる時は1(true),2(false)で返ってくる）
-    let members:[ [String:Any] ]
+    let members:[ [String:Any] ]  //辞書型（firebaseでいうmap）の配列
     let week: String
     let day: String
     let amount: Int
     let defaultStartTime:[String:Int]
     let createdAt: Timestamp
     let password: String
+    let savingAmount: Int
     
     
     init(dic: [String: Any]) {
@@ -45,6 +46,7 @@ class Moai {
         self.defaultStartTime = dic["startTime"] as? [String:Int] ?? ["hour":20, "minute":00]
         self.createdAt = dic["createdAt"] as? Timestamp ?? Timestamp()
         self.password = dic["password"] as? String ?? ""
+        self.savingAmount = dic["savingAmount"] as? Int ?? 0
     }
     
     func switchMoaiDate(weekNum: String, weekDay: String) -> [Int]  {

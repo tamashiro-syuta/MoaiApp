@@ -285,6 +285,7 @@ class PastMoaiViewController: standardViewController {
     }
 }
 
+//コレクションビュー
 extension PastMoaiViewController: UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
