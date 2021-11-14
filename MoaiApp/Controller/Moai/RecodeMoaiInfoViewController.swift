@@ -144,10 +144,6 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         }
         //payOrNotの正誤を全てfalseに設定（PaidPeopleSVのビューを更新する際にこちらを変更しないと正しい処理にならないため）
         //全てのメンバーのpayOrNotをfalseにする
-//        for i in 0..<members.count {
-//            memberArray?[i].updateValue("false", forKey: "payOrNot")
-//        }
-//        print("memberArray -> \(memberArray)")
         for i in 0...newMembers.count - 1 {
             newMembers[i].updateValue(false, forKey: "payOrNot")
         }
@@ -155,11 +151,19 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         
         paidPeopleStackView.backgroundColor = .white
         //paidPeopleSVの高さの変更
-        let paidPeopleSVHeight:CGFloat = CGFloat(60 * (self.moai?.members.count)!)
+        let paidPeopleSVHeight:CGFloat = CGFloat(60 * (self.moai?.members.count)! + 50)
         paidPeopleSVHeightConstraint.constant = paidPeopleSVHeight
         let contentViewHeight = contentView.frame.height
         // 下の制約の「-100」はデフォルトで設定しているpaidPeopleSVの高さの部分を引いてる
         contentViewHeightConstraint.constant = contentViewHeight + paidPeopleSVHeight - 100
+        
+        //paidPeopleStacViewにラベルを追加
+        let label = UILabel()
+        label.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
+        label.text = "模合代の支払いの有無"
+        label.backgroundColor = .barColor()
+        self.paidPeopleStackView.addArrangedSubview(label)
+        
         
         //メンバーの数だけラベルとスイッチを配置
         for (i,member) in members.enumerated() {
