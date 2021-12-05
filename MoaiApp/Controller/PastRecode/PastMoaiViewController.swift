@@ -23,7 +23,7 @@ struct pastImage {
 
 class PastMoaiViewController: standardViewController {
     
-    let storage = Storage.storage().reference().child("past_recodes")
+    let storage = Storage.storage().reference().child("past_records")
     
     var selectedPastMoaiNumber:Int = 0
     
@@ -43,17 +43,17 @@ class PastMoaiViewController: standardViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("self.pastRecodeArrayは \(self.pastRecodeArray)")
+        print("self.pastRecordArrayは \(self.pastRecordArray)")
         print("self.moai?.groupNameは \(self.moai?.groupName)")
         
         //模合を　過去にしたことがあるかの判定条件
-        if self.pastRecodeArray != nil && self.pastRecodeArray?.count != 0 {
+        if self.pastRecordArray != nil && self.pastRecordArray?.count != 0 {
             //模合をしたことがある
 //            self.fetchPastPicture()
             
             print("viewを作り始めます")
             //viewを表示
-            self.selectedPastMoaiNumber = self.pastRecodeArray!.count - 1
+            self.selectedPastMoaiNumber = self.pastRecordArray!.count - 1
             self.setLayout(backnumber: self.selectedPastMoaiNumber)
             self.fetchPastPicture(pastMoaiDate: self.pastMoaiDate!)
             
@@ -157,15 +157,15 @@ class PastMoaiViewController: standardViewController {
     private func setLayout(backnumber:Int) {
         print("引数は \(backnumber)")
         let navTitle = "まだだよん♪"
-        if backnumber < 0 || backnumber + 1 > self.pastRecodeArray?.count ?? 0 {
+        if backnumber < 0 || backnumber + 1 > self.pastRecordArray?.count ?? 0 {
             print("例外な値だよとアラートを出す")
         }else {
-            let record =  self.pastRecodeArray![backnumber]
+            let record =  self.pastRecordArray![backnumber]
             let text = " 受取：" + "\(record.getMoneyPerson["name"]!)" + "\n" + " 場所：" + "\(record.location["name"]!)"
             self.pastMoaiInfoLabel.text = text
             
             let date = DateUtils.yyyyMMddEEEFromDate(date: record.date.dateValue())
-            self.pastMoaiDate = DateUtils.stringFromDateoForSettingRecodeID(date: record.date.dateValue())
+            self.pastMoaiDate = DateUtils.stringFromDateoForSettingRecordID(date: record.date.dateValue())
             setNavigationBar(title: date)
         }
     }
@@ -176,9 +176,9 @@ class PastMoaiViewController: standardViewController {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 46))
         //ボタンを生成
         let filterButton = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 46))
-        if self.pastRecodeArray != nil && self.pastRecodeArray?.count != 0 {
+        if self.pastRecordArray != nil && self.pastRecordArray?.count != 0 {
             //ボタンが働く処理
-            print("pastRecodeArrayにはちゃんと値があるからボタンとして機能させるンゴよ")
+            print("pastRecordArrayにはちゃんと値があるからボタンとして機能させるンゴよ")
             filterButton.addTarget(self, action: #selector(tappedTitleButton), for: .touchUpInside)//タップされた時に関数動く
         }
 //        filterButton.addTarget(self, action: #selector(tappedTitleButton), for: .touchUpInside)//タップされた時に関数動く
@@ -274,12 +274,12 @@ class PastMoaiViewController: standardViewController {
     }
     
     private func showPastMoaiDetails(backnumber: Int) {
-        let record =  self.pastRecodeArray![backnumber]
+        let record =  self.pastRecordArray![backnumber]
         
         let PastMoaiDetailsSB = UIStoryboard(name: "PastMoaiDetails", bundle: nil)
         let PastMoaiDetailsVC = PastMoaiDetailsSB.instantiateViewController(withIdentifier: "PastMoaiDetailsViewController") as! PastMoaiDetailsViewController
         
-        PastMoaiDetailsVC.pastRecode = record
+        PastMoaiDetailsVC.pastRecord = record
         
         self.navigationController?.pushViewController(PastMoaiDetailsVC, animated: true)
     }
@@ -349,13 +349,12 @@ extension PastMoaiViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     //UIViewPickerの行(縦方向)数を指定
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         //上でボタンが有効な条件として、カウントが０以外かつ配列が空出ないことを指定しているので、ここが呼ばれる＝カウントが存在するということになる
-        return (self.pastRecodeArray?.count)!
+        return (self.pastRecordArray?.count)!
     }
     
     //各行のタイトルとテキストカラー
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-//        return NSAttributedString(string: (self.pastRecodeIDDateArray?[row])!, attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
-        return NSAttributedString(string: (DateUtils.yyyyMMddEEEFromDate(date: (self.pastRecodeArray?[row].date.dateValue())!)), attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+        return NSAttributedString(string: (DateUtils.yyyyMMddEEEFromDate(date: (self.pastRecordArray?[row].date.dateValue())!)), attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
     }
     
     // UIViewPickerのrowが選択された時のメソッド

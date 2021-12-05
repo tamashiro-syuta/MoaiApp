@@ -1,5 +1,5 @@
 //
-//  RecodeMoaiInfoViewController.swift
+//  RecordMoaiInfoViewController.swift
 //  MoaiApp
 //
 //  Created by 玉城秀大 on 2021/08/02.
@@ -10,7 +10,7 @@ import Firebase
 import FSCalendar
 
 //記録画面
-class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
+class RecordMoaiInfoViewController: UIViewController,UITextFieldDelegate {
     
     let db = Firestore.firestore()
     
@@ -46,8 +46,8 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
     @IBOutlet weak var startTimeStackView: UIStackView!
     @IBOutlet weak var paidPeopleStackView: UIStackView!
     @IBOutlet weak var noteStackView: UIStackView!
-    @IBOutlet weak var recodeButtonStackView: UIStackView!
-    @IBOutlet weak var recodeButton: UIButton!
+    @IBOutlet weak var recordButtonStackView: UIStackView!
+    @IBOutlet weak var recordButton: UIButton!
     
     
     @IBOutlet weak var dateTextField: UITextField!
@@ -227,7 +227,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
 //        print("memberArray -> \(memberArray)")
     }
     
-    @IBAction func recode(_ sender: Any) {
+    @IBAction func record(_ sender: Any) {
         print("ボタン押したよ")
         //nextのデータを値が更新されているもののみアップデートする
         var newDate:Timestamp = self.nextMoai!.date
@@ -312,14 +312,14 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
             // ボタンが押された時の処理を書く（クロージャ実装）
             (action: UIAlertAction!) -> Void in
             
-            //nextに入っていたデータをpastRecodeに入れる
-            self.addRecodeToPastRecode(paidCount: paidsID.count, newDate: newDate, newGetMoneyPerson: newGetMoneyPerson, newLocation: newLocation, newNote: newNote, paidsID: paidsID, unpaidsID: unpaidsID)
+            //nextに入っていたデータをpastRecordに入れる
+            self.addRecordToPastRecord(paidCount: paidsID.count, newDate: newDate, newGetMoneyPerson: newGetMoneyPerson, newLocation: newLocation, newNote: newNote, paidsID: paidsID, unpaidsID: unpaidsID)
             
             //nextにあったデータの削除
             self.removeNextMoaiInfo()
             
             //nextに新しいデータを入れる
-            self.addNewRecodeToNext()
+            self.addNewRecordToNext()
             
             //元の画面に戻る
             self.navigationController?.popViewController(animated: true)
@@ -365,7 +365,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
     }
     
     //DBにデータを保存するメソッド
-    private func addRecodeToPastRecode(paidCount: Int, newDate:Timestamp, newGetMoneyPerson:[String:String], newLocation:[String:Any], newNote:String, paidsID:[String], unpaidsID:[String]) {
+    private func addRecordToPastRecord(paidCount: Int, newDate:Timestamp, newGetMoneyPerson:[String:String], newLocation:[String:Any], newNote:String, paidsID:[String], unpaidsID:[String]) {
         guard let moaiID = self.moaiID else {
             print("なんや知らんけど、moaiID取れて無いっすわ")
             return
@@ -405,7 +405,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         }
     }
     
-    private func addNewRecodeToNext() {
+    private func addNewRecordToNext() {
         guard let moaiID = self.moaiID else {
             print("なんや知らんけど、moaiID取れて無いっすわ")
             return
@@ -416,7 +416,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         let weekAndDayArray:[Int] = moai.switchMoaiDate(weekNum: moai.week, weekDay: moai.day)
         
         self.newNextMoaiDate = DateUtils.returnNextMoaiDate(weekNum: weekAndDayArray[0], weekDay: weekAndDayArray[1])
-        self.newNextMoaiDateID = DateUtils.stringFromDateoForSettingRecodeID(date: self.newNextMoaiDate!)
+        self.newNextMoaiDateID = DateUtils.stringFromDateoForSettingRecordID(date: self.newNextMoaiDate!)
         
         let dic = [
             "amount": 0,
@@ -445,7 +445,7 @@ class RecodeMoaiInfoViewController: UIViewController,UITextFieldDelegate {
 
 
 
-extension RecodeMoaiInfoViewController: FSCalendarDelegate,FSCalendarDataSource {
+extension RecordMoaiInfoViewController: FSCalendarDelegate,FSCalendarDataSource {
     
     //カレンダーの設定
     private func setupCalendar() {
@@ -504,7 +504,7 @@ extension RecodeMoaiInfoViewController: FSCalendarDelegate,FSCalendarDataSource 
 }
 
 
-extension RecodeMoaiInfoViewController: UIPickerViewDelegate,UIPickerViewDataSource {
+extension RecordMoaiInfoViewController: UIPickerViewDelegate,UIPickerViewDataSource {
     
     //列数
     func numberOfComponents(in pickerView: UIPickerView) -> Int {

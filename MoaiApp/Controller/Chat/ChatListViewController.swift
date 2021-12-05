@@ -29,7 +29,7 @@ class ChatListViewController: standardViewController {
     
     
     override func viewDidLoad() {
-        print("self.pastRecodeArray?.countは\(self.pastRecodeArray?.count)")
+        print("self.pastRecordArray?.countは\(self.pastRecordArray?.count)")
         print("self.userIDは\(self.userID)")
         super.viewDidLoad()
         fetchLoginUserInfo()

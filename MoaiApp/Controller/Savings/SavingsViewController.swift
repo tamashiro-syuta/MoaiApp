@@ -23,15 +23,6 @@ class SavingsViewController: standardViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("~~~~~~~~~~~~~~~~~~~~~~~")
-        for saving in self.savingsArray {
-            print(saving.ID)
-            print(saving.paidAmounts)
-            print("ちゃんと値取れているかな？  --->  \(saving.paidAmounts[0]["ID"])")
-        }
-        print("~~~~~~~~~~~~~~~~~~~~~~~")
-
         setupViews()
         
         // 積み立てをしているメンバーを取得し変数化
@@ -41,6 +32,7 @@ class SavingsViewController: standardViewController {
                 savingMember.append(member)
             }
         }
+        print("savingMember  --> \(savingMember)")
         
         savingsTableView.isScrollEnabled = true
         savingsTableView.delegate = self
@@ -61,16 +53,20 @@ class SavingsViewController: standardViewController {
         memberLabel.layer.borderWidth = 1.5
         lastSavingLabel.layer.borderWidth = 1.5
 
-        let recodeSavingDataButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(addBarButtonTapped(_:)))
-        recodeSavingDataButton.tintColor = .textColor()
-        self.navigationItem.rightBarButtonItem = recodeSavingDataButton
+        let recordSavingDataButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(addBarButtonTapped(_:)))
+        recordSavingDataButton.tintColor = .textColor()
+        self.navigationItem.rightBarButtonItem = recordSavingDataButton
     }
     
     @objc private func addBarButtonTapped(_ sender: UIBarButtonItem) {
         print("押されたよん♪")
-        let storyboard = UIStoryboard(name: "RecodeSaving", bundle: nil)
-        let recodeSavingVC = storyboard.instantiateViewController(withIdentifier: "RecodeSavingViewController") as! RecodeSavingViewController
-        self.navigationController?.pushViewController(recodeSavingVC, animated: true)
+        let storyboard = UIStoryboard(name: "RecordSaving", bundle: nil)
+        let recordSavingVC = storyboard.instantiateViewController(withIdentifier: "RecordSavingViewController") as! RecordSavingViewController
+        recordSavingVC.user = self.user
+        recordSavingVC.recordDate = self.nextMoaiID
+        recordSavingVC.members = self.moai?.members
+        recordSavingVC.savingAmount = self.moai?.savingAmount
+        self.navigationController?.pushViewController(recordSavingVC, animated: true)
     }
 }
 
@@ -86,11 +82,11 @@ extension SavingsViewController: UITableViewDelegate, UITableViewDataSource {
         let label1 = cell.contentView.viewWithTag(1) as! UILabel
         let label2 = cell.contentView.viewWithTag(2) as! UILabel
         
-        let latestSavingData = savingsArray.last
+        let latestSavingData = self.savingsArray.last
         var name:String?
         var amount:Int?
         for paidAmount in latestSavingData!.paidAmounts {
-            if savingMember[indexPath.row]["id"] as! String == paidAmount["ID"] as! String {
+            if savingMember[indexPath.row]["id"] as! String == paidAmount["id"] as! String {
                 name = savingMember[indexPath.row]["name"] as? String
                 amount = paidAmount["amount"] as? Int
                 print("amount -> \(amount)")

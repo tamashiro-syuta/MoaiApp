@@ -41,9 +41,9 @@ class standardViewController :UIViewController {
     var moai: Moai?
     var nextMoai: MoaiRecord? //次回の模合の情報
     var nextMoaiID: String?
-    var pastRecodeArray: [MoaiRecord]?  //古いデータが「0番目」、新しいのが「n番目」になってる
-//    var pastRecodeIDStringArray: [String]?  // 20210417みたいな形で取り出してる
-    var pastRecodeIDDateArray: [String]?  //◯月◯日みたいな形で取り出してる
+    var pastRecordArray: [MoaiRecord]?  //古いデータが「0番目」、新しいのが「n番目」になってる
+//    var pastRecordIDStringArray: [String]?  // 20210417みたいな形で取り出してる
+    var pastRecordIDDateArray: [String]?  //◯月◯日みたいな形で取り出してる
     var savingsArray: [Savings] = []
 //    var nextMoaiEntryArray: [Bool]? // ブーリアン型の配列
     
@@ -143,18 +143,16 @@ class standardViewController :UIViewController {
                 guard let querySnapshots = querySnapshots else {return}
                 for document in querySnapshots.documents {
                     let dic = document.data()
-                    let recode = MoaiRecord(dic: dic)
+                    let record = MoaiRecord(dic: dic)
                     print("\(document.documentID) => \(document.data())")
-                    array1.append(recode)
+                    array1.append(record)
                     
                     let moaiID = document.documentID
                     array2.append(moaiID)
                     
                 }
                 //古いデータが「0番目」、新しいのが「n番目」になってる
-                self.pastRecodeArray = array1
-//                self.pastRecodeIDStringArray = array2
-//                self.makePastRecodeIDtoDateArray(array: self.pastRecodeIDStringArray!)
+                self.pastRecordArray = array1
             }
         }
     }
@@ -192,9 +190,8 @@ class standardViewController :UIViewController {
                     let ID = document.documentID
                     let paidAmounts = mapData["paidAmounts"]
                     
-                    let dic = ["ID":ID, "paidAmounts":paidAmounts] as [String:Any]
+                    let dic = ["paidAmounts":paidAmounts] as [String:Any]
                     let saving = Savings(dic: dic)
-                    print("saving.ID --> \(saving.ID)")
                     print("saving.paidAmounts --> \(saving.paidAmounts)")
                     self.savingsArray.append(saving)
                 }
@@ -228,10 +225,10 @@ class standardViewController :UIViewController {
         
     }
     
-    private func makePastRecodeIDtoDateArray(array: Array<Any>) {
+    private func makePastRecordIDtoDateArray(array: Array<Any>) {
         //これ入れないと、配列に値を入れれなくなって、空になるから消さない。
-        self.pastRecodeIDDateArray = ["◯年◯月◯日みたいな形で取り出すよ"]
-        self.pastRecodeIDDateArray?.removeFirst()
+        self.pastRecordIDDateArray = ["◯年◯月◯日みたいな形で取り出すよ"]
+        self.pastRecordIDDateArray?.removeFirst()
         
         let dateFormatter1 = DateFormatter()
         dateFormatter1.dateFormat = "yyyyMMdd"  //"E, d MMM yyyy HH:mm:ss Z"
@@ -246,7 +243,7 @@ class standardViewController :UIViewController {
             //arrayには、20210409の形でデータが入っている
             let pastDate1 = dateFormatter1.date(from: item as! String)
             let pastDate2 = dateFormatter2.string(from: pastDate1!)
-            self.pastRecodeIDDateArray?.append(pastDate2)
+            self.pastRecordIDDateArray?.append(pastDate2)
         }
     }
     

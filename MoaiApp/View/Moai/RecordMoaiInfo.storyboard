@@ -8,10 +8,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Recode Moai Info View Controller-->
+        <!--Record Moai Info View Controller-->
         <scene sceneID="brq-NM-1XU">
             <objects>
-                <viewController storyboardIdentifier="RecodeMoaiInfoViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="a0A-Nc-B9u" customClass="RecodeMoaiInfoViewController" customModule="MoaiApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RecordMoaiInfoViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="a0A-Nc-B9u" customClass="RecordMoaiInfoViewController" customModule="MoaiApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Xrt-Tb-9TE">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="1300"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -164,7 +164,7 @@
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
                                                         <connections>
-                                                            <action selector="recode:" destination="a0A-Nc-B9u" eventType="touchUpInside" id="VOa-NP-IMK"/>
+                                                            <action selector="record:" destination="a0A-Nc-B9u" eventType="touchUpInside" id="VOa-NP-IMK"/>
                                                         </connections>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LqI-Bx-QKj">
@@ -248,8 +248,8 @@
                         <outlet property="noteTextField" destination="Sc0-c2-VBB" id="N3h-VP-cDT"/>
                         <outlet property="paidPeopleSVHeightConstraint" destination="orO-Xg-vQ9" id="uH2-aK-nxz"/>
                         <outlet property="paidPeopleStackView" destination="lAs-Yd-MFs" id="Md1-if-F4c"/>
-                        <outlet property="recodeButton" destination="GSE-Ka-UoE" id="VFn-9J-75h"/>
-                        <outlet property="recodeButtonStackView" destination="53U-Wg-a1a" id="ryX-pb-Uu1"/>
+                        <outlet property="recordButton" destination="GSE-Ka-UoE" id="VFn-9J-75h"/>
+                        <outlet property="recordButtonStackView" destination="53U-Wg-a1a" id="ryX-pb-Uu1"/>
                         <outlet property="startTimeStackView" destination="r6m-1x-7Jj" id="LTS-35-PT5"/>
                         <outlet property="startTimeTextField" destination="JPu-it-Bgi" id="MAB-Kk-Jdp"/>
                     </connections>

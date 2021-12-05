@@ -20,9 +20,9 @@ class ManagementViewController: standardViewController {
 //    var moai: Moai?
 //    var nextMoai: MoaiRecord? //次回の模合の情報
 //    var nextMoaiID: String?
-//    var pastRecodeArray: [MoaiRecord]?  //古いデータが「0番目」、新しいのが「n番目」になってる
-//    var pastRecodeIDStringArray: [String]?  // 20210417みたいな形で取り出してる
-//    var pastRecodeIDDateArray: [String]?  //◯月◯日みたいな形で取り出してる
+//    var pastRecordArray: [MoaiRecord]?  //古いデータが「0番目」、新しいのが「n番目」になってる
+//    var pastRecordIDStringArray: [String]?  // 20210417みたいな形で取り出してる
+//    var pastRecordIDDateArray: [String]?  //◯月◯日みたいな形で取り出してる
 //    var nextMoaiEntryArray: [Bool]? // ブーリアン型の配列
 //    var moaiMenbersNameList: [String] = [] //模合メンバーの名前の配列
     
@@ -74,7 +74,7 @@ class ManagementViewController: standardViewController {
             self.blurView.alpha = 0
             print("現在、ログインしているユーザー　\(self.user?.username)")
             print("self.moai.members -> \(self.moai?.members)")
-            print("self.pastRecodeArray -> \(self.pastRecodeArray)")
+            print("self.pastRecordArray -> \(self.pastRecordArray)")
             
             
             //ユーザーの参加、不参加によって、ボタンのalpha値を変更
@@ -96,7 +96,7 @@ class ManagementViewController: standardViewController {
     private func setupView() {
         
         //ナビゲーションアイテムの追加
-        let reloadViewButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(self.recodeMoaiinfo(_:) ) )
+        let reloadViewButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(self.recordMoaiinfo(_:) ) )
         reloadViewButton.tintColor = .white
         self.navigationItem.rightBarButtonItem = reloadViewButton
         
@@ -136,16 +136,15 @@ class ManagementViewController: standardViewController {
     }
     
     //viewの再読み込み
-    @objc func recodeMoaiinfo(_ sender: Any) {
+    @objc func recordMoaiinfo(_ sender: Any) {
         print("模合の記録をしま〜〜〜〜す！！！！")
-        let storyboard = UIStoryboard(name: "RecodeMoaiInfo", bundle: nil)
-        let recodeMoaiInfoVC = storyboard.instantiateViewController(withIdentifier: "RecodeMoaiInfoViewController") as! RecodeMoaiInfoViewController
-        recodeMoaiInfoVC.user = self.user
-        recodeMoaiInfoVC.nextMoai = self.nextMoai
-        recodeMoaiInfoVC.nextMoaiID = self.nextMoaiID
-        recodeMoaiInfoVC.moai = self.moai
-//        recodeMoaiInfoVC.memberArray = self.memberArray
-        self.navigationController?.pushViewController(recodeMoaiInfoVC, animated: true)
+        let storyboard = UIStoryboard(name: "RecordMoaiInfo", bundle: nil)
+        let recordMoaiInfoVC = storyboard.instantiateViewController(withIdentifier: "RecordMoaiInfoViewController") as! RecordMoaiInfoViewController
+        recordMoaiInfoVC.user = self.user
+        recordMoaiInfoVC.nextMoai = self.nextMoai
+        recordMoaiInfoVC.nextMoaiID = self.nextMoaiID
+        recordMoaiInfoVC.moai = self.moai
+        self.navigationController?.pushViewController(recordMoaiInfoVC, animated: true)
         
     }
     
@@ -212,18 +211,18 @@ class ManagementViewController: standardViewController {
     
     private func addDateToMembers() {
         
-        if self.pastRecodeArray == nil || self.pastRecodeArray?.count == 0 {
+        if self.pastRecordArray == nil || self.pastRecordArray?.count == 0 {
             //処理終了
             return
         }else {
             membersWithDate = self.moai!.members
             for i in 0..<(membersWithDate.count) {
-                for recode in self.pastRecodeArray! {
-                    if membersWithDate[i]["name"] as! String == recode.getMoneyPerson["name"]! && membersWithDate[i]["id"] as! String == recode.getMoneyPerson["id"]! {
+                for record in self.pastRecordArray! {
+                    if membersWithDate[i]["name"] as! String == record.getMoneyPerson["name"]! && membersWithDate[i]["id"] as! String == record.getMoneyPerson["id"]! {
                         //日付を文字列に変換
-                        let date:String = DateUtils.MddEEEFromDate(date: recode.date.dateValue() )
+                        let date:String = DateUtils.MddEEEFromDate(date: record.date.dateValue() )
                         membersWithDate[i].updateValue(date, forKey: "date")
-                        break //for文(recodeの)を抜ける
+                        break //for文(recordの)を抜ける
                     }else {
                         //なかったら、"×"を入れる
                         membersWithDate[i].updateValue("×", forKey: "date")

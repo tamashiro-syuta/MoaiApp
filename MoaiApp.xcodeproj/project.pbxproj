@@ -18,8 +18,8 @@
 		4823182F2657FCD100257189 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4823182E2657FCD100257189 /* GoogleService-Info.plist */; };
 		4823184F2660B65C00257189 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4823184E2660B65B00257189 /* FirstViewController.swift */; };
 		483DFB5626BA4D0500BA0CF6 /* standardTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483DFB5526BA4D0400BA0CF6 /* standardTabBarController.swift */; };
-		483E5D9526B7A3D5001BAD0B /* RecodeMoaiInfo.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 483E5D9426B7A3D5001BAD0B /* RecodeMoaiInfo.storyboard */; };
-		483E5D9826B7A442001BAD0B /* RecodeMoaiInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E5D9726B7A442001BAD0B /* RecodeMoaiInfoViewController.swift */; };
+		483E5D9526B7A3D5001BAD0B /* RecordMoaiInfo.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 483E5D9426B7A3D5001BAD0B /* RecordMoaiInfo.storyboard */; };
+		483E5D9826B7A442001BAD0B /* RecordMoaiInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E5D9726B7A442001BAD0B /* RecordMoaiInfoViewController.swift */; };
 		483E5D9F26B7E2E8001BAD0B /* ChangeNextMoai.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 483E5D9E26B7E2E7001BAD0B /* ChangeNextMoai.storyboard */; };
 		484388922684F4AD00175415 /* FirstJoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484388912684F4AD00175415 /* FirstJoinViewController.swift */; };
 		484388952684F6B600175415 /* CreateRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484388942684F6B600175415 /* CreateRoomViewController.swift */; };
@@ -30,8 +30,8 @@
 		48538EE5264B81A600871BB0 /* UserList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48538EE4264B81A600871BB0 /* UserList.storyboard */; };
 		48538EE8264B82D400871BB0 /* UserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48538EE7264B82D400871BB0 /* UserListViewController.swift */; };
 		4854E909273AC86B006D660F /* Savings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4854E908273AC86B006D660F /* Savings.swift */; };
-		4854E90C273F6195006D660F /* RecodeSaving.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4854E90B273F6194006D660F /* RecodeSaving.storyboard */; };
-		4854E90F273F6463006D660F /* RecodeSavingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4854E90E273F6463006D660F /* RecodeSavingViewController.swift */; };
+		4854E90C273F6195006D660F /* RecordSaving.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4854E90B273F6194006D660F /* RecordSaving.storyboard */; };
+		4854E90F273F6463006D660F /* RecordSavingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4854E90E273F6463006D660F /* RecordSavingViewController.swift */; };
 		485838542647E84C00274507 /* ChatRoom.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 485838532647E84C00274507 /* ChatRoom.storyboard */; };
 		485838572647E8BD00274507 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485838562647E8BD00274507 /* ChatRoomViewController.swift */; };
 		4858385A2649431900274507 /* ChatRoomTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 485838592649431900274507 /* ChatRoomTableViewCell.xib */; };
@@ -81,8 +81,8 @@
 		4823182E2657FCD100257189 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4823184E2660B65B00257189 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
 		483DFB5526BA4D0400BA0CF6 /* standardTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = standardTabBarController.swift; sourceTree = "<group>"; };
-		483E5D9426B7A3D5001BAD0B /* RecodeMoaiInfo.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RecodeMoaiInfo.storyboard; sourceTree = "<group>"; };
-		483E5D9726B7A442001BAD0B /* RecodeMoaiInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecodeMoaiInfoViewController.swift; sourceTree = "<group>"; };
+		483E5D9426B7A3D5001BAD0B /* RecordMoaiInfo.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RecordMoaiInfo.storyboard; sourceTree = "<group>"; };
+		483E5D9726B7A442001BAD0B /* RecordMoaiInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordMoaiInfoViewController.swift; sourceTree = "<group>"; };
 		483E5D9E26B7E2E7001BAD0B /* ChangeNextMoai.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ChangeNextMoai.storyboard; sourceTree = "<group>"; };
 		484388912684F4AD00175415 /* FirstJoinViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstJoinViewController.swift; sourceTree = "<group>"; };
 		484388942684F6B600175415 /* CreateRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomViewController.swift; sourceTree = "<group>"; };
@@ -93,8 +93,8 @@
 		48538EE4264B81A600871BB0 /* UserList.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = UserList.storyboard; sourceTree = "<group>"; };
 		48538EE7264B82D400871BB0 /* UserListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListViewController.swift; sourceTree = "<group>"; };
 		4854E908273AC86B006D660F /* Savings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Savings.swift; sourceTree = "<group>"; };
-		4854E90B273F6194006D660F /* RecodeSaving.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RecodeSaving.storyboard; sourceTree = "<group>"; };
-		4854E90E273F6463006D660F /* RecodeSavingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecodeSavingViewController.swift; sourceTree = "<group>"; };
+		4854E90B273F6194006D660F /* RecordSaving.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RecordSaving.storyboard; sourceTree = "<group>"; };
+		4854E90E273F6463006D660F /* RecordSavingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSavingViewController.swift; sourceTree = "<group>"; };
 		485838532647E84C00274507 /* ChatRoom.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ChatRoom.storyboard; sourceTree = "<group>"; };
 		485838562647E8BD00274507 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
 		485838592649431900274507 /* ChatRoomTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatRoomTableViewCell.xib; sourceTree = "<group>"; };
@@ -204,7 +204,7 @@
 			isa = PBXGroup;
 			children = (
 				489CD2B826E0BB3C00232B55 /* Savings.storyboard */,
-				4854E90B273F6194006D660F /* RecodeSaving.storyboard */,
+				4854E90B273F6194006D660F /* RecordSaving.storyboard */,
 			);
 			path = Savings;
 			sourceTree = "<group>";
@@ -213,7 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				489CD2BC26E0BB7400232B55 /* SavingsViewController.swift */,
-				4854E90E273F6463006D660F /* RecodeSavingViewController.swift */,
+				4854E90E273F6463006D660F /* RecordSavingViewController.swift */,
 			);
 			path = Savings;
 			sourceTree = "<group>";
@@ -239,6 +239,7 @@
 		48C608502647828E002D1258 /* MoaiApp */ = {
 			isa = PBXGroup;
 			children = (
+				48C6085A26478292002D1258 /* Assets.xcassets */,
 				48C60871264784B4002D1258 /* Model */,
 				48C60872264784C2002D1258 /* View */,
 				48C60873264784CA002D1258 /* Controller */,
@@ -277,7 +278,6 @@
 				4823180E2657F60900257189 /* Login */,
 				4823180D2657F5F400257189 /* Chat */,
 				48C6085C26478292002D1258 /* LaunchScreen.storyboard */,
-				48C6085A26478292002D1258 /* Assets.xcassets */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -304,7 +304,7 @@
 				48DE010C26830FFF00B4E62E /* Moai.storyboard */,
 				484388972684FF5300175415 /* Management.storyboard */,
 				4804137E26A7F031004F5BE0 /* JudgeUserInMoai.storyboard */,
-				483E5D9426B7A3D5001BAD0B /* RecodeMoaiInfo.storyboard */,
+				483E5D9426B7A3D5001BAD0B /* RecordMoaiInfo.storyboard */,
 				483E5D9E26B7E2E7001BAD0B /* ChangeNextMoai.storyboard */,
 			);
 			path = Moai;
@@ -318,7 +318,7 @@
 				4804137426A2B1E6004F5BE0 /* detailsNextMoaiViewController.swift */,
 				4804137B26A7EC2A004F5BE0 /* JudgeUserInMoaiViewController.swift */,
 				481D2A1026AC63DD007BF229 /* ChangeNextMoaiViewController.swift */,
-				483E5D9726B7A442001BAD0B /* RecodeMoaiInfoViewController.swift */,
+				483E5D9726B7A442001BAD0B /* RecordMoaiInfoViewController.swift */,
 			);
 			path = Moai;
 			sourceTree = "<group>";
@@ -431,9 +431,9 @@
 				483E5D9F26B7E2E8001BAD0B /* ChangeNextMoai.storyboard in Resources */,
 				48ECBCCC2697F0C200FA65CC /* Map.storyboard in Resources */,
 				48DE010D26830FFF00B4E62E /* Moai.storyboard in Resources */,
-				4854E90C273F6195006D660F /* RecodeSaving.storyboard in Resources */,
+				4854E90C273F6195006D660F /* RecordSaving.storyboard in Resources */,
 				4858385A2649431900274507 /* ChatRoomTableViewCell.xib in Resources */,
-				483E5D9526B7A3D5001BAD0B /* RecodeMoaiInfo.storyboard in Resources */,
+				483E5D9526B7A3D5001BAD0B /* RecordMoaiInfo.storyboard in Resources */,
 				48C6085E26478292002D1258 /* LaunchScreen.storyboard in Resources */,
 				48C6085B26478292002D1258 /* Assets.xcassets in Resources */,
 				48CA14CD26BBDBBF00ABA246 /* startButton.json in Resources */,
@@ -524,7 +524,7 @@
 				4858385E2649474200274507 /* ChatRoomTableViewCell.swift in Sources */,
 				48E7FD5E2690C40600E4FF2B /* MoaiRecord.swift in Sources */,
 				48231783265375F200257189 /* Message.swift in Sources */,
-				4854E90F273F6463006D660F /* RecodeSavingViewController.swift in Sources */,
+				4854E90F273F6463006D660F /* RecordSavingViewController.swift in Sources */,
 				48E810AA26E1C87D00B717D6 /* ShowImageViewController.swift in Sources */,
 				48ABEA062647E27500B40323 /* UIColorExtension.swift in Sources */,
 				4804137C26A7EC2A004F5BE0 /* JudgeUserInMoaiViewController.swift in Sources */,
@@ -534,7 +534,7 @@
 				48B8B6A3264F917A00E863A1 /* ChatRoom.swift in Sources */,
 				4823184F2660B65C00257189 /* FirstViewController.swift in Sources */,
 				4854E909273AC86B006D660F /* Savings.swift in Sources */,
-				483E5D9826B7A442001BAD0B /* RecodeMoaiInfoViewController.swift in Sources */,
+				483E5D9826B7A442001BAD0B /* RecordMoaiInfoViewController.swift in Sources */,
 				4804137526A2B1E6004F5BE0 /* detailsNextMoaiViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

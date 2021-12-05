@@ -36,7 +36,7 @@ class DateUtils {
     }
     
     // Date -> String("yyyyMMdd")
-    class func stringFromDateoForSettingRecodeID(date: Date) -> String {
+    class func stringFromDateoForSettingRecordID(date: Date) -> String {
         let formatter: DateFormatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .gregorian)
         formatter.locale = Locale(identifier: "ja_JP")

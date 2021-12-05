@@ -293,7 +293,7 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
             }
         }
         //新しく更新したデータを追加
-        let nextMoaiDate = DateUtils.stringFromDateoForSettingRecodeID(date: self.selectedDate?[0] as! Date)
+        let nextMoaiDate = DateUtils.stringFromDateoForSettingRecordID(date: self.selectedDate?[0] as! Date)
         self.db.collection("moais").document((self.user?.moais[1])!).collection("next").document(nextMoaiDate).setData(newNextMoaiDic) {err in
             if let err = err {
                 print("エラーでっせ \(err)")
