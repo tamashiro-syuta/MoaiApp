@@ -44,6 +44,15 @@ class DateUtils {
         return formatter.string(from: date)
     }
     
+    // Date -> String("yyyy年 MM 月")
+    class func yyyyMMFromDate(date: Date) -> String {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.locale = Locale(identifier: "ja_JP")
+        formatter.dateFormat = "yyyy / MM "
+        return formatter.string(from: date)
+    }
+    
     // Date -> String (時刻のみ取得)　ex)20:00 
     class func fetchStartTimeFromDate(date: Date) -> String {
         let formatter: DateFormatter = DateFormatter()

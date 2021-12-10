@@ -35,6 +35,7 @@ class Moai {
     let createdAt: Timestamp
     let password: String
     let savingAmount: Int
+    let finalMonth: Date
     
     
     init(dic: [String: Any]) {
@@ -47,6 +48,7 @@ class Moai {
         self.createdAt = dic["createdAt"] as? Timestamp ?? Timestamp()
         self.password = dic["password"] as? String ?? ""
         self.savingAmount = dic["savingAmount"] as? Int ?? 0
+        self.finalMonth = dic["finalMonth"] as? Date ?? Date()
     }
     
     func switchMoaiDate(weekNum: String, weekDay: String) -> [Int]  {

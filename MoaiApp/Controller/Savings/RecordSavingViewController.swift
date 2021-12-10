@@ -102,7 +102,7 @@ class RecordSavingViewController: UIViewController, UITextFieldDelegate {
         case 2:
             addPaid(personNum: buttonPersonNum, amount: 0)
         case 3:
-            sankakuAlertAndPaid(personNum: buttonPersonNum)
+            sankakuAlertAndPaid(personNum: buttonPersonNum, button: button)
         default:
             print("このプリント分が吐き出されているということは、何かしらエラーが起きているという事だ。")
         }
@@ -125,6 +125,7 @@ class RecordSavingViewController: UIViewController, UITextFieldDelegate {
         
         //stackViewのボタンにかかっているviewを取り除く
         for i in 0...2 {
+            print("============================")
             //stackViewのボタンにかかっているviewを取り除く
             let buttonTag2 = Int(String(cellTag) + String(i + 1) )!
             let button2 = stackViewH?.viewWithTag(buttonTag2)
@@ -135,9 +136,17 @@ class RecordSavingViewController: UIViewController, UITextFieldDelegate {
                 blur.removeFromSuperview()
             }
         }
+        //△以外が押されて、かつ、△にサブビューがかかっているなら、サブビューを削除
+        guard let sankakuButtonTag = Int(String(cellTag) + String(3) ) else {return}
+        //押されたボタンの列の△ボタン
+        let sankakuButton = stackViewH?.viewWithTag(sankakuButtonTag)
+        if let sankakuAMount = sankakuButton?.viewWithTag(99) {
+            sankakuAMount.removeFromSuperview()
+        }
         
         //引数のボタンに曇りガラスを、その他のボタンには透明のviewをかける
         for i in 0...2 {
+            
             let buttonTag2 = Int(String(cellTag) + String(i + 1) )!
             let button2 = stackViewH?.viewWithTag(buttonTag2)
             //タップしたボタンにだけblurをかける
@@ -158,7 +167,7 @@ class RecordSavingViewController: UIViewController, UITextFieldDelegate {
         print("savingMembers[personNum]  --->  \(savingMembers[personNum])")
     }
     
-    func sankakuAlertAndPaid(personNum:Int) {
+    func sankakuAlertAndPaid(personNum:Int, button:UIButton) {
         var savingAmount:Int?
         alertController = UIAlertController(title: title,
                                     message: "金額を入力してください",
@@ -176,6 +185,19 @@ class RecordSavingViewController: UIViewController, UITextFieldDelegate {
             }else {
                 savingAmount = Int(textField.text!)
                 self.addPaid(personNum: personNum, amount: savingAmount!)
+                
+                //入力金額を画像の上に貼り付ける
+                let outLength:CGFloat = ( (button.frame.size.width * 1.3) - (button.frame.size.width) ) / 2
+                //ちょっとはみ出すように設定
+                let frame = CGRect(x: -outLength , y: 0 , width: button.frame.size.width * 1.3, height: button.frame.size.height)
+                let label = UILabel(frame: frame)
+                label.tag = 99
+                label.text = String(textField.text!) + "円"
+                label.font = UIFont.boldSystemFont(ofSize: 20)
+                label.textColor = UIColor.textColor()
+                label.textAlignment = NSTextAlignment.center
+                button.addSubview(label)
+                
             }
         })
         alertController.addAction(cansel)

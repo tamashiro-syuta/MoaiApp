@@ -10,11 +10,12 @@ import UIKit
 class SavingsViewController: standardViewController {
     
     var savingMember: [ [String:Any] ] = []
+    var savingOrganizer = "幹事の名前"
     
     
     @IBOutlet weak var amountPerPersonLabel: UILabel!
     @IBOutlet weak var allSavingsLabel: UILabel!
-    @IBOutlet weak var PersonaSavingsLabel: UILabel!
+    @IBOutlet weak var finalSavingLabel: UILabel!
     @IBOutlet weak var personInChargeLabel: UILabel!
     @IBOutlet weak var savingsTableView: UITableView!
     @IBOutlet weak var memberLabel: UILabel!
@@ -23,16 +24,19 @@ class SavingsViewController: standardViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupViews()
-        
         // 積み立てをしているメンバーを取得し変数化
         for member in self.moai!.members {
             guard let saving = member["saving"] else {return}
             if saving as! Bool == true {
                 savingMember.append(member)
             }
+            if (member["savingOrganizer"] != nil) == true {
+                savingOrganizer = member["name"] as! String
+            }
         }
         print("savingMember  --> \(savingMember)")
+        
+        setupViews()
         
         savingsTableView.isScrollEnabled = true
         savingsTableView.delegate = self
@@ -41,14 +45,25 @@ class SavingsViewController: standardViewController {
     }
 
     private func setupViews() {
+        // navigationItemを表示(デフォでは非表示)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.navigationItem.title = "積み立て"
         
         amountPerPersonLabel.layer.borderWidth = 3
         amountPerPersonLabel.layer.borderColor = UIColor.black.cgColor
         amountPerPersonLabel.layer.cornerRadius = 20
         
         allSavingsLabel.addBorder(width: 1.5, color: .black, position: .bottom)
-        PersonaSavingsLabel.addBorder(width: 1.5, color: .black, position: .bottom)
+        finalSavingLabel.addBorder(width: 1.5, color: .black, position: .bottom)
         personInChargeLabel.addBorder(width: 1.5, color: .black, position: .bottom)
+        
+        let lastMonth = DateUtils.yyyyMMFromDate(date: self.moai!.finalMonth as Date)
+        let totalSavingAmount = self.moai!.savingAmount * self.savingMember.count
+        
+        self.amountPerPersonLabel.text = " 1人当たり　　\(String(self.moai!.savingAmount))円 / 回 "
+        self.allSavingsLabel.text = " 全体 " + String(totalSavingAmount) + "円 / 回"
+        self.finalSavingLabel.text = "最終月 " + lastMonth
+        self.personInChargeLabel.text = "担当 " +  savingOrganizer + "さん"
         
         memberLabel.layer.borderWidth = 1.5
         lastSavingLabel.layer.borderWidth = 1.5

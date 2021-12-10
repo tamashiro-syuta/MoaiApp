@@ -28,5 +28,6 @@ class User {
         self.moais = dic["moais"] as? [String] ?? [""]
         self.password = dic["password"] as? String ?? ""
     }
-    
 }
+    
+
