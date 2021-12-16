@@ -45,6 +45,7 @@ class standardViewController :UIViewController {
 //    var pastRecordIDStringArray: [String]?  // 20210417みたいな形で取り出してる
     var pastRecordIDDateArray: [String]?  //◯月◯日みたいな形で取り出してる
     var savingsArray: [Savings] = []
+    var savingIDArray: [String] = []
 //    var nextMoaiEntryArray: [Bool]? // ブーリアン型の配列
     
 //    var memberArray: [ [String:Any] ]? // 模合メンバーの名前の配列（  ex)[["name": "テスト9", "id": "tMfuNFOxckUtupgmxIkgbNcLMap1"], ... ]  ）
@@ -194,6 +195,7 @@ class standardViewController :UIViewController {
                     let saving = Savings(dic: dic)
                     print("saving.paidAmounts --> \(saving.paidAmounts)")
                     self.savingsArray.append(saving)
+                    self.savingIDArray.append(ID)
                 }
             }
         }

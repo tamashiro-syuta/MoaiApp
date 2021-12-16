@@ -63,6 +63,24 @@ class DateUtils {
         return formatter.string(from: date)
     }
     
+    //  yyyymmddの表記から◯年○月◯日の表記に変更
+    class func yyyymmddToJPFormat(yyyymmdd:String) -> String {
+        var from = yyyymmdd.index(yyyymmdd.startIndex, offsetBy:0)
+        var to = yyyymmdd.index(yyyymmdd.startIndex, offsetBy:4)
+        let year = yyyymmdd[from..<to]
+        
+        from = yyyymmdd.index(yyyymmdd.startIndex, offsetBy:5)
+        to = yyyymmdd.index(yyyymmdd.startIndex, offsetBy:6)
+        let month = yyyymmdd[from..<to]
+        
+        from = yyyymmdd.index(yyyymmdd.startIndex, offsetBy:7)
+        to = yyyymmdd.index(yyyymmdd.startIndex, offsetBy:8)
+        let date = yyyymmdd[from..<to]
+        
+        let dateString = year + "年" +  month + "月" + date + "日"
+        return dateString
+    }
+    
     // 次回の模合の日付をDate型で返す(要修正)
     class func returnNextMoaiDate(weekNum: Int, weekDay:Int) -> Date {
         let cal = Calendar.current

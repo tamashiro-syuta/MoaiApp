@@ -60,10 +60,10 @@ class SavingsViewController: standardViewController {
         let lastMonth = DateUtils.yyyyMMFromDate(date: self.moai!.finalMonth as Date)
         let totalSavingAmount = self.moai!.savingAmount * self.savingMember.count
         
-        self.amountPerPersonLabel.text = " 1人当たり　　\(String(self.moai!.savingAmount))円 / 回 "
+        self.amountPerPersonLabel.text = " 1人当たり　\(String(self.moai!.savingAmount))円 / 回  "
         self.allSavingsLabel.text = " 全体 " + String(totalSavingAmount) + "円 / 回"
-        self.finalSavingLabel.text = "最終月 " + lastMonth
-        self.personInChargeLabel.text = "担当 " +  savingOrganizer + "さん"
+        self.finalSavingLabel.text = "最終月  " + lastMonth
+        self.personInChargeLabel.text = "幹事 " +  savingOrganizer
         
         memberLabel.layer.borderWidth = 1.5
         lastSavingLabel.layer.borderWidth = 1.5
@@ -119,6 +119,20 @@ extension SavingsViewController: UITableViewDelegate, UITableViewDataSource {
         }
         return cell
     }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        pushPersonalSavingVC(indexPath: indexPath.row)
+    }
     
+    func pushPersonalSavingVC(indexPath:Int) {
+        let storyboard = UIStoryboard(name: "PersonalSaving", bundle: nil)
+        let personalSavingVC = storyboard.instantiateViewController(withIdentifier: "PersonalSavingViewController") as! PersonalSavingViewController
+        
+        personalSavingVC.savingMember = self.savingMember[indexPath]
+        personalSavingVC.savingsArray = self.savingsArray
+        personalSavingVC.savingIDArray = self.savingIDArray
+        
+        self.navigationController?.pushViewController(personalSavingVC, animated: true)
+    }
     
 }

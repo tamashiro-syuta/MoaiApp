@@ -258,6 +258,10 @@ class PastMoaiViewController: standardViewController {
                 return
             }else {
                 //エラーが出ない時点でdataには値が入っているから強制アンラップしても大丈夫
+                print("===================================")
+                print("data -> \(data)")
+                print("type(of: data) -> \(type(of: data))")
+                print("===================================")
                 guard let image = UIImage(data: data!)?.jpegData(compressionQuality: 0.1) else {
                     print("何か知らんけど、UIImage型に変換できんかったわ")
                     return

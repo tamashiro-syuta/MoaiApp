@@ -10,6 +10,8 @@
 		4804137526A2B1E6004F5BE0 /* detailsNextMoaiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4804137426A2B1E6004F5BE0 /* detailsNextMoaiViewController.swift */; };
 		4804137C26A7EC2A004F5BE0 /* JudgeUserInMoaiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4804137B26A7EC2A004F5BE0 /* JudgeUserInMoaiViewController.swift */; };
 		4804137F26A7F031004F5BE0 /* JudgeUserInMoai.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4804137E26A7F031004F5BE0 /* JudgeUserInMoai.storyboard */; };
+		4811BB6827634FCE00210091 /* PersonalSaving.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4811BB6727634FCD00210091 /* PersonalSaving.storyboard */; };
+		4811BB6B2763507400210091 /* PersonalSavingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4811BB6A2763507400210091 /* PersonalSavingViewController.swift */; };
 		481D2A1126AC63DD007BF229 /* ChangeNextMoaiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481D2A1026AC63DD007BF229 /* ChangeNextMoaiViewController.swift */; };
 		481D2A1426AE7461007BF229 /* DateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481D2A1326AE7461007BF229 /* DateUtils.swift */; };
 		48231783265375F200257189 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48231782265375F200257189 /* Message.swift */; };
@@ -41,6 +43,7 @@
 		48583879264A13BF00274507 /* SignUp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48583878264A13BF00274507 /* SignUp.storyboard */; };
 		4858387C264A17A100274507 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4858387B264A17A100274507 /* SignUpViewController.swift */; };
 		485C003226CF865400F25E70 /* standardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485C003126CF865400F25E70 /* standardViewController.swift */; };
+		48970885276ADADC00A82DD6 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48970884276ADADC00A82DD6 /* UIImageExtension.swift */; };
 		489CD2B926E0BB3C00232B55 /* Savings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 489CD2B826E0BB3C00232B55 /* Savings.storyboard */; };
 		489CD2BD26E0BB7400232B55 /* SavingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489CD2BC26E0BB7400232B55 /* SavingsViewController.swift */; };
 		48ABEA062647E27500B40323 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ABEA052647E27500B40323 /* UIColorExtension.swift */; };
@@ -73,6 +76,8 @@
 		4804137426A2B1E6004F5BE0 /* detailsNextMoaiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = detailsNextMoaiViewController.swift; sourceTree = "<group>"; };
 		4804137B26A7EC2A004F5BE0 /* JudgeUserInMoaiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JudgeUserInMoaiViewController.swift; sourceTree = "<group>"; };
 		4804137E26A7F031004F5BE0 /* JudgeUserInMoai.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = JudgeUserInMoai.storyboard; sourceTree = "<group>"; };
+		4811BB6727634FCD00210091 /* PersonalSaving.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PersonalSaving.storyboard; sourceTree = "<group>"; };
+		4811BB6A2763507400210091 /* PersonalSavingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalSavingViewController.swift; sourceTree = "<group>"; };
 		481D2A1026AC63DD007BF229 /* ChangeNextMoaiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeNextMoaiViewController.swift; sourceTree = "<group>"; };
 		481D2A1326AE7461007BF229 /* DateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtils.swift; sourceTree = "<group>"; };
 		48231782265375F200257189 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -104,6 +109,7 @@
 		48583878264A13BF00274507 /* SignUp.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SignUp.storyboard; sourceTree = "<group>"; };
 		4858387B264A17A100274507 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		485C003126CF865400F25E70 /* standardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = standardViewController.swift; sourceTree = "<group>"; };
+		48970884276ADADC00A82DD6 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		489CD2B826E0BB3C00232B55 /* Savings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Savings.storyboard; sourceTree = "<group>"; };
 		489CD2BC26E0BB7400232B55 /* SavingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsViewController.swift; sourceTree = "<group>"; };
 		48ABEA052647E27500B40323 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
@@ -205,6 +211,7 @@
 			children = (
 				489CD2B826E0BB3C00232B55 /* Savings.storyboard */,
 				4854E90B273F6194006D660F /* RecordSaving.storyboard */,
+				4811BB6727634FCD00210091 /* PersonalSaving.storyboard */,
 			);
 			path = Savings;
 			sourceTree = "<group>";
@@ -214,6 +221,7 @@
 			children = (
 				489CD2BC26E0BB7400232B55 /* SavingsViewController.swift */,
 				4854E90E273F6463006D660F /* RecordSavingViewController.swift */,
+				4811BB6A2763507400210091 /* PersonalSavingViewController.swift */,
 			);
 			path = Savings;
 			sourceTree = "<group>";
@@ -264,6 +272,7 @@
 				48E7FD5D2690C40400E4FF2B /* MoaiRecord.swift */,
 				481D2A1326AE7461007BF229 /* DateUtils.swift */,
 				4854E908273AC86B006D660F /* Savings.swift */,
+				48970884276ADADC00A82DD6 /* UIImageExtension.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -431,6 +440,7 @@
 				483E5D9F26B7E2E8001BAD0B /* ChangeNextMoai.storyboard in Resources */,
 				48ECBCCC2697F0C200FA65CC /* Map.storyboard in Resources */,
 				48DE010D26830FFF00B4E62E /* Moai.storyboard in Resources */,
+				4811BB6827634FCE00210091 /* PersonalSaving.storyboard in Resources */,
 				4854E90C273F6195006D660F /* RecordSaving.storyboard in Resources */,
 				4858385A2649431900274507 /* ChatRoomTableViewCell.xib in Resources */,
 				483E5D9526B7A3D5001BAD0B /* RecordMoaiInfo.storyboard in Resources */,
@@ -503,6 +513,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				48C608522647828E002D1258 /* AppDelegate.swift in Sources */,
+				4811BB6B2763507400210091 /* PersonalSavingViewController.swift in Sources */,
 				48DE01112683103C00B4E62E /* MoaiBaseViewController.swift in Sources */,
 				485C003226CF865400F25E70 /* standardViewController.swift in Sources */,
 				485838652649529A00274507 /* ChatInputAccessoryView.swift in Sources */,
@@ -524,6 +535,7 @@
 				4858385E2649474200274507 /* ChatRoomTableViewCell.swift in Sources */,
 				48E7FD5E2690C40600E4FF2B /* MoaiRecord.swift in Sources */,
 				48231783265375F200257189 /* Message.swift in Sources */,
+				48970885276ADADC00A82DD6 /* UIImageExtension.swift in Sources */,
 				4854E90F273F6463006D660F /* RecordSavingViewController.swift in Sources */,
 				48E810AA26E1C87D00B717D6 /* ShowImageViewController.swift in Sources */,
 				48ABEA062647E27500B40323 /* UIColorExtension.swift in Sources */,
