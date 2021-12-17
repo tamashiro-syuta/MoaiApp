@@ -128,6 +128,7 @@ extension SavingsViewController: UITableViewDelegate, UITableViewDataSource {
         let storyboard = UIStoryboard(name: "PersonalSaving", bundle: nil)
         let personalSavingVC = storyboard.instantiateViewController(withIdentifier: "PersonalSavingViewController") as! PersonalSavingViewController
         
+        personalSavingVC.moai = self.moai
         personalSavingVC.savingMember = self.savingMember[indexPath]
         personalSavingVC.savingsArray = self.savingsArray
         personalSavingVC.savingIDArray = self.savingIDArray

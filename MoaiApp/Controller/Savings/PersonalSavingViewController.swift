@@ -21,6 +21,7 @@ class PersonalSavingViewController: UIViewController {
     let db = Firestore.firestore()
     let storage = Storage.storage()
     
+    var moai:Moai?
     //積み立ての記録
     var savingsArray: [Savings] = []
     var savingIDArray: [String] = []
@@ -114,6 +115,10 @@ extension PersonalSavingViewController: UITableViewDelegate, UITableViewDataSour
         let amount = personalSavingArray[indexPath.row]["amount"] as! Int
         monthLabel.text = date
         amountLabel.text = String(amount)
+        if amount != self.moai?.savingAmount {
+            amountLabel.textColor = .red
+            amountLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        }
         return cell
     }
     
