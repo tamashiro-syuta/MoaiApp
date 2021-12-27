@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import CoreLocation
 
-class standardTabBarController: UITabBarController {
+class standardTabBarController: UITabBarController, CLLocationManagerDelegate {
     
     var user: User?
     var moai: Moai?
@@ -18,10 +19,24 @@ class standardTabBarController: UITabBarController {
     var pastRecordIDDateArray: [String]?  //◯月◯日みたいな形で取り出してる
     var nextMoaiEntryArray: [Bool]? // ブーリアン型の配列
     var moaiMenbersNameList: [String] = [] //模合メンバーの名前の配列
+    
+    //位置情報の確認用
+    var locationManager: CLLocationManager!
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        //位置情報の取得
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager!.requestWhenInUseAuthorization()
 
+        //位置情報の利用許可を取る
+        locationManager = CLLocationManager()
+        CLLocationManager.locationServicesEnabled()
+        print(CLLocationManager.locationServicesEnabled())
+        
+        
         // アイコンの色を変更できます！
         UITabBar.appearance().tintColor = .white
         // 背景色を変更できます！
@@ -60,14 +75,40 @@ class standardTabBarController: UITabBarController {
         let savingsVC = savingsSB.instantiateViewController(withIdentifier: "Savings")
         savingsVC.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 5)
         
+        let apiSB = UIStoryboard(name: "api", bundle: nil)
+        let apiVC = apiSB.instantiateViewController(withIdentifier: "apiViewController")
+        apiVC.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 6)
+        
         VCArray.append(managementVC)
         VCArray.append(chatVC)
         VCArray.append(pastMoaiVC)
         VCArray.append(mapVC)
         VCArray.append(savingsVC)
+        VCArray.append(apiVC)
         
         self.setViewControllers(VCArray, animated: false)
         
+    }
+    
+    // 許可を求めるためのdelegateメソッド
+    func locationManager(_ manager: CLLocationManager,didChangeAuthorization status: CLAuthorizationStatus) {
+        switch status {
+        // 許可されてない場合
+        case .notDetermined:
+            // 許可を求める
+            manager.requestWhenInUseAuthorization()
+        // 拒否されてる場合
+        case .restricted, .denied:
+            // 何もしない
+            break
+        // 許可されている場合
+        case .authorizedAlways, .authorizedWhenInUse:
+            // 現在地の取得を開始
+            manager.startUpdatingLocation()
+            break
+        default:
+            break
+        }
     }
 
 }

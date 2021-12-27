@@ -8,6 +8,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+import FloatingPanel
 
 class MapViewController: standardViewController, CLLocationManagerDelegate, UITextFieldDelegate, MKMapViewDelegate, UISearchBarDelegate {
     
@@ -21,12 +22,17 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
     var locationManager: CLLocationManager!
     var route: MKRoute?
     var routeMessage:String?
+    
+    //ハーフモーダル
+    var halfModalVC = FloatingPanelController()
+    var placeMarks: [PlaceMark] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         map.delegate = self
         searchBar.delegate = self
+        halfModalVC.delegate = self
         
         locationManager = CLLocationManager()
         locationManager.delegate = self
@@ -35,7 +41,7 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
         // 自分の位置情報の場所に青丸をつける
         self.map.showsUserLocation = true
         
-        //位置情報が利用可能か
+        //位置情報が利用可能か(standardVCで許可とってもいいかも、初期画面で許可系のやつは全部とった方がユーザビリティ的にも良いのでは？？？？？)
         if CLLocationManager.locationServicesEnabled() {
             //位置情報の取得開始
             locationManager.startUpdatingLocation()
@@ -66,6 +72,7 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
 //        self.map.region = MKCoordinateRegion(center: locationManager.location!.coordinate, latitudinalMeters: 3000, longitudinalMeters: 3000)
     }
     
+    //検索
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         //キーボードを閉じる。
         searchBar.resignFirstResponder()
@@ -89,19 +96,28 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
                     
             //ローカル検索を実行する。
             let localSearch:MKLocalSearch = MKLocalSearch(request: request)
-            localSearch.start(completionHandler: {(result, error) in
+            localSearch.start(completionHandler: {(result, err) in
+//                print("result?.mapItems")
+//                print(result?.mapItems)
              
                 for placemark in (result?.mapItems)! {
-                    if(error == nil) {
-                        guard let location = placemark.placemark.location else {return}
-                        let name = placemark.placemark.name
-                        self.setPin(location: location, pinTitle: name ?? "")
-                                
-                    } else {
-                        //エラー
-                        print(error)
+                    if let err = err {
+                        print("エラー -> \(err)")
+                        return
                     }
+                    guard let location = placemark.placemark.location else {return}
+                    let dic = [
+                        "name":placemark.placemark.name ?? "なし",
+                        "title":placemark.placemark.title ?? "なし",
+                        "coordinate":placemark.placemark.coordinate,
+                        "locality":placemark.placemark.locality ?? "なし"
+                    ] as [String : Any]
+                    let place = PlaceMark(dic: dic)
+                    self.placeMarks.append(place)
+                    self.setPin(location: location, pinTitle: place.name ?? "")
                 }
+                //モーダルを表示
+                self.halfModal(placeMarks: self.placeMarks)
             })
         }
     }
@@ -226,7 +242,23 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
             break
         }
     }
+    
+    //検索をかけた際に、ハーフモーダルで条件にヒットした店舗を表示
+    private func halfModal(placeMarks: [PlaceMark]) {
+        let storyboard = UIStoryboard(name: "SearchList", bundle: nil)
+        let searchListVC = storyboard.instantiateViewController(withIdentifier: "SearchListTableViewController") as! SearchListTableViewController
+//        searchListVC.pla
+        
+        halfModalVC.isRemovalInteractionEnabled = true
+        halfModalVC.set(contentViewController: searchListVC)
+        halfModalVC.addPanel(toParent: self)
+        
+    }
 
+}
+
+extension MapViewController: FloatingPanelControllerDelegate {
+    
 }
 
 // カスタムアノテーションビューの定義

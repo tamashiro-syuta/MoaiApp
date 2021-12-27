@@ -29,6 +29,7 @@ class CreateRoomViewController: UIViewController {
     var amount:String?
     var password:String?
     var savingAmount:Int = 0  //実施しない場合は0を取る設定なので初期値として0を入れる
+    var members: [ [String:Any] ] = []
     let dataSource1 = ["第１","第２","第３","第４"]
     let dataSource2 = ["月曜日","火曜日","水曜日","木曜日","金曜日","土曜日","日曜日"]
     
@@ -89,7 +90,17 @@ class CreateRoomViewController: UIViewController {
            amountTextField.text?.isEmpty == false &&
            passwordTextField.text?.isEmpty == false
         {
+            if ((savingsTextField.text?.isEmpty) != nil) {
+                savingAmount = savingsTextField.text as? Int ?? 0
+                print("savingAmount -> \(savingAmount)")
+            }
+            let saving = savingAmount != 0 ? true : false
+            var member:[String:Any] = ["id": self.userID, "name": user?.username, "next":false, "saving":saving, "savingOrganizer": true]
+            members.append(member)
             
+            print("saving -> \(saving)")
+            print("members -> \(members)")
+
             let docData = [
                 "groupName": groupName,
                 "week": week,
@@ -97,9 +108,8 @@ class CreateRoomViewController: UIViewController {
                 "amount": amount,
                 "createdAt": Timestamp(),
                 "password": password,
-                "menbers": [userID],
-                "next": [false],
-                "savingAmount": savingsTextField.text ?? 0
+                "members": members,
+                "savingAmount": savingAmount
             ] as [String : Any]
             
             //新規模合グループ作成
@@ -135,7 +145,7 @@ class CreateRoomViewController: UIViewController {
         }
     }
     
-    //ユーザー情報から模合情報を取得し、新しい模合情報を追加後、DBに戻す    
+    //ユーザー情報から模合情報を取得し、新しい模合情報を追加後、DBに戻す
     private func fetchAndResetUserMoaiInfo(moaiID: String) {
         var moaisArray: [String] = self.user!.moais
         moaisArray.append(moaiID)
@@ -174,7 +184,6 @@ class CreateRoomViewController: UIViewController {
     
     
     //画面遷移は、navigationのrootVCをtabBarControllerに上書き
-    //まあ、やり方は、おいおい考えていきますわ〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
     private func pushManagementVC() {
         print("タブバーに画面遷移するよ")
         let tabBarController = standardTabBarController()
