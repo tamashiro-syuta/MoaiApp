@@ -28,7 +28,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="jxr-VS-8qH" firstAttribute="top" secondItem="0AG-wP-yYv" secondAttribute="top" id="4xY-WP-p8D"/>
-                            <constraint firstItem="0AG-wP-yYv" firstAttribute="bottom" secondItem="jxr-VS-8qH" secondAttribute="bottom" id="Eq9-zN-ppL"/>
+                            <constraint firstAttribute="bottom" secondItem="jxr-VS-8qH" secondAttribute="bottom" constant="34" id="Eq9-zN-ppL"/>
                             <constraint firstItem="jxr-VS-8qH" firstAttribute="leading" secondItem="0AG-wP-yYv" secondAttribute="leading" id="M9j-IT-jeO"/>
                             <constraint firstItem="q4N-H4-HoF" firstAttribute="leading" secondItem="0AG-wP-yYv" secondAttribute="leading" id="ToI-r4-90e"/>
                             <constraint firstItem="q4N-H4-HoF" firstAttribute="top" secondItem="0AG-wP-yYv" secondAttribute="top" id="VZT-Nd-BFG"/>

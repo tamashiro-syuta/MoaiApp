@@ -10,10 +10,7 @@ import MapKit
 import CoreLocation
 import FloatingPanel
 
-class MapViewController: standardViewController, CLLocationManagerDelegate, UITextFieldDelegate, MKMapViewDelegate, UISearchBarDelegate {
-    
-//    var user:User?
-//    var moai:Moai?
+class MapViewController: standardViewController, CLLocationManagerDelegate, UITextFieldDelegate, MKMapViewDelegate, UISearchBarDelegate, FloatingPanelControllerDelegate {
     
     @IBOutlet weak var map: MKMapView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -71,7 +68,6 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
     
     //ユーザーの場所が更新された時に呼ばれるメソッド
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-//        self.map.region = MKCoordinateRegion(center: locationManager.location!.coordinate, latitudinalMeters: 3000, longitudinalMeters: 3000)
     }
     
     //検索
@@ -105,8 +101,6 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
             //ローカル検索を実行する。
             let localSearch:MKLocalSearch = MKLocalSearch(request: request)
             localSearch.start(completionHandler: {(result, err) in
-//                print("result?.mapItems")
-//                print(result?.mapItems)
              
                 for placemark in (result?.mapItems)! {
                     if let err = err {
@@ -275,18 +269,12 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
             encoded.append(element.urlEncoded)
         }
         keyword = encoded.joined(separator: "%E3%80%80")
-        url = baseURL + apikey + "&keyword=" + keyword + "&format=json"
+        url = baseURL + apikey + "&keyword=" + keyword + "&large_area=Z098" + "&format=json"
         print("url --> \(url)")
-        
-        let sampleURL = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=2de3f74a5a1d3e05&large_area=Z011&format=json"
-        
+
         return url
     }
 
-}
-
-extension MapViewController: FloatingPanelControllerDelegate {
-    
 }
 
 // カスタムアノテーションビューの定義
@@ -300,9 +288,6 @@ class CustomAnnotationView: MKMarkerAnnotationView {
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-
-//        glyphImage = UIImage(systemName: "flame")!
-        
         configure(for: annotation)
     }
 

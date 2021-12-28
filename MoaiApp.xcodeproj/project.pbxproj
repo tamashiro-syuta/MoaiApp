@@ -69,9 +69,7 @@
 		48EA09322779FA750038E6DE /* Film.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EA09312779FA750038E6DE /* Film.swift */; };
 		48EA09352779FAE90038E6DE /* Hotpepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EA09342779FAE90038E6DE /* Hotpepper.swift */; };
 		48EA09382779FB020038E6DE /* PlaceMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EA09372779FB020038E6DE /* PlaceMark.swift */; };
-		48EA093F2779FB660038E6DE /* SearchList2TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EA093E2779FB660038E6DE /* SearchList2TableViewController.swift */; };
 		48EA09422779FC590038E6DE /* SearchListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EA09412779FC590038E6DE /* SearchListTableViewController.swift */; };
-		48EA09672779FE4C0038E6DE /* api.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48EA09662779FE4C0038E6DE /* api.storyboard */; };
 		48EA096A2779FE7A0038E6DE /* SearchList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48EA09692779FE7A0038E6DE /* SearchList.storyboard */; };
 		48EA096D277A00530038E6DE /* RecordSaving.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48EA096C277A00520038E6DE /* RecordSaving.storyboard */; };
 		48ECBCC72697F08B00FA65CC /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ECBCC62697F08B00FA65CC /* MapViewController.swift */; };
@@ -145,9 +143,7 @@
 		48EA09312779FA750038E6DE /* Film.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Film.swift; sourceTree = "<group>"; };
 		48EA09342779FAE90038E6DE /* Hotpepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hotpepper.swift; sourceTree = "<group>"; };
 		48EA09372779FB020038E6DE /* PlaceMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceMark.swift; sourceTree = "<group>"; };
-		48EA093E2779FB660038E6DE /* SearchList2TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchList2TableViewController.swift; sourceTree = "<group>"; };
 		48EA09412779FC590038E6DE /* SearchListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchListTableViewController.swift; sourceTree = "<group>"; };
-		48EA09662779FE4C0038E6DE /* api.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = api.storyboard; sourceTree = "<group>"; };
 		48EA09692779FE7A0038E6DE /* SearchList.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SearchList.storyboard; sourceTree = "<group>"; };
 		48EA096C277A00520038E6DE /* RecordSaving.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RecordSaving.storyboard; sourceTree = "<group>"; };
 		48ECBCC62697F08B00FA65CC /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -301,7 +297,6 @@
 		48C60872264784C2002D1258 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				48EA09652779FE3E0038E6DE /* API */,
 				489CD2B726E0BB2200232B55 /* Savings */,
 				486296A426DB921F00850153 /* PastMoai */,
 				48ECBCCA2697F0AD00FA65CC /* Map */,
@@ -316,7 +311,6 @@
 		48C60873264784CA002D1258 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				48EA093A2779FB1B0038E6DE /* API */,
 				489CD2BB26E0BB5500232B55 /* Savings */,
 				48E1FF3526D726ED00842705 /* PastRecode */,
 				48ECBCC52697F06F00FA65CC /* Map */,
@@ -363,22 +357,6 @@
 				48E810AF26E33BA400B717D6 /* PastMoaiDetailsViewController.swift */,
 			);
 			path = PastRecode;
-			sourceTree = "<group>";
-		};
-		48EA093A2779FB1B0038E6DE /* API */ = {
-			isa = PBXGroup;
-			children = (
-				48EA093E2779FB660038E6DE /* SearchList2TableViewController.swift */,
-			);
-			path = API;
-			sourceTree = "<group>";
-		};
-		48EA09652779FE3E0038E6DE /* API */ = {
-			isa = PBXGroup;
-			children = (
-				48EA09662779FE4C0038E6DE /* api.storyboard */,
-			);
-			path = API;
 			sourceTree = "<group>";
 		};
 		48ECBCC52697F06F00FA65CC /* Map */ = {
@@ -479,7 +457,6 @@
 				483E5D9F26B7E2E8001BAD0B /* ChangeNextMoai.storyboard in Resources */,
 				48ECBCCC2697F0C200FA65CC /* Map.storyboard in Resources */,
 				48DE010D26830FFF00B4E62E /* Moai.storyboard in Resources */,
-				48EA09672779FE4C0038E6DE /* api.storyboard in Resources */,
 				4811BB6827634FCE00210091 /* PersonalSaving.storyboard in Resources */,
 				4858385A2649431900274507 /* ChatRoomTableViewCell.xib in Resources */,
 				483E5D9526B7A3D5001BAD0B /* RecordMoaiInfo.storyboard in Resources */,
@@ -586,7 +563,6 @@
 				48EA09322779FA750038E6DE /* Film.swift in Sources */,
 				48E810AA26E1C87D00B717D6 /* ShowImageViewController.swift in Sources */,
 				48ABEA062647E27500B40323 /* UIColorExtension.swift in Sources */,
-				48EA093F2779FB660038E6DE /* SearchList2TableViewController.swift in Sources */,
 				4804137C26A7EC2A004F5BE0 /* JudgeUserInMoaiViewController.swift in Sources */,
 				484388952684F6B600175415 /* CreateRoomViewController.swift in Sources */,
 				484388B42685B59200175415 /* Moai.swift in Sources */,
