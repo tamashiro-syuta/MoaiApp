@@ -23,7 +23,7 @@ class api2ViewController: UIViewController {
     let sampleURL = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=2de3f74a5a1d3e05&large_area=Z011&format=json"
     
     let decoder: JSONDecoder = JSONDecoder()
-    var hotpeppers:[Hotpepper] = []
+    var hotpepper:Hotpepper?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,32 +36,24 @@ class api2ViewController: UIViewController {
     
     //Get JSON
     func getDataAsJSON(url: String) {
-//        AF.request(url, method: .get).responseJSON { res in
-//           print(res)
-//            self.json = JSON(res)
-//            let sample = self.json["shop"]["tones"][1]["score"].float
-//            print(sample)
-//        }
-        AF.request(url, method: .get).responseJSON { response in
+        let request = AF.request(url)
+        request.responseJSON { (response) in
             switch response.result {
             case .success:
                 do {
-                    self.hotpeppers = try self.decoder.decode([Hotpepper].self, from: response.data!)
-//                    self.articleListTableView.reloadData()
-                    print("デコードに成功しました！！！")
-                    print("self.hotpeppers -> \(self.hotpeppers)")
+                    print("デコードに成功しました")
+//                    print(response)
+                    self.hotpepper = try self.decoder.decode(Hotpepper.self, from: response.data!)
+                    print("self.hotpepper --> \(self.hotpepper)")
+//                    self.hotpepperListTableView.reloadData()
                 } catch {
                     print("デコードに失敗しました")
-                    print("response -> \(response)")
-                    print("response.data -> \(response.data)")
-                    print("type(of: response -> \(type(of: response))")
                 }
             case .failure(let error):
                 print("error", error)
             }
         }
     }
-
 }
 
 extension api2ViewController: UITableViewDelegate, UITableViewDataSource {

@@ -16,14 +16,34 @@ struct HotpepperAPI {
 }
 
 struct Hotpepper: Codable {
-    let shop: Shop
+    let results: ResultsData
+}
+
+struct ResultsData: Codable {
+    let resultsReturned: String
+    let shop: [Shop]
     
-    struct Shop: Codable {
-        let id: Int
-        let name: String
-        let logo_image: String
-        let address: String
-        let lat: String
-        let lng: String
+    enum CodingKeys: String, CodingKey {
+        case resultsReturned = "results_returned"
+        case shop = "shop"
+    }
+}
+
+struct Shop: Codable {
+    let ID: String
+    let name: String
+    let logoImage: String
+    let address: String
+    let lat: Float
+    let lng: Float
+    
+    //スネークケースから、キャメルケースに変換するため
+    enum CodingKeys: String, CodingKey {
+        case ID = "id"
+        case name = "name"
+        case logoImage = "logo_image"
+        case address = "address"
+        case lat = "lat"
+        case lng = "lng"
     }
 }
