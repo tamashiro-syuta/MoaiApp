@@ -8,10 +8,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Api2 View Controller-->
+        <!--Api View Controller-->
         <scene sceneID="0Tt-i7-gzS">
             <objects>
-                <viewController storyboardIdentifier="apiViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="KrA-jh-bxc" customClass="api2ViewController" customModule="MoaiApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="apiViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="KrA-jh-bxc" customClass="apiViewController" customModule="MoaiApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vdf-Ma-0aX">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -69,7 +69,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lJW-b7-WXc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="131.8840579710145" y="116.51785714285714"/>
+            <point key="canvasLocation" x="-309" y="108"/>
         </scene>
     </scenes>
     <resources>
