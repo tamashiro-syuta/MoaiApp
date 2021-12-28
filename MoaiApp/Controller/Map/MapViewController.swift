@@ -26,6 +26,8 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
     //ハーフモーダル
     var halfModalVC = FloatingPanelController()
     var placeMarks: [PlaceMark] = []
+    
+    var url:String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,6 +92,12 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
             //検索条件を作成する。
             let request = MKLocalSearch.Request()
             request.naturalLanguageQuery = searchKey
+            
+            //searchKeyを検索できる形に変換
+            let url = makeURL(searchKey: searchKey!)
+            
+            //ハーフモーダルを呼び出してAPIを叩く
+            self.halfModal(url: url)
                     
             //検索範囲はマップビューと同じにする。
             request.region = map.region
@@ -116,8 +124,6 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
                     self.placeMarks.append(place)
                     self.setPin(location: location, pinTitle: place.name ?? "")
                 }
-                //モーダルを表示
-                self.halfModal(placeMarks: self.placeMarks)
             })
         }
     }
@@ -244,15 +250,37 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
     }
     
     //検索をかけた際に、ハーフモーダルで条件にヒットした店舗を表示
-    private func halfModal(placeMarks: [PlaceMark]) {
+    private func halfModal(url: String) {
         let storyboard = UIStoryboard(name: "SearchList", bundle: nil)
         let searchListVC = storyboard.instantiateViewController(withIdentifier: "SearchListTableViewController") as! SearchListTableViewController
-//        searchListVC.pla
+        searchListVC.url = url
         
         halfModalVC.isRemovalInteractionEnabled = true
         halfModalVC.set(contentViewController: searchListVC)
         halfModalVC.addPanel(toParent: self)
         
+    }
+    
+    private func makeURL(searchKey:String) -> String {
+        var url = ""
+        
+        let baseURL = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key="
+        let apikey = APIKeys().hotpepper
+        var keyword:String = ""
+        //スペース(半角、全角)を検索クエリに適した形(%E3%80%80)に変換 (charactersInの中身は' '(半角)+'　'(全角)だから、無駄にいじらないようにする!!)
+        let notEncode:[String] = searchKey.components(separatedBy: CharacterSet(charactersIn: " 　"))
+        var encoded:[String] = []
+        for element in notEncode {
+            //URL用にエンコードした値を配列に入れる
+            encoded.append(element.urlEncoded)
+        }
+        keyword = encoded.joined(separator: "%E3%80%80")
+        url = baseURL + apikey + "&keyword=" + keyword + "&format=json"
+        print("url --> \(url)")
+        
+        let sampleURL = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=2de3f74a5a1d3e05&large_area=Z011&format=json"
+        
+        return url
     }
 
 }
@@ -293,5 +321,17 @@ class CustomAnnotationView: MKMarkerAnnotationView {
         let index = Int(annotation.title ?? "") ?? 0
         let remainder = index % colors.count
         return colors[remainder]
+    }
+}
+
+extension String {
+    
+    var urlEncoded: String {
+        // 半角英数字 + "/?-._~" のキャラクタセットを定義
+        let charset = CharacterSet.alphanumerics.union(.init(charactersIn: "/?-._~"))
+        // 一度すべてのパーセントエンコードを除去(URLデコード)
+        let removed = removingPercentEncoding ?? self
+        // あらためてパーセントエンコードして返す
+        return removed.addingPercentEncoding(withAllowedCharacters: charset) ?? removed
     }
 }

@@ -42,6 +42,8 @@
 		48583879264A13BF00274507 /* SignUp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48583878264A13BF00274507 /* SignUp.storyboard */; };
 		4858387C264A17A100274507 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4858387B264A17A100274507 /* SignUpViewController.swift */; };
 		485C003226CF865400F25E70 /* standardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485C003126CF865400F25E70 /* standardViewController.swift */; };
+		488B0059277ABD9B006DAE7C /* key.plist in Resources */ = {isa = PBXBuildFile; fileRef = 488B0058277ABD9B006DAE7C /* key.plist */; };
+		488B005C277AC35F006DAE7C /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488B005B277AC35F006DAE7C /* Key.swift */; };
 		48970885276ADADC00A82DD6 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48970884276ADADC00A82DD6 /* UIImageExtension.swift */; };
 		489CD2B926E0BB3C00232B55 /* Savings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 489CD2B826E0BB3C00232B55 /* Savings.storyboard */; };
 		489CD2BD26E0BB7400232B55 /* SavingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489CD2BC26E0BB7400232B55 /* SavingsViewController.swift */; };
@@ -67,7 +69,7 @@
 		48EA09322779FA750038E6DE /* Film.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EA09312779FA750038E6DE /* Film.swift */; };
 		48EA09352779FAE90038E6DE /* Hotpepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EA09342779FAE90038E6DE /* Hotpepper.swift */; };
 		48EA09382779FB020038E6DE /* PlaceMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EA09372779FB020038E6DE /* PlaceMark.swift */; };
-		48EA093F2779FB660038E6DE /* apiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EA093E2779FB660038E6DE /* apiViewController.swift */; };
+		48EA093F2779FB660038E6DE /* SearchList2TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EA093E2779FB660038E6DE /* SearchList2TableViewController.swift */; };
 		48EA09422779FC590038E6DE /* SearchListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EA09412779FC590038E6DE /* SearchListTableViewController.swift */; };
 		48EA09672779FE4C0038E6DE /* api.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48EA09662779FE4C0038E6DE /* api.storyboard */; };
 		48EA096A2779FE7A0038E6DE /* SearchList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48EA09692779FE7A0038E6DE /* SearchList.storyboard */; };
@@ -114,6 +116,8 @@
 		48583878264A13BF00274507 /* SignUp.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SignUp.storyboard; sourceTree = "<group>"; };
 		4858387B264A17A100274507 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		485C003126CF865400F25E70 /* standardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = standardViewController.swift; sourceTree = "<group>"; };
+		488B0058277ABD9B006DAE7C /* key.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = key.plist; sourceTree = "<group>"; };
+		488B005B277AC35F006DAE7C /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		48970884276ADADC00A82DD6 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		489CD2B826E0BB3C00232B55 /* Savings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Savings.storyboard; sourceTree = "<group>"; };
 		489CD2BC26E0BB7400232B55 /* SavingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsViewController.swift; sourceTree = "<group>"; };
@@ -141,7 +145,7 @@
 		48EA09312779FA750038E6DE /* Film.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Film.swift; sourceTree = "<group>"; };
 		48EA09342779FAE90038E6DE /* Hotpepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hotpepper.swift; sourceTree = "<group>"; };
 		48EA09372779FB020038E6DE /* PlaceMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceMark.swift; sourceTree = "<group>"; };
-		48EA093E2779FB660038E6DE /* apiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = apiViewController.swift; sourceTree = "<group>"; };
+		48EA093E2779FB660038E6DE /* SearchList2TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchList2TableViewController.swift; sourceTree = "<group>"; };
 		48EA09412779FC590038E6DE /* SearchListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchListTableViewController.swift; sourceTree = "<group>"; };
 		48EA09662779FE4C0038E6DE /* api.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = api.storyboard; sourceTree = "<group>"; };
 		48EA09692779FE7A0038E6DE /* SearchList.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SearchList.storyboard; sourceTree = "<group>"; };
@@ -269,6 +273,7 @@
 				48CA14CB26BBDBB900ABA246 /* startButton.json */,
 				48C6085F26478292002D1258 /* Info.plist */,
 				4823182E2657FCD100257189 /* GoogleService-Info.plist */,
+				488B0058277ABD9B006DAE7C /* key.plist */,
 			);
 			path = MoaiApp;
 			sourceTree = "<group>";
@@ -288,6 +293,7 @@
 				48EA09312779FA750038E6DE /* Film.swift */,
 				48EA09342779FAE90038E6DE /* Hotpepper.swift */,
 				48EA09372779FB020038E6DE /* PlaceMark.swift */,
+				488B005B277AC35F006DAE7C /* Key.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -362,7 +368,7 @@
 		48EA093A2779FB1B0038E6DE /* API */ = {
 			isa = PBXGroup;
 			children = (
-				48EA093E2779FB660038E6DE /* apiViewController.swift */,
+				48EA093E2779FB660038E6DE /* SearchList2TableViewController.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -491,6 +497,7 @@
 				484388982684FF5300175415 /* Management.storyboard in Resources */,
 				489CD2B926E0BB3C00232B55 /* Savings.storyboard in Resources */,
 				48E810AD26E33B7100B717D6 /* PastMoaiDetails.storyboard in Resources */,
+				488B0059277ABD9B006DAE7C /* key.plist in Resources */,
 				48583879264A13BF00274507 /* SignUp.storyboard in Resources */,
 				482317862653EDFD00257189 /* Login.storyboard in Resources */,
 				48E088CD26D3111B0072091B /* PastMoai.storyboard in Resources */,
@@ -572,13 +579,14 @@
 				48C608542647828E002D1258 /* SceneDelegate.swift in Sources */,
 				4858385E2649474200274507 /* ChatRoomTableViewCell.swift in Sources */,
 				48E7FD5E2690C40600E4FF2B /* MoaiRecord.swift in Sources */,
+				488B005C277AC35F006DAE7C /* Key.swift in Sources */,
 				48231783265375F200257189 /* Message.swift in Sources */,
 				48970885276ADADC00A82DD6 /* UIImageExtension.swift in Sources */,
 				4854E90F273F6463006D660F /* RecordSavingViewController.swift in Sources */,
 				48EA09322779FA750038E6DE /* Film.swift in Sources */,
 				48E810AA26E1C87D00B717D6 /* ShowImageViewController.swift in Sources */,
 				48ABEA062647E27500B40323 /* UIColorExtension.swift in Sources */,
-				48EA093F2779FB660038E6DE /* apiViewController.swift in Sources */,
+				48EA093F2779FB660038E6DE /* SearchList2TableViewController.swift in Sources */,
 				4804137C26A7EC2A004F5BE0 /* JudgeUserInMoaiViewController.swift in Sources */,
 				484388952684F6B600175415 /* CreateRoomViewController.swift in Sources */,
 				484388B42685B59200175415 /* Moai.swift in Sources */,

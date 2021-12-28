@@ -8,10 +8,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Api View Controller-->
+        <!--Search List2 Table View Controller-->
         <scene sceneID="0Tt-i7-gzS">
             <objects>
-                <viewController storyboardIdentifier="apiViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="KrA-jh-bxc" customClass="apiViewController" customModule="MoaiApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="apiViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="KrA-jh-bxc" customClass="SearchList2TableViewController" customModule="MoaiApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vdf-Ma-0aX">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

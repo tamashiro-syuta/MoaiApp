@@ -75,16 +75,16 @@ class standardTabBarController: UITabBarController, CLLocationManagerDelegate {
         let savingsVC = savingsSB.instantiateViewController(withIdentifier: "Savings")
         savingsVC.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 5)
         
-        let apiSB = UIStoryboard(name: "api", bundle: nil)
-        let apiVC = apiSB.instantiateViewController(withIdentifier: "apiViewController")
-        apiVC.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 6)
+//        let apiSB = UIStoryboard(name: "api", bundle: nil)
+//        let apiVC = apiSB.instantiateViewController(withIdentifier: "apiViewController")
+//        apiVC.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 6)
         
         VCArray.append(managementVC)
         VCArray.append(chatVC)
         VCArray.append(pastMoaiVC)
         VCArray.append(mapVC)
         VCArray.append(savingsVC)
-        VCArray.append(apiVC)
+//        VCArray.append(apiVC)
         
         self.setViewControllers(VCArray, animated: false)
         

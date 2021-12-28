@@ -6,86 +6,93 @@
 //
 
 import UIKit
-import MapKit
+import Alamofire
+import PKHUD
 
-var placeMarks: [PlaceMark]?
-
-class SearchListTableViewController: UITableViewController {
+class SearchListTableViewController: UIViewController {
     
     
+    @IBOutlet weak var hotpepperListTableView: UITableView!
+    
+    
+    var articles = [[String: AnyObject]]()
+    let baseURL = "https://qiita.com/api/v2/items"
 
+    var url:String = ""
+//    let sampleURL = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=2de3f74a5a1d3e05&large_area=Z011&format=json"
+    let sampleURL = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=2de3f74a5a1d3e05&keyword=%E7%B3%B8%E6%BA%80%E3%80%80%E9%82%A3%E8%A6%87%E3%80%80%E3%83%A9%E3%83%BC%E3%83%A1%E3%83%B3&format=json"
+    let sampleURL2 = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=2de3f74a5a1d3e05&keyword=糸満%E3%80%80ラーメン&format=json"
+    
+    let decoder: JSONDecoder = JSONDecoder()
+    var hotpepper:Hotpepper?
+    var shops:[Shop] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("shopsのカウント --> \(shops.count)")
+        
+        self.hotpepperListTableView.delegate = self
+        self.hotpepperListTableView.dataSource = self
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        HUD.flash(.progress)
+        getDataAsJSON(url: url)
     }
-
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 10
-    }
-
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-
-        return cell
-    }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+    
+    //Get JSON
+    func getDataAsJSON(url: String) {
+        let request = AF.request(url)
+        request.responseJSON { (response) in
+            switch response.result {
+            case .success:
+                do {
+                    print("デコードに成功しました")
+                    self.hotpepper = try self.decoder.decode(Hotpepper.self, from: response.data!)
+                    print("self.hotpepper --> \(self.hotpepper)")
+                    self.shops = (self.hotpepper?.results.shop)!
+                    self.hotpepperListTableView.reloadData()
+                } catch {
+                    print("デコードに失敗しました")
+                    HUD.hide()
+                }
+            case .failure(let error):
+                print("error", error)
+                HUD.hide()
+            }
         }
     }
-    */
+}
 
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
+extension SearchListTableViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.shops.count == 0 ? 1 : self.shops.count
     }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if self.shops.count == 0 {
+            return self.view.frame.size.height
+        }else {
+            return 80
+        }
     }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let imageView = cell.contentView.viewWithTag(1) as! UIImageView
+        let label = cell.contentView.viewWithTag(2) as! UILabel
+        
+        if shops.count == 0 {
+            //まだAPIから値が取れていない時
+            label.text = ""
+        }else {
+            //APIからの値を利用
+            imageView.image = UIImage(url: self.shops[indexPath.row].logoImage)
+            label.text = self.shops[indexPath.row].name
+        }
+        return cell
     }
-    */
-
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("タップされたお")
+    }
+    
 }

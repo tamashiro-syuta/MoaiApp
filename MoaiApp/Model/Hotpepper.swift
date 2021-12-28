@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-struct HotpepperAPI {
+struct HotpepperURL {
     static let scheme = "https"
     static let host = "webservice.recruit.co.jp"
     static let gourmetPath = "/hotpepper/gourmet/v1/"

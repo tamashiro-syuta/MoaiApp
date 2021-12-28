@@ -9,7 +9,7 @@ import UIKit
 import Alamofire
 import PKHUD
 
-class apiViewController: UIViewController {
+class SearchList2TableViewController: UIViewController {
     
     
     @IBOutlet weak var hotpepperListTableView: UITableView!
@@ -59,7 +59,7 @@ class apiViewController: UIViewController {
     }
 }
 
-extension apiViewController: UITableViewDelegate, UITableViewDataSource {
+extension SearchList2TableViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.shops.count == 0 ? 1 : self.shops.count
     }
