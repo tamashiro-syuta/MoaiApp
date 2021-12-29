@@ -9,8 +9,13 @@ import UIKit
 import MapKit
 import CoreLocation
 import FloatingPanel
+import Alamofire
+import PKHUD
+
+// SearchListTableViewControllerDelegate は、モーダルから値を受け取るためのデリゲート
 
 class MapViewController: standardViewController, CLLocationManagerDelegate, UITextFieldDelegate, MKMapViewDelegate, UISearchBarDelegate, FloatingPanelControllerDelegate {
+    
     
     @IBOutlet weak var map: MKMapView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -25,6 +30,9 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
     var placeMarks: [PlaceMark] = []
     
     var url:String?
+    let decoder: JSONDecoder = JSONDecoder()
+    var hotpepper:Hotpepper?
+    var shops:[Shop] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +40,10 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
         map.delegate = self
         searchBar.delegate = self
         halfModalVC.delegate = self
+        
+        //mapにCustomAnnotationViewとCustomeClusterAnnotationViewを使うよ的な宣言
+        map.register(CustomAnnotationView.self, forAnnotationViewWithReuseIdentifier: CustomAnnotationView.identifier)
+        map.register(CustomeClusterAnnotationView.self, forAnnotationViewWithReuseIdentifier: CustomeClusterAnnotationView.identifier)
         
         locationManager = CLLocationManager()
         locationManager.delegate = self
@@ -60,12 +72,7 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
-    
+
     //ユーザーの場所が更新された時に呼ばれるメソッド
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
     }
@@ -78,6 +85,22 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
         self.map.removeAnnotations(self.map.annotations)
         //表示している経路を削除
         self.map.removeOverlays(self.map.overlays)
+        
+        
+        
+        
+        
+        
+        
+        
+        //ここから下の処理をメソッド化し、shopsに値が入ったらタイミングで発火させる
+        
+        
+        
+        
+        
+        
+        
         
         //入力された文字を取り出す
         if searchBar.text != "" {
@@ -92,33 +115,34 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
             //searchKeyを検索できる形に変換
             let url = makeURL(searchKey: searchKey!)
             
-            //ハーフモーダルを呼び出してAPIを叩く
-            self.halfModal(url: url)
-                    
+            //生成したURLからJSONデータを取得
+            self.getDataAsJSON(url: url)
+            
+
             //検索範囲はマップビューと同じにする。
             request.region = map.region
                     
-            //ローカル検索を実行する。
-            let localSearch:MKLocalSearch = MKLocalSearch(request: request)
-            localSearch.start(completionHandler: {(result, err) in
-             
-                for placemark in (result?.mapItems)! {
-                    if let err = err {
-                        print("エラー -> \(err)")
-                        return
-                    }
-                    guard let location = placemark.placemark.location else {return}
-                    let dic = [
-                        "name":placemark.placemark.name ?? "なし",
-                        "title":placemark.placemark.title ?? "なし",
-                        "coordinate":placemark.placemark.coordinate,
-                        "locality":placemark.placemark.locality ?? "なし"
-                    ] as [String : Any]
-                    let place = PlaceMark(dic: dic)
-                    self.placeMarks.append(place)
-                    self.setPin(location: location, pinTitle: place.name ?? "")
-                }
-            })
+//            //ローカル検索を実行する。
+//            let localSearch:MKLocalSearch = MKLocalSearch(request: request)
+//            localSearch.start(completionHandler: {(result, err) in
+//
+//                for placemark in (result?.mapItems)! {
+//                    if let err = err {
+//                        print("エラー -> \(err)")
+//                        return
+//                    }
+//                    guard let location = placemark.placemark.location else {return}
+//                    let dic = [
+//                        "name":placemark.placemark.name ?? "なし",
+//                        "title":placemark.placemark.title ?? "なし",
+//                        "coordinate":placemark.placemark.coordinate,
+//                        "locality":placemark.placemark.locality ?? "なし"
+//                    ] as [String : Any]
+//                    let place = PlaceMark(dic: dic)
+//                    self.placeMarks.append(place)
+//                    self.setPin(location: location, pinTitle: place.name ?? "")
+//                }
+//            })
         }
     }
     
@@ -129,10 +153,14 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
         //ピンの置く場所の緯度経度を設定
         pin.coordinate = targetCoordinate
         pin.title = pinTitle
-        if pinTitle == "現在地" {
-            
-        }
+//        if pinTitle == "現在地" {
+//
+//        }
+        //ピンを設置
         self.map.addAnnotation(pin)
+        
+        //現在地の情報があれば、現在地と　ヒットした位置情報が画面に収まるように調整する
+        //そうじゃなければ、ヒットした位置情報の付近を中心に設定する
         guard let currentPoint = locationManager.location else {return}
         if currentPoint != nil {
             let halfWayPoint = self.halfwayPoint(first: location, second: currentPoint)
@@ -216,11 +244,47 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-            let renderer = MKPolylineRenderer(overlay: overlay)
-            renderer.strokeColor = UIColor.blue
-            renderer.lineWidth = 8
-            return renderer
+        let renderer = MKPolylineRenderer(overlay: overlay)
+        renderer.strokeColor = UIColor.blue
+        renderer.lineWidth = 8
+        return renderer
+    }
+    
+    //画面に表示するAnnotationViewを設定
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        //mapView(viewFor:)でクラスター化されたAnnotationの場合、先ほど定義したCustomeClusterAnnotationViewを表示
+        if annotation is MKClusterAnnotation {
+            return mapView.dequeueReusableAnnotationView(withIdentifier: CustomeClusterAnnotationView.identifier)
         }
+        // dequeueReusableAnnotationViewを使うことで、AnnotationViewを再利用することが可能
+        let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: CustomAnnotationView.identifier) as? CustomAnnotationView
+        annotationView?.setup()
+        return annotationView
+    }
+    
+    func localSearch(request: MKLocalSearch.Request) {
+        //ローカル検索を実行する。
+        let localSearch:MKLocalSearch = MKLocalSearch(request: request)
+        localSearch.start(completionHandler: {(result, err) in
+         
+            for placemark in (result?.mapItems)! {
+                if let err = err {
+                    print("エラー -> \(err)")
+                    return
+                }
+                guard let location = placemark.placemark.location else {return}
+                let dic = [
+                    "name":placemark.placemark.name ?? "なし",
+                    "title":placemark.placemark.title ?? "なし",
+                    "coordinate":placemark.placemark.coordinate,
+                    "locality":placemark.placemark.locality ?? "なし"
+                ] as [String : Any]
+                let place = PlaceMark(dic: dic)
+                self.placeMarks.append(place)
+                self.setPin(location: location, pinTitle: place.name ?? "")
+            }
+        })
+    }
     
     // 許可を求めるためのdelegateメソッド
     func locationManager(_ manager: CLLocationManager,didChangeAuthorization status: CLAuthorizationStatus) {
@@ -243,13 +307,15 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
         }
     }
     
-    //検索をかけた際に、ハーフモーダルで条件にヒットした店舗を表示
-    private func halfModal(url: String) {
+    //検索をかけた際に、ハーフモーダルで条件にヒットした店舗を表示(SearchListTVは渡したデータを表示するだけの機能しか持たせないようにする)
+    private func halfModal(shops: [Shop]) {
         let storyboard = UIStoryboard(name: "SearchList", bundle: nil)
         let searchListVC = storyboard.instantiateViewController(withIdentifier: "SearchListTableViewController") as! SearchListTableViewController
-        searchListVC.url = url
+        searchListVC.shops = shops
         
         halfModalVC.isRemovalInteractionEnabled = true
+        halfModalVC.surfaceView.layer.cornerRadius = 10
+        halfModalVC.surfaceView.backgroundColor = .clear
         halfModalVC.set(contentViewController: searchListVC)
         halfModalVC.addPanel(toParent: self)
         
@@ -274,11 +340,59 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
 
         return url
     }
-
+    
+    //URLからJSONデータを取得し、成功すればハーフモーダルを呼び出し、ピンをセット
+    func getDataAsJSON(url: String) {
+        let request = AF.request(url)
+        request.responseJSON { (response) in
+            switch response.result {
+            case .success:
+                do {
+                    print("デコードに成功しました")
+                    self.hotpepper = try self.decoder.decode(Hotpepper.self, from: response.data!)
+                    print("self.hotpepper?.results.shops --> \(self.hotpepper?.results.shops)")
+                    self.shops = (self.hotpepper?.results.shops)!
+                    
+                    
+                    print("shopの数は\(self.shops.count)件です。")
+                    //shopの数だけピンを立てる
+                    for shop in self.shops {
+                        let location = CLLocation(latitude: shop.lat, longitude: shop.lng)
+                        print("\(shop.name)の緯度経度はこちら -> \(location)")
+                        self.setPin(location: location, pinTitle: shop.name)
+                    }
+                    
+                    
+                    //ハーフモーダルを呼び出してAPIを叩く
+                    self.halfModal(shops: self.shops)
+                   
+                } catch {
+                    print("デコードに失敗しました")
+                    HUD.hide()
+                }
+            case .failure(let error):
+                print("error", error)
+                HUD.hide()
+            }
+        }
+    }
 }
 
 // カスタムアノテーションビューの定義
+// クラスター化されたAnnotationViewをカスタムクラスとして定義
 class CustomAnnotationView: MKMarkerAnnotationView {
+    
+    static let identifier = "CustomAnnotationView"
+    
+    override func prepareForDisplay() {
+        super.prepareForDisplay()
+        image = UIImage.pinImage
+    }
+    
+    //クラスタリングされるように設定
+    func setup() {
+        clusteringIdentifier = "StationCluster"
+    }
     
     override var annotation: MKAnnotation? {
         didSet {
@@ -306,6 +420,79 @@ class CustomAnnotationView: MKMarkerAnnotationView {
         let index = Int(annotation.title ?? "") ?? 0
         let remainder = index % colors.count
         return colors[remainder]
+    }
+}
+
+
+// クラスター化されたピンのAnnotationView
+class CustomeClusterAnnotationView: MKAnnotationView {
+    static let identifier = "CustomeClusterAnnotationView"
+
+    override func prepareForDisplay() {
+        super.prepareForDisplay()
+        if let clusterAnnotation = annotation as? MKClusterAnnotation {
+            image = UIImage.clusterImage(count: clusterAnnotation.memberAnnotations.count)
+        }
+    }
+}
+
+
+
+extension UIImage {
+    //ピンの画像
+    static let pinImage: UIImage? = {
+        let size: CGFloat = 16.0
+        let contextSize = CGSize(width: size, height: size)
+        UIGraphicsBeginImageContextWithOptions(contextSize, false, 0)
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        let fillColor = UIColor.green
+        let borderColor = UIColor.blue
+        let circlePath = UIBezierPath(ovalIn: CGRect(x: 0.0, y: 0.0, width: size, height: size))
+        fillColor.setFill()
+        circlePath.fill()
+        borderColor.setStroke()
+        circlePath.stroke()
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }()
+    
+    /// クラスター化されたピンの画像を生成する
+    /// - Parameters:
+    ///   - count: 中央に表示する数字
+    /// - Returns: クラスター化されたピンの画像
+    static func clusterImage(count: Int) -> UIImage? {
+        let size: CGFloat = 33.0
+        let contextSize = CGSize(width: size, height: size)
+        UIGraphicsBeginImageContextWithOptions(contextSize, false, 0)
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        let fillColor = UIColor.red
+        let circlePath = UIBezierPath(ovalIn: CGRect(x: 0.0, y: 0.0, width: size, height: size))
+        fillColor.setFill()
+        circlePath.fill()
+
+        let text = count.description
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 15.0, weight: UIFont.Weight.bold),
+            .foregroundColor: UIColor.white,
+        ]
+        let textRect = CGRect(origin: CGPoint.zero, size: CGSize(width: size, height: size))
+        let textBoundingRect = text.boundingRect(
+            with: CGSize(width: textRect.width, height: textRect.height),
+            options: .usesLineFragmentOrigin,
+            attributes: attributes, context: nil)
+
+        let finalRect = CGRect(
+            x: textRect.midX - textBoundingRect.width / 2,
+            y: textRect.midY - textBoundingRect.height / 2,
+            width: textBoundingRect.width,
+            height: textBoundingRect.height
+        )
+        text.draw(in: finalRect, withAttributes: attributes)
+
+        return UIGraphicsGetImageFromCurrentImageContext()
     }
 }
 

@@ -44,6 +44,7 @@
 		485C003226CF865400F25E70 /* standardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485C003126CF865400F25E70 /* standardViewController.swift */; };
 		488B0059277ABD9B006DAE7C /* key.plist in Resources */ = {isa = PBXBuildFile; fileRef = 488B0058277ABD9B006DAE7C /* key.plist */; };
 		488B005C277AC35F006DAE7C /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488B005B277AC35F006DAE7C /* Key.swift */; };
+		488B0069277B2825006DAE7C /* PlaceMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488B0068277B2825006DAE7C /* PlaceMark.swift */; };
 		48970885276ADADC00A82DD6 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48970884276ADADC00A82DD6 /* UIImageExtension.swift */; };
 		489CD2B926E0BB3C00232B55 /* Savings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 489CD2B826E0BB3C00232B55 /* Savings.storyboard */; };
 		489CD2BD26E0BB7400232B55 /* SavingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489CD2BC26E0BB7400232B55 /* SavingsViewController.swift */; };
@@ -66,9 +67,7 @@
 		48E810AA26E1C87D00B717D6 /* ShowImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E810A926E1C87D00B717D6 /* ShowImageViewController.swift */; };
 		48E810AD26E33B7100B717D6 /* PastMoaiDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48E810AC26E33B7100B717D6 /* PastMoaiDetails.storyboard */; };
 		48E810B026E33BA400B717D6 /* PastMoaiDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E810AF26E33BA400B717D6 /* PastMoaiDetailsViewController.swift */; };
-		48EA09322779FA750038E6DE /* Film.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EA09312779FA750038E6DE /* Film.swift */; };
 		48EA09352779FAE90038E6DE /* Hotpepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EA09342779FAE90038E6DE /* Hotpepper.swift */; };
-		48EA09382779FB020038E6DE /* PlaceMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EA09372779FB020038E6DE /* PlaceMark.swift */; };
 		48EA09422779FC590038E6DE /* SearchListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EA09412779FC590038E6DE /* SearchListTableViewController.swift */; };
 		48EA096A2779FE7A0038E6DE /* SearchList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48EA09692779FE7A0038E6DE /* SearchList.storyboard */; };
 		48EA096D277A00530038E6DE /* RecordSaving.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48EA096C277A00520038E6DE /* RecordSaving.storyboard */; };
@@ -116,6 +115,7 @@
 		485C003126CF865400F25E70 /* standardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = standardViewController.swift; sourceTree = "<group>"; };
 		488B0058277ABD9B006DAE7C /* key.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = key.plist; sourceTree = "<group>"; };
 		488B005B277AC35F006DAE7C /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
+		488B0068277B2825006DAE7C /* PlaceMark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceMark.swift; sourceTree = "<group>"; };
 		48970884276ADADC00A82DD6 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		489CD2B826E0BB3C00232B55 /* Savings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Savings.storyboard; sourceTree = "<group>"; };
 		489CD2BC26E0BB7400232B55 /* SavingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsViewController.swift; sourceTree = "<group>"; };
@@ -140,9 +140,7 @@
 		48E810A926E1C87D00B717D6 /* ShowImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowImageViewController.swift; sourceTree = "<group>"; };
 		48E810AC26E33B7100B717D6 /* PastMoaiDetails.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PastMoaiDetails.storyboard; sourceTree = "<group>"; };
 		48E810AF26E33BA400B717D6 /* PastMoaiDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastMoaiDetailsViewController.swift; sourceTree = "<group>"; };
-		48EA09312779FA750038E6DE /* Film.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Film.swift; sourceTree = "<group>"; };
 		48EA09342779FAE90038E6DE /* Hotpepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hotpepper.swift; sourceTree = "<group>"; };
-		48EA09372779FB020038E6DE /* PlaceMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceMark.swift; sourceTree = "<group>"; };
 		48EA09412779FC590038E6DE /* SearchListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchListTableViewController.swift; sourceTree = "<group>"; };
 		48EA09692779FE7A0038E6DE /* SearchList.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SearchList.storyboard; sourceTree = "<group>"; };
 		48EA096C277A00520038E6DE /* RecordSaving.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RecordSaving.storyboard; sourceTree = "<group>"; };
@@ -285,10 +283,9 @@
 				48E7FD5D2690C40400E4FF2B /* MoaiRecord.swift */,
 				481D2A1326AE7461007BF229 /* DateUtils.swift */,
 				4854E908273AC86B006D660F /* Savings.swift */,
+				488B0068277B2825006DAE7C /* PlaceMark.swift */,
 				48970884276ADADC00A82DD6 /* UIImageExtension.swift */,
-				48EA09312779FA750038E6DE /* Film.swift */,
 				48EA09342779FAE90038E6DE /* Hotpepper.swift */,
-				48EA09372779FB020038E6DE /* PlaceMark.swift */,
 				488B005B277AC35F006DAE7C /* Key.swift */,
 			);
 			path = Model;
@@ -533,6 +530,7 @@
 			files = (
 				48C608522647828E002D1258 /* AppDelegate.swift in Sources */,
 				4811BB6B2763507400210091 /* PersonalSavingViewController.swift in Sources */,
+				488B0069277B2825006DAE7C /* PlaceMark.swift in Sources */,
 				48DE01112683103C00B4E62E /* MoaiBaseViewController.swift in Sources */,
 				485C003226CF865400F25E70 /* standardViewController.swift in Sources */,
 				485838652649529A00274507 /* ChatInputAccessoryView.swift in Sources */,
@@ -541,7 +539,6 @@
 				489CD2BD26E0BB7400232B55 /* SavingsViewController.swift in Sources */,
 				485838572647E8BD00274507 /* ChatRoomViewController.swift in Sources */,
 				48EA09352779FAE90038E6DE /* Hotpepper.swift in Sources */,
-				48EA09382779FB020038E6DE /* PlaceMark.swift in Sources */,
 				48538EE8264B82D400871BB0 /* UserListViewController.swift in Sources */,
 				48E810B026E33BA400B717D6 /* PastMoaiDetailsViewController.swift in Sources */,
 				48EA09422779FC590038E6DE /* SearchListTableViewController.swift in Sources */,
@@ -560,7 +557,6 @@
 				48231783265375F200257189 /* Message.swift in Sources */,
 				48970885276ADADC00A82DD6 /* UIImageExtension.swift in Sources */,
 				4854E90F273F6463006D660F /* RecordSavingViewController.swift in Sources */,
-				48EA09322779FA750038E6DE /* Film.swift in Sources */,
 				48E810AA26E1C87D00B717D6 /* ShowImageViewController.swift in Sources */,
 				48ABEA062647E27500B40323 /* UIColorExtension.swift in Sources */,
 				4804137C26A7EC2A004F5BE0 /* JudgeUserInMoaiViewController.swift in Sources */,

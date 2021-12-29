@@ -15,16 +15,15 @@ class SearchListTableViewController: UIViewController {
     @IBOutlet weak var hotpepperListTableView: UITableView!
     
     
-    var articles = [[String: AnyObject]]()
-    let baseURL = "https://qiita.com/api/v2/items"
+//    var articles = [[String: AnyObject]]()
+//    let baseURL = "https://qiita.com/api/v2/items"
 
-    var url:String = ""
-//    let sampleURL = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=2de3f74a5a1d3e05&large_area=Z011&format=json"
-    let sampleURL = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=2de3f74a5a1d3e05&keyword=%E7%B3%B8%E6%BA%80%E3%80%80%E9%82%A3%E8%A6%87%E3%80%80%E3%83%A9%E3%83%BC%E3%83%A1%E3%83%B3&format=json"
-    let sampleURL2 = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=2de3f74a5a1d3e05&keyword=糸満%E3%80%80ラーメン&format=json"
-    
-    let decoder: JSONDecoder = JSONDecoder()
-    var hotpepper:Hotpepper?
+//    var url:String = ""
+//    let sampleURL = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=2de3f74a5a1d3e05&keyword=%E7%B3%B8%E6%BA%80%E3%80%80%E9%82%A3%E8%A6%87%E3%80%80%E3%83%A9%E3%83%BC%E3%83%A1%E3%83%B3&format=json"
+//    let sampleURL2 = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=2de3f74a5a1d3e05&keyword=糸満%E3%80%80ラーメン&format=json"
+//
+//    let decoder: JSONDecoder = JSONDecoder()
+//    var hotpepper:Hotpepper?
     var shops:[Shop] = []
     
     override func viewDidLoad() {
@@ -34,32 +33,32 @@ class SearchListTableViewController: UIViewController {
         self.hotpepperListTableView.delegate = self
         self.hotpepperListTableView.dataSource = self
 
-        HUD.flash(.progress)
-        getDataAsJSON(url: url)
+//        HUD.flash(.progress)
+//        getDataAsJSON(url: url)
     }
     
     //Get JSON
-    func getDataAsJSON(url: String) {
-        let request = AF.request(url)
-        request.responseJSON { (response) in
-            switch response.result {
-            case .success:
-                do {
-                    print("デコードに成功しました")
-                    self.hotpepper = try self.decoder.decode(Hotpepper.self, from: response.data!)
-                    print("self.hotpepper --> \(self.hotpepper)")
-                    self.shops = (self.hotpepper?.results.shop)!
-                    self.hotpepperListTableView.reloadData()
-                } catch {
-                    print("デコードに失敗しました")
-                    HUD.hide()
-                }
-            case .failure(let error):
-                print("error", error)
-                HUD.hide()
-            }
-        }
-    }
+//    func getDataAsJSON(url: String) {
+//        let request = AF.request(url)
+//        request.responseJSON { (response) in
+//            switch response.result {
+//            case .success:
+//                do {
+//                    print("デコードに成功しました")
+//                    self.hotpepper = try self.decoder.decode(Hotpepper.self, from: response.data!)
+//                    print("self.hotpepper --> \(self.hotpepper)")
+//                    self.shops = (self.hotpepper?.results.shops)!
+//                    self.hotpepperListTableView.reloadData()
+//                } catch {
+//                    print("デコードに失敗しました")
+//                    HUD.hide()
+//                }
+//            case .failure(let error):
+//                print("error", error)
+//                HUD.hide()
+//            }
+//        }
+//    }
 }
 
 extension SearchListTableViewController: UITableViewDelegate, UITableViewDataSource {

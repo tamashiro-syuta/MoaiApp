@@ -21,11 +21,11 @@ struct Hotpepper: Codable {
 
 struct ResultsData: Codable {
     let resultsReturned: String
-    let shop: [Shop]
+    let shops: [Shop]
     
     enum CodingKeys: String, CodingKey {
         case resultsReturned = "results_returned"
-        case shop = "shop"
+        case shops = "shop"
     }
 }
 
@@ -34,8 +34,8 @@ struct Shop: Codable {
     let name: String
     let logoImage: String
     let address: String
-    let lat: Float
-    let lng: Float
+    let lat: Double
+    let lng: Double
     
     //スネークケースから、キャメルケースに変換するため
     enum CodingKeys: String, CodingKey {

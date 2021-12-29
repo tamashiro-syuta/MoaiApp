@@ -2,7 +2,7 @@
 //  PlaceMark.swift
 //  MoaiApp
 //
-//  Created by 玉城秀大 on 2021/12/27.
+//  Created by 玉城秀大 on 2021/12/25.
 //
 
 import Foundation
