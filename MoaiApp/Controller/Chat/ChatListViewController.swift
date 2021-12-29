@@ -18,19 +18,28 @@ class ChatListViewController: standardViewController {
     
     @IBOutlet weak var chatListTableView: UITableView!
     
+    //最初のviewWillAppearでメソッドが呼ばれないように
+    var first = 1
+    
     
     override func viewDidLoad() {
-        print("self.pastRecordArray?.countは\(self.pastRecordArray?.count)")
         print("self.userIDは\(self.userID)")
         super.viewDidLoad()
-        fetchLoginUserInfo()
-        print("self.moai?.groupNameはこちら　→ \(self.moai?.groupName)")
+//        fetchLoginUserInfo()
         
         //1秒後に処理
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             //ここに処理
             self.setUpViews()
             //chatListViewが呼ばれる度にchatroomの情報を更新していると無駄に通信して良くないので、viewWillAppearではなく、viewDidLoadに記載
+            self.fetchChatroomsInfoFromFireStore()
+            self.first += 1
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        if first != 1 {
             self.fetchChatroomsInfoFromFireStore()
         }
     }
@@ -139,63 +148,63 @@ class ChatListViewController: standardViewController {
         navigationItem.title = "トーク"
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
-        let rightBarButton = UIBarButtonItem(title: "新規チャット", style: .plain, target: self, action: #selector(tappedNavRightBarButton))
-        let logoutBarButton = UIBarButtonItem(title: "ログアウト", style: .plain, target: self, action: #selector(tappedLogoutButton))
+//        let rightBarButton = UIBarButtonItem(title: "新規チャット", style: .plain, target: self, action: #selector(tappedNavRightBarButton))
+//        let logoutBarButton = UIBarButtonItem(title: "ログアウト", style: .plain, target: self, action: #selector(tappedLogoutButton))
         
         //navigationBarの右側にボタンをコードで追加
-        navigationItem.rightBarButtonItem = rightBarButton
+//        navigationItem.rightBarButtonItem = rightBarButton
         navigationItem.rightBarButtonItem?.tintColor = .white
-        navigationItem.leftBarButtonItem = logoutBarButton
-        navigationItem.leftBarButtonItem?.tintColor = .white
+//        navigationItem.leftBarButtonItem = logoutBarButton
+//        navigationItem.leftBarButtonItem?.tintColor = .white
 
     }
     
-    @IBAction func tappedLogoutButton(_ sender: Any) {
-        //ログアウトは、必ずdo catch構文で書かないといけない
-        do {
-            try Auth.auth().signOut()
-            pushLoginViewController()
-        } catch {
-            print("ログアウトに失敗しました。\(error)")
-        }
-    }
-    
-    @IBAction func tappedNavRightBarButton(_ sender: Any) {
-        //新規チャット画面への画面遷移
-        let storyborad = UIStoryboard.init(name: "UserList", bundle: nil)
-        let userListViewController = storyborad.instantiateViewController(withIdentifier: "UserListViewController")
-        //画面遷移先のuserListViewControllerにナビゲーションバーを追加
-        let nav = UINavigationController(rootViewController: userListViewController)
-        self.present(nav, animated: true, completion: nil)
-    }
+//    @IBAction func tappedLogoutButton(_ sender: Any) {
+//        //ログアウトは、必ずdo catch構文で書かないといけない
+//        do {
+//            try Auth.auth().signOut()
+//            pushLoginViewController()
+//        } catch {
+//            print("ログアウトに失敗しました。\(error)")
+//        }
+//    }
+//
+//    @IBAction func tappedNavRightBarButton(_ sender: Any) {
+//        //新規チャット画面への画面遷移
+//        let storyborad = UIStoryboard.init(name: "UserList", bundle: nil)
+//        let userListViewController = storyborad.instantiateViewController(withIdentifier: "UserListViewController")
+//        //画面遷移先のuserListViewControllerにナビゲーションバーを追加
+//        let nav = UINavigationController(rootViewController: userListViewController)
+//        self.present(nav, animated: true, completion: nil)
+//    }
 
     
-    private func pushLoginViewController() {
-        let storyboard = UIStoryboard(name: "SignUp", bundle: nil)
-        let signUpViewController = storyboard.instantiateViewController(withIdentifier: "SignUpViewController")
-        //signUpViewControllerをナビゲーションの最初の画面にし、それを定数navに格納
-        let nav = UINavigationController(rootViewController: signUpViewController)
-        nav.modalPresentationStyle = .fullScreen
-        self.present(nav, animated: true, completion: nil)
-    }
+//    private func pushLoginViewController() {
+//        let storyboard = UIStoryboard(name: "SignUp", bundle: nil)
+//        let signUpViewController = storyboard.instantiateViewController(withIdentifier: "SignUpViewController")
+//        //signUpViewControllerをナビゲーションの最初の画面にし、それを定数navに格納
+//        let nav = UINavigationController(rootViewController: signUpViewController)
+//        nav.modalPresentationStyle = .fullScreen
+//        self.present(nav, animated: true, completion: nil)
+//    }
 
-    private func fetchLoginUserInfo() {
-        guard let uid = Auth.auth().currentUser?.uid else {return}
-        //ログインしているユーザーの情報だけを取得
-        db.collection("users").document(uid).getDocument { (snapshot, err) in
-            if let err = err {
-                print("ユーザー情報の取得に失敗しました。\(err)")
-                return
-            }
-            //snapshotのnilチェック
-            guard let snapshot = snapshot,let dic = snapshot.data() else {return}
-            let user = User(dic: dic)
-            self.user = user
-            //模合の情報を取得
-            self.fetchUsersMoaiInfo(user: self.user!)
-            
-        }
-    }
+//    private func fetchLoginUserInfo() {
+//        guard let uid = Auth.auth().currentUser?.uid else {return}
+//        //ログインしているユーザーの情報だけを取得
+//        db.collection("users").document(uid).getDocument { (snapshot, err) in
+//            if let err = err {
+//                print("ユーザー情報の取得に失敗しました。\(err)")
+//                return
+//            }
+//            //snapshotのnilチェック
+//            guard let snapshot = snapshot,let dic = snapshot.data() else {return}
+//            let user = User(dic: dic)
+//            self.user = user
+//            //模合の情報を取得
+//            self.fetchUsersMoaiInfo(user: self.user!)
+//
+//        }
+//    }
 
 }
 
