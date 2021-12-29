@@ -10,7 +10,6 @@ import MapKit
 import CoreLocation
 import FloatingPanel
 import Alamofire
-import PKHUD
 
 // SearchListTableViewControllerDelegate は、モーダルから値を受け取るためのデリゲート
 
@@ -86,22 +85,6 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
         //表示している経路を削除
         self.map.removeOverlays(self.map.overlays)
         
-        
-        
-        
-        
-        
-        
-        
-        //ここから下の処理をメソッド化し、shopsに値が入ったらタイミングで発火させる
-        
-        
-        
-        
-        
-        
-        
-        
         //入力された文字を取り出す
         if searchBar.text != "" {
             let searchKey = searchBar.text
@@ -121,28 +104,6 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
 
             //検索範囲はマップビューと同じにする。
             request.region = map.region
-                    
-//            //ローカル検索を実行する。
-//            let localSearch:MKLocalSearch = MKLocalSearch(request: request)
-//            localSearch.start(completionHandler: {(result, err) in
-//
-//                for placemark in (result?.mapItems)! {
-//                    if let err = err {
-//                        print("エラー -> \(err)")
-//                        return
-//                    }
-//                    guard let location = placemark.placemark.location else {return}
-//                    let dic = [
-//                        "name":placemark.placemark.name ?? "なし",
-//                        "title":placemark.placemark.title ?? "なし",
-//                        "coordinate":placemark.placemark.coordinate,
-//                        "locality":placemark.placemark.locality ?? "なし"
-//                    ] as [String : Any]
-//                    let place = PlaceMark(dic: dic)
-//                    self.placeMarks.append(place)
-//                    self.setPin(location: location, pinTitle: place.name ?? "")
-//                }
-//            })
         }
     }
     
@@ -153,12 +114,9 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
         //ピンの置く場所の緯度経度を設定
         pin.coordinate = targetCoordinate
         pin.title = pinTitle
-//        if pinTitle == "現在地" {
-//
-//        }
         //ピンを設置
         self.map.addAnnotation(pin)
-        
+
         //現在地の情報があれば、現在地と　ヒットした位置情報が画面に収まるように調整する
         //そうじゃなければ、ヒットした位置情報の付近を中心に設定する
         guard let currentPoint = locationManager.location else {return}
@@ -262,30 +220,6 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
         return annotationView
     }
     
-    func localSearch(request: MKLocalSearch.Request) {
-        //ローカル検索を実行する。
-        let localSearch:MKLocalSearch = MKLocalSearch(request: request)
-        localSearch.start(completionHandler: {(result, err) in
-         
-            for placemark in (result?.mapItems)! {
-                if let err = err {
-                    print("エラー -> \(err)")
-                    return
-                }
-                guard let location = placemark.placemark.location else {return}
-                let dic = [
-                    "name":placemark.placemark.name ?? "なし",
-                    "title":placemark.placemark.title ?? "なし",
-                    "coordinate":placemark.placemark.coordinate,
-                    "locality":placemark.placemark.locality ?? "なし"
-                ] as [String : Any]
-                let place = PlaceMark(dic: dic)
-                self.placeMarks.append(place)
-                self.setPin(location: location, pinTitle: place.name ?? "")
-            }
-        })
-    }
-    
     // 許可を求めるためのdelegateメソッド
     func locationManager(_ manager: CLLocationManager,didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
@@ -352,31 +286,24 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
                     self.hotpepper = try self.decoder.decode(Hotpepper.self, from: response.data!)
                     print("self.hotpepper?.results.shops --> \(self.hotpepper?.results.shops)")
                     self.shops = (self.hotpepper?.results.shops)!
-                    
-                    
-                    print("shopの数は\(self.shops.count)件です。")
                     //shopの数だけピンを立てる
                     for shop in self.shops {
                         let location = CLLocation(latitude: shop.lat, longitude: shop.lng)
-                        print("\(shop.name)の緯度経度はこちら -> \(location)")
                         self.setPin(location: location, pinTitle: shop.name)
                     }
-                    
-                    
                     //ハーフモーダルを呼び出してAPIを叩く
                     self.halfModal(shops: self.shops)
                    
                 } catch {
                     print("デコードに失敗しました")
-                    HUD.hide()
                 }
             case .failure(let error):
                 print("error", error)
-                HUD.hide()
             }
         }
     }
 }
+
 
 // カスタムアノテーションビューの定義
 // クラスター化されたAnnotationViewをカスタムクラスとして定義
