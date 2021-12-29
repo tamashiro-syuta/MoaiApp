@@ -153,7 +153,7 @@ class ChatListViewController: standardViewController {
         
         //navigationBarの右側にボタンをコードで追加
 //        navigationItem.rightBarButtonItem = rightBarButton
-        navigationItem.rightBarButtonItem?.tintColor = .white
+//        navigationItem.rightBarButtonItem?.tintColor = .white
 //        navigationItem.leftBarButtonItem = logoutBarButton
 //        navigationItem.leftBarButtonItem?.tintColor = .white
 
