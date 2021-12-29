@@ -18,6 +18,7 @@ class SavingsViewController: standardViewController {
     @IBOutlet weak var finalSavingLabel: UILabel!
     @IBOutlet weak var personInChargeLabel: UILabel!
     @IBOutlet weak var savingsTableView: UITableView!
+    @IBOutlet weak var memberAndLastSavingSV: UIStackView!
     @IBOutlet weak var memberLabel: UILabel!
     @IBOutlet weak var lastSavingLabel: UILabel!
     
@@ -38,7 +39,7 @@ class SavingsViewController: standardViewController {
         
         setupViews()
         
-        savingsTableView.isScrollEnabled = true
+        savingsTableView.isScrollEnabled = false
         savingsTableView.delegate = self
         savingsTableView.dataSource = self
 
@@ -50,12 +51,12 @@ class SavingsViewController: standardViewController {
         self.navigationItem.title = "積み立て"
         
         amountPerPersonLabel.layer.borderWidth = 3
-        amountPerPersonLabel.layer.borderColor = UIColor.black.cgColor
+        amountPerPersonLabel.layer.borderColor = UIColor.textColor2().cgColor
         amountPerPersonLabel.layer.cornerRadius = 20
         
-        allSavingsLabel.addBorder(width: 1.5, color: .black, position: .bottom)
-        finalSavingLabel.addBorder(width: 1.5, color: .black, position: .bottom)
-        personInChargeLabel.addBorder(width: 1.5, color: .black, position: .bottom)
+        allSavingsLabel.addBorder(width: 1.5, color: UIColor.textColor2(), position: .bottom)
+        finalSavingLabel.addBorder(width: 1.5, color: UIColor.textColor2(), position: .bottom)
+        personInChargeLabel.addBorder(width: 1.5, color: UIColor.textColor2(), position: .bottom)
         
         let lastMonth = DateUtils.yyyyMMFromDate(date: self.moai!.finalMonth as Date)
         let totalSavingAmount = self.moai!.savingAmount * self.savingMember.count
@@ -65,8 +66,11 @@ class SavingsViewController: standardViewController {
         self.finalSavingLabel.text = "最終月  " + lastMonth
         self.personInChargeLabel.text = "幹事 " +  savingOrganizer
         
-        memberLabel.layer.borderWidth = 1.5
-        lastSavingLabel.layer.borderWidth = 1.5
+//        memberLabel.layer.borderWidth = 1.5
+//        lastSavingLabel.layer.borderWidth = 1.5
+        self.memberAndLastSavingSV.layer.cornerRadius = 10
+        self.memberAndLastSavingSV.layer.borderWidth = 4
+        self.memberAndLastSavingSV.layer.borderColor = UIColor.textColor2().cgColor
 
         let recordSavingDataButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(addBarButtonTapped(_:)))
         recordSavingDataButton.tintColor = .textColor()
@@ -88,7 +92,12 @@ class SavingsViewController: standardViewController {
 extension SavingsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("savingMember.count -> \(savingMember.count)")
         return savingMember.count
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

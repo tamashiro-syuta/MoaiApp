@@ -48,19 +48,14 @@ class PastMoaiViewController: standardViewController {
         
         //模合を　過去にしたことがあるかの判定条件
         if self.pastRecordArray != nil && self.pastRecordArray?.count != 0 {
-            //模合をしたことがある
-//            self.fetchPastPicture()
-            
-            print("viewを作り始めます")
             //viewを表示
+            self.setupView()
             self.selectedPastMoaiNumber = self.pastRecordArray!.count - 1
             self.setLayout(backnumber: self.selectedPastMoaiNumber)
             self.fetchPastPicture(pastMoaiDate: self.pastMoaiDate!)
             
             HUD.flash(.progress, onView: view, delay: 1.5) { _ in
-                
-                self.setupView()
-                
+                self.setDelegates()
                 let layout = UICollectionViewFlowLayout()
                 layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
                 layout.minimumInteritemSpacing = 3
@@ -70,19 +65,9 @@ class PastMoaiViewController: standardViewController {
             }
         }else {
             //模合をしたことがない
-            
             //上からBlurViewをかけて利用を制限
             self.addBlurEffect()
-            
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super .viewWillAppear(true)
-        
-        //レイアウトの更新
-//        resetLayout(backnumber: )
-        
     }
     
     private func setupView() {
@@ -90,10 +75,11 @@ class PastMoaiViewController: standardViewController {
         self.pastMoaiInfoLabel.layer.borderWidth = 2.0    // 枠線の幅
         self.pastMoaiInfoLabel.layer.borderColor = UIColor.black.cgColor   // 枠線の色
         addFileButton.layer.cornerRadius = addFileButton.bounds.height / 3
-        
+    }
+    
+    private func setDelegates() {
         collectionView.delegate = self
         collectionView.dataSource = self
-
     }
     
     //画像のアップロード
@@ -181,7 +167,6 @@ class PastMoaiViewController: standardViewController {
             print("pastRecordArrayにはちゃんと値があるからボタンとして機能させるンゴよ")
             filterButton.addTarget(self, action: #selector(tappedTitleButton), for: .touchUpInside)//タップされた時に関数動く
         }
-//        filterButton.addTarget(self, action: #selector(tappedTitleButton), for: .touchUpInside)//タップされた時に関数動く
         view.addSubview(filterButton)//メインのviewにviewをのせる
         //タイトルとなるViewを生成
         let label = UILabel(frame: CGRect(x: 0, y: 13, width: 200, height: 18))
@@ -258,10 +243,6 @@ class PastMoaiViewController: standardViewController {
                 return
             }else {
                 //エラーが出ない時点でdataには値が入っているから強制アンラップしても大丈夫
-                print("===================================")
-                print("data -> \(data)")
-                print("type(of: data) -> \(type(of: data))")
-                print("===================================")
                 guard let image = UIImage(data: data!)?.jpegData(compressionQuality: 0.1) else {
                     print("何か知らんけど、UIImage型に変換できんかったわ")
                     return
