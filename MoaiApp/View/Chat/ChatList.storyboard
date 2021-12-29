@@ -85,18 +85,7 @@
                             <constraint firstItem="7xw-ar-VEJ" firstAttribute="bottom" secondItem="u7j-xc-53m" secondAttribute="bottom" id="WzA-Ba-kv9"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="gGS-tM-QHJ">
-                        <barButtonItem key="leftBarButtonItem" title="ログアウト" id="zSB-Gy-FUC">
-                            <connections>
-                                <action selector="tappedNavRightBarButton:" destination="RWv-3X-qfG" id="0es-7O-CBj"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="新規チャット" id="or2-4k-Xe4">
-                            <connections>
-                                <action selector="tappedLogoutButton:" destination="RWv-3X-qfG" id="4gc-NM-ZWv"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="gGS-tM-QHJ"/>
                     <connections>
                         <outlet property="chatListTableView" destination="u7j-xc-53m" id="seM-Tc-rmg"/>
                     </connections>
