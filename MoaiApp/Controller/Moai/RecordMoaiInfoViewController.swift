@@ -64,6 +64,16 @@ class RecordMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         
         self.setupCalendar()
         
+        //viewの調整
+        dateStackView.layer.cornerRadius = 10
+        getMoneyPersonStackView.layer.cornerRadius = 10
+        locationStackView.layer.cornerRadius = 10
+        startTimeStackView.layer.cornerRadius = 10
+        paidPeopleStackView.layer.cornerRadius = 10
+        noteStackView.layer.cornerRadius = 10
+        recordButton.layer.cornerRadius = 10
+        
+        
         //PaidPeopleSVの高さを０に設定し、初期状態では見えなくする
         let paidPeopleSVHeight:CGFloat = 0
         paidPeopleSVHeightConstraint.constant = paidPeopleSVHeight
