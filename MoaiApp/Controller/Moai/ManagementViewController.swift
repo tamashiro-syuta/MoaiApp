@@ -47,6 +47,8 @@ class ManagementViewController: standardViewController {
     
     var membersWithDate: [ [String:Any] ] = []
     
+    var newMembers:[ [String:Any] ] = []
+    
     
     //viewが初めて呼ばれた１回目だけ呼ばれるメソッド
     override func viewDidLoad() {
@@ -117,6 +119,9 @@ class ManagementViewController: standardViewController {
         self.getMoneyPersonLabel.layer.borderWidth = 4
         self.getMoneyPersonLabel.layer.borderColor = UIColor.textColor2().cgColor
         
+        //詳細画面への画面遷移時に、参加不参加ボタンをタップしてないとnewMembersの値が空になってエラーが起きるため
+        self.newMembers = self.moai!.members
+        
     }
     
     //getMoneyPeopleSVの高さを模合のメンバー数に応じて動的に処理
@@ -162,6 +167,7 @@ class ManagementViewController: standardViewController {
 
         detailsNextMoaiVC.moai = self.moai
         detailsNextMoaiVC.nextMoai = self.nextMoai
+        detailsNextMoaiVC.newMembers = self.newMembers
 //        detailsNextMoaiVC.judgeEntryArray = self.nextMoaiEntryArray
 //        detailsNextMoaiVC.moaiMenbersNameList = self.moaiMembersNameList
         navigationController?.pushViewController(detailsNextMoaiVC, animated: true)
@@ -183,12 +189,13 @@ class ManagementViewController: standardViewController {
     //ユーザーの"next"が1(true)か2(false)か判別すれば良い
     private func entryOrNot(Bool:Bool) {
         
-        var newMembers:[ [String:Any] ] = self.moai!.members
+        self.newMembers = self.moai!.members
         
         for i in 0..<(self.moai!.members.count) {
             if self.moai?.members[i]["id"] as? String == userID {
-                newMembers[i]["next"] = Bool
-                print("newMembers[i][next]  -->  \(newMembers[i]["next"])")
+                let next = Bool ? 1 : 2
+                newMembers[i]["next"] = next
+                print("newMembers[\(i)][next]  -->  \(newMembers[i]["next"])")
             }
         }
         

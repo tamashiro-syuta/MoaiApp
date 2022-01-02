@@ -2,7 +2,7 @@
 //  detailsNextMoaiViewController.swift
 //  MoaiApp
 //
-//  Created by 玉城秀大 on 2021/07/17.
+//  Created by 玉城秀大 on 2022/01/03.
 //
 
 import UIKit
@@ -11,60 +11,58 @@ class detailsNextMoaiViewController: UIViewController {
     
     var moai:Moai?
     var nextMoai:MoaiRecord?
-    var judgeEntryArray: [Bool] = []  //self.moaiのnextから取得できるので消去
-//    var moaiMenbersNameList:[String]?
+    var judgeEntryArray: [Bool] = []
+    var newMembers: [ [String:Any] ] = []
     
     var EntryMenbersArray: [String]?
     var notEntryMenbersArray: [String]?
     
-    @IBOutlet weak var ParentStackView: UIStackView!
-    @IBOutlet weak var stackView1: UIStackView!
-    @IBOutlet weak var stackView3: UIStackView!
-    @IBOutlet weak var stackView4: UIStackView!
+    
+    typealias MySectionRow = (mySection: String, myRow: Array<String>)
+    var mySectionRows = [MySectionRow]()
+    var selectedClass = ""
+    var selectedPerson = ""
     
     
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var locationLabel: UILabel!
-    @IBOutlet weak var entryTableView: UITableView!
-    @IBOutlet weak var notEntryTableView: UITableView!
     
-    
+    let sections = ["日時","受け取り","場所","参加","不参加","備考"]
+    //tableViewに表示するようの配列を要素に取る配列
+    var nextDetailsArray = [cells]()
 
+    @IBOutlet weak var DetailsTableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        makeEntryMenberArrayAndNot()
-        setupViews()
-        entryTableView.delegate = self
-        entryTableView.dataSource = self
-        notEntryTableView.delegate = self
-        notEntryTableView.dataSource = self
+        makeEntryMenberArrayAndNot(newMembers: newMembers)
+
+        let data = DateUtils.yyyyMMddEEEFromDate(date: (self.nextMoai?.date.dateValue())!)
+        //starttimeがまだ入っていない
+        let getMoneyPerson = self.nextMoai!.getMoneyPerson["name"] as! String
+        let location = self.nextMoai!.location["name"] as! String
+        let entry: [String] = EntryMenbersArray ?? ["なし"]
+        let unEntry: [String] = notEntryMenbersArray ?? ["なし"]
+        let note = self.nextMoai!.note
         
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super .viewWillAppear(animated)
-        makeEntryMenberArrayAndNot()
-    }
-    
-    private func setupViews() {
-        let date = DateUtils.MddEEEFromDate(date: (self.nextMoai?.date.dateValue())!)
-        let startTime = DateUtils.fetchStartTimeFromDate(date: (self.nextMoai?.date.dateValue())!)
-        dateLabel.text = " " + date + " " + startTime + " 〜 "
-        //locationがセットされてるかで表示内容を変換
-        if nextMoai?.location["name"] as! String  != nil || nextMoai?.location["name"] as! String == ""{
-            locationLabel.text = " " + (nextMoai?.location["name"] as! String)
-        }else {
-            locationLabel.text = "未設定"
-        }
         
+        nextDetailsArray.append(cells(isShown: true, sectionName: "日時", rowArray: [data]))
+        nextDetailsArray.append(cells(isShown: true, sectionName: "受取", rowArray: [getMoneyPerson] ))
+        nextDetailsArray.append(cells(isShown: true, sectionName: "場所", rowArray: [location]))
+        nextDetailsArray.append(cells(isShown: true, sectionName: "参加", rowArray: entry))
+        nextDetailsArray.append(cells(isShown: true, sectionName: "不参加", rowArray: unEntry))
+        nextDetailsArray.append(cells(isShown: true, sectionName: "備考", rowArray: [note]))
+        
+        self.navigationController?.navigationItem.backBarButtonItem?.tintColor = .white
+        
+        self.DetailsTableView.delegate = self
+        self.DetailsTableView.dataSource = self
     }
     
     //judgeEntryArrayとmenbersArrayから参加予定の人の配列と不参加予定の人の配列を作成
-    private func makeEntryMenberArrayAndNot() {
+    private func makeEntryMenberArrayAndNot(newMembers: [ [String:Any] ]) {
         self.judgeEntryArray.removeAll()
-        for member in self.moai!.members {
+        for member in newMembers {
             //false -> 0, true -> 1
+            print("member --> \(member)")
             if member["next"] as! Int == 0 {
                 print("\(member["name"])は、falseです。")
                 self.judgeEntryArray.append(false)
@@ -77,16 +75,11 @@ class detailsNextMoaiViewController: UIViewController {
         var dic = [String: Bool]()
         var array1:[String] = []
         var array2:[String] = []
-//        guard let arrayCount
-//        guard let arrayCount = self.moaiMenbersNameList?.count else {return}
         print("self.moai?.members.count -> \(self.moai?.members.count)")
         for i in 0...(self.moai?.members.count)! - 1 {
             print("\(i)番目の処理")
             dic[self.moai!.members[i]["name"] as! String] = self.judgeEntryArray[i]
         }
-//        for i in 0...arrayCount - 1 {
-//            dic[self.moaiMenbersNameList![i]] = self.judgeEntryArray![i]
-//        }
         for item in dic {
             if item.value == true {
                 print(item.key)
@@ -99,49 +92,56 @@ class detailsNextMoaiViewController: UIViewController {
         self.EntryMenbersArray = array1
         self.notEntryMenbersArray = array2
     }
-
 }
 
-extension detailsNextMoaiViewController: UITableViewDelegate,UITableViewDataSource {
+
+extension detailsNextMoaiViewController: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return self.nextDetailsArray.count
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView.tag == 1 {
-            if self.EntryMenbersArray?.count == 0 {
-                return 1
-            }else {
-                return self.EntryMenbersArray?.count ?? 1
-            }
-        }else {
-            if self.notEntryMenbersArray?.count == 0 {
-                return 1
-            }else {
-                return notEntryMenbersArray?.count ?? 1
-            }
-        }
+//        return self.mySectionRows[section].myRow.count
+        //courseArray[section].isShownの値によって、表示数を変更
+        return nextDetailsArray[section].isShown ? nextDetailsArray[section].rowArray.count : 0
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return nextDetailsArray[section].sectionName
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView.tag == 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell1", for: indexPath)
-            if self.EntryMenbersArray?.count != 0 {
-                cell.textLabel?.text = self.EntryMenbersArray?[indexPath.row] as! String
-            }else {
-                cell.textLabel?.text = "現在、参加予定のメンバーはいません。"
-            }
-            
-            return cell
-        }else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell2", for: indexPath)
-            if self.notEntryMenbersArray?.count != 0 {
-                cell.textLabel?.text = self.notEntryMenbersArray?[indexPath.row] as! String
-            }else {
-                cell.textLabel?.text = "現在、不参加予定のメンバーはいません。"
-            }
-            return cell
-        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = nextDetailsArray[indexPath.section].rowArray[indexPath.row]
+        return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+    //HeaderのViewに対して、タップを感知できるようにして行きます。
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UITableViewHeaderFooterView()
+        //UITapGestureを定義する。Tapされた際に、headertappedを呼ぶようにしています。
+        let gesture = UITapGestureRecognizer(target: self,
+                                             action: #selector(headertapped(sender:)))
+        //ここで、実際に、HeaderViewをセットします。
+        headerView.addGestureRecognizer(gesture)
+
+        headerView.tag = section
+        return headerView
+    }
+
+    //タップされるとこのメソッドが呼ばれます。
+    @objc func headertapped(sender: UITapGestureRecognizer) {
+        print("タップされたよ")
+        //tagを持っていない場合は、guardします。
+        guard let section = sender.view?.tag else {
+            return
+        }
+        //courseArray[section].isShownの値を反転させます。
+        nextDetailsArray[section].isShown.toggle()
+
+        //これ以降で表示、非表示を切り替えます。
+        DetailsTableView.beginUpdates()
+        DetailsTableView.reloadSections([section], with: .automatic)
+        DetailsTableView.endUpdates()
     }
 }
