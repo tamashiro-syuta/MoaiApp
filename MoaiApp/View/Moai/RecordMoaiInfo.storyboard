@@ -160,7 +160,8 @@
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GSE-Ka-UoE">
                                                         <rect key="frame" x="157.5" y="0.0" width="79" height="70"/>
                                                         <color key="backgroundColor" systemColor="systemGreenColor"/>
-                                                        <state key="normal" title="Button">
+                                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                        <state key="normal" title="送信">
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
                                                         <connections>
