@@ -173,7 +173,7 @@ class PastMoaiViewController: standardViewController {
         label.text = title
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 17)
-        label.textColor = UIColor.black
+        label.textColor = UIColor.white
         view.addSubview(label)
         //三角形のimageを生成
         let imageView = UIImageView(frame: CGRect(x: 85, y: 30, width: 10, height: 12))
