@@ -79,7 +79,7 @@ class RecordMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         paidPeopleSVHeightConstraint.constant = paidPeopleSVHeight
         let contentViewHeight = contentView.frame.height
         // 下の制約の「-100」はデフォルトで設定しているpaidPeopleSVの高さの部分を引いてる
-        contentViewHeightConstraint.constant = contentViewHeight + paidPeopleSVHeight - 100
+        contentViewHeightConstraint.constant = contentViewHeight + paidPeopleSVHeight - 90
         
         //startTimeTextFieldの初期値の処理(DBの値を成形し文字列型に変換)
         let formatter = DateFormatter()
@@ -161,7 +161,7 @@ class RecordMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         
         paidPeopleStackView.backgroundColor = .white
         //paidPeopleSVの高さの変更
-        let paidPeopleSVHeight:CGFloat = CGFloat(60 * (self.moai?.members.count)! + 50)
+        let paidPeopleSVHeight:CGFloat = CGFloat(50 * (self.moai?.members.count)! + 40)
         paidPeopleSVHeightConstraint.constant = paidPeopleSVHeight
         let contentViewHeight = contentView.frame.height
         // 下の制約の「-100」はデフォルトで設定しているpaidPeopleSVの高さの部分を引いてる
@@ -171,7 +171,9 @@ class RecordMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         let label = UILabel()
         label.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
         label.text = "模合代の支払いの有無"
-        label.backgroundColor = .barColor()
+        label.backgroundColor = .clear
+        label.textColor = UIColor(red: 41, green: 95, blue: 97, alpha: 38)
+        label.font = UIFont.boldSystemFont(ofSize: 20.0)
         self.paidPeopleStackView.addArrangedSubview(label)
         
         

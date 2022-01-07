@@ -67,10 +67,6 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
         
         self.setupStackViews()
         
-//        self.menberIDArray = self.moai?.menbers
-//        self.menberIDArray?.insert("未定", at: 0)
-//        self.moaiMenbersNameList?.insert("未定", at: 0)
-        
         self.moaiID = self.user?.moais[1]
         
         choiceDateCalendar.delegate = self
@@ -152,6 +148,7 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
         
         changeButton.frame.size.height = changeButtonStackView.frame.size.height / 3
         changeButton.layer.cornerRadius = changeButton.frame.size.width / 6
+        changeButton.backgroundColor = .barColor()
         
         print("dateStackViewのheightの値は\(dateStackView.frame.size.height)")
         print("startTimeStackViewのheightの値は\(startTimeStackView.frame.size.height)")
