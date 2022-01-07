@@ -23,6 +23,7 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         
         loginButton.layer.cornerRadius = 8
+        loginButton.backgroundColor = .barColor()
 
         dontHaveAccountButton.addTarget(self, action: #selector(tappedDontHaveAccountButton), for: .touchUpInside)
         loginButton.addTarget(self, action: #selector(tappedLoginbutton), for: .touchUpInside)
