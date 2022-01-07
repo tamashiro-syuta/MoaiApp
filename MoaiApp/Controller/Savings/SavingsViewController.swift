@@ -73,7 +73,7 @@ class SavingsViewController: standardViewController {
         self.memberAndLastSavingSV.layer.borderColor = UIColor.textColor2().cgColor
 
         let recordSavingDataButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(addBarButtonTapped(_:)))
-        recordSavingDataButton.tintColor = .textColor()
+        recordSavingDataButton.tintColor = .white
         self.navigationItem.rightBarButtonItem = recordSavingDataButton
     }
     

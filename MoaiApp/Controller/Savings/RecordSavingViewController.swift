@@ -62,6 +62,9 @@ class RecordSavingViewController: UIViewController, UITextFieldDelegate {
         let memberListSVHeight:CGFloat = CGFloat(70 * (self.savingMembers.count) )
         self.memberListSVHeightConstraints.constant = memberListSVHeight
         self.memberListTVHeightConstraints.constant = memberListSVHeight
+        
+        recordButton.backgroundColor = .barColor()
+        recordButton.layer.cornerRadius = 15
 
     }
     
