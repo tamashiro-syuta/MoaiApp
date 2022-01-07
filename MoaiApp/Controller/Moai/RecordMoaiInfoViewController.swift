@@ -171,9 +171,9 @@ class RecordMoaiInfoViewController: UIViewController,UITextFieldDelegate {
         let label = UILabel()
         label.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
         label.text = "模合代の支払いの有無"
-        label.backgroundColor = .clear
-        label.textColor = UIColor(red: 41, green: 95, blue: 97, alpha: 38)
+        label.backgroundColor = .systemGray6
         label.font = UIFont.boldSystemFont(ofSize: 20.0)
+        label.textColor = UIColor.textColor2()
         self.paidPeopleStackView.addArrangedSubview(label)
         
         
