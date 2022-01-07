@@ -57,34 +57,34 @@ class standardTabBarController: UITabBarController, CLLocationManagerDelegate {
         
         let managementSB = UIStoryboard(name: "Management", bundle: nil)
         let managementVC = managementSB.instantiateViewController(withIdentifier: "Management")
-        managementVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 1)
+        let managementImage = UIImage(systemName: "house")
+        managementVC.tabBarItem = UITabBarItem(title: "模合", image: managementImage, selectedImage: nil)
         
         let chatSB = UIStoryboard(name: "ChatList", bundle: nil)
         let chatVC = chatSB.instantiateViewController(withIdentifier: "Chat")
-        chatVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 2)
+        let chatImage = UIImage(systemName: "bubble.left.and.bubble.right")
+        chatVC.tabBarItem = UITabBarItem(title: "チャット", image: chatImage, selectedImage: nil)
         
         let pastMoaiSB = UIStoryboard(name: "PastMoai", bundle: nil)
         let pastMoaiVC = pastMoaiSB.instantiateViewController(withIdentifier: "PastMoai")
-        pastMoaiVC.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 3)
+        let pastMoaiImage = UIImage(systemName: "photo.on.rectangle.angled")
+        pastMoaiVC.tabBarItem = UITabBarItem(title: "過去の模合", image: pastMoaiImage, selectedImage: nil)
         
         let mapSB = UIStoryboard(name: "Map", bundle: nil)
         let mapVC = mapSB.instantiateViewController(withIdentifier: "Map")
-        mapVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 4)
+        let mapImage = UIImage(systemName: "map")
+        mapVC.tabBarItem = UITabBarItem(title: "店舗検索", image: mapImage, selectedImage: nil)
         
         let savingsSB = UIStoryboard(name: "Savings", bundle: nil)
         let savingsVC = savingsSB.instantiateViewController(withIdentifier: "Savings")
-        savingsVC.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 5)
-        
-//        let apiSB = UIStoryboard(name: "api", bundle: nil)
-//        let apiVC = apiSB.instantiateViewController(withIdentifier: "apiViewController")
-//        apiVC.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 6)
+        let savingImage = UIImage(systemName: "yensign.square.fill")
+        savingsVC.tabBarItem = UITabBarItem(title: "積み立て", image: savingImage, selectedImage: nil)
         
         VCArray.append(managementVC)
         VCArray.append(chatVC)
         VCArray.append(pastMoaiVC)
         VCArray.append(mapVC)
         VCArray.append(savingsVC)
-//        VCArray.append(apiVC)
         
         self.setViewControllers(VCArray, animated: false)
         
