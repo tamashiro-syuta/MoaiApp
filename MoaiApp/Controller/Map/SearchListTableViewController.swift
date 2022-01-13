@@ -8,6 +8,7 @@
 import UIKit
 import Alamofire
 import PKHUD
+import WebKit
 
 class SearchListTableViewController: UIViewController {
     
@@ -91,7 +92,12 @@ extension SearchListTableViewController: UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("タップされたお")
+        //hotpepperのページをwebViewで表示(webViewControllerに画面遷移)
+        let storyboard = UIStoryboard(name: "WebView", bundle: nil)
+        let WebVC = storyboard.instantiateViewController(withIdentifier: "WebViewController") as! WebViewController
+        
+        WebVC.url = self.shops[indexPath.row].urls.url
+        self.navigationController?.pushViewController(WebVC, animated: true)
     }
     
 }

@@ -305,6 +305,14 @@ class MapViewController: standardViewController, CLLocationManagerDelegate, UITe
 }
 
 
+
+
+
+
+
+
+
+
 // カスタムアノテーションビューの定義
 // クラスター化されたAnnotationViewをカスタムクラスとして定義
 class CustomAnnotationView: MKMarkerAnnotationView {

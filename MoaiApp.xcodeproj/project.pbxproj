@@ -73,6 +73,8 @@
 		48EA096D277A00530038E6DE /* RecordSaving.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48EA096C277A00520038E6DE /* RecordSaving.storyboard */; };
 		48ECBCC72697F08B00FA65CC /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ECBCC62697F08B00FA65CC /* MapViewController.swift */; };
 		48ECBCCC2697F0C200FA65CC /* Map.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48ECBCCB2697F0C200FA65CC /* Map.storyboard */; };
+		48EEBB682790457700A93BC2 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EEBB672790457700A93BC2 /* WebViewController.swift */; };
+		48EEBB6B279045AD00A93BC2 /* WebView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48EEBB6A279045AD00A93BC2 /* WebView.storyboard */; };
 		83CC11FA220279066C8781F6 /* Pods_MoaiApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 878C9D9E75FAD18FDB05BE86 /* Pods_MoaiApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -146,6 +148,8 @@
 		48EA096C277A00520038E6DE /* RecordSaving.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RecordSaving.storyboard; sourceTree = "<group>"; };
 		48ECBCC62697F08B00FA65CC /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		48ECBCCB2697F0C200FA65CC /* Map.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Map.storyboard; sourceTree = "<group>"; };
+		48EEBB672790457700A93BC2 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		48EEBB6A279045AD00A93BC2 /* WebView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = WebView.storyboard; sourceTree = "<group>"; };
 		5642086F0542BB225CE11B19 /* Pods-MoaiApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoaiApp.release.xcconfig"; path = "Target Support Files/Pods-MoaiApp/Pods-MoaiApp.release.xcconfig"; sourceTree = "<group>"; };
 		878C9D9E75FAD18FDB05BE86 /* Pods_MoaiApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoaiApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -361,6 +365,7 @@
 			children = (
 				48ECBCC62697F08B00FA65CC /* MapViewController.swift */,
 				48EA09412779FC590038E6DE /* SearchListTableViewController.swift */,
+				48EEBB672790457700A93BC2 /* WebViewController.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -370,6 +375,7 @@
 			children = (
 				48ECBCCB2697F0C200FA65CC /* Map.storyboard */,
 				48EA09692779FE7A0038E6DE /* SearchList.storyboard */,
+				48EEBB6A279045AD00A93BC2 /* WebView.storyboard */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -475,6 +481,7 @@
 				48583879264A13BF00274507 /* SignUp.storyboard in Resources */,
 				482317862653EDFD00257189 /* Login.storyboard in Resources */,
 				48E088CD26D3111B0072091B /* PastMoai.storyboard in Resources */,
+				48EEBB6B279045AD00A93BC2 /* WebView.storyboard in Resources */,
 				48E810A726E1C81C00B717D6 /* ShowImage.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -564,6 +571,7 @@
 				484388952684F6B600175415 /* CreateRoomViewController.swift in Sources */,
 				484388B42685B59200175415 /* Moai.swift in Sources */,
 				482317892653EF4B00257189 /* LoginViewController.swift in Sources */,
+				48EEBB682790457700A93BC2 /* WebViewController.swift in Sources */,
 				48B8B6A3264F917A00E863A1 /* ChatRoom.swift in Sources */,
 				4823184F2660B65C00257189 /* FirstViewController.swift in Sources */,
 				4854E909273AC86B006D660F /* Savings.swift in Sources */,

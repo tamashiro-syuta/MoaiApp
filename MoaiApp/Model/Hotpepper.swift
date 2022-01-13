@@ -36,6 +36,7 @@ struct Shop: Codable {
     let address: String
     let lat: Double
     let lng: Double
+    let urls: Urls
     
     //スネークケースから、キャメルケースに変換するため
     enum CodingKeys: String, CodingKey {
@@ -45,5 +46,15 @@ struct Shop: Codable {
         case address = "address"
         case lat = "lat"
         case lng = "lng"
+        case urls = "urls"
+    }
+}
+
+struct Urls: Codable {
+    let url: String
+    
+    // 10歳のデータでは"pc"という名前でとってくるから
+    enum CodingKeys: String, CodingKey {
+        case url = "pc"
     }
 }
