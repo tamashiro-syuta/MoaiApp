@@ -7,7 +7,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Title-->
+        <!--飲食店検索-->
         <scene sceneID="rLy-Ju-9F8">
             <objects>
                 <viewController storyboardIdentifier="MapViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="tMi-Uv-pkx" customClass="MapViewController" customModule="MoaiApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -36,7 +36,7 @@
                             <constraint firstItem="jxr-VS-8qH" firstAttribute="trailing" secondItem="0AG-wP-yYv" secondAttribute="trailing" id="ebs-K8-l8d"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Title" id="llp-TX-TCh"/>
+                    <navigationItem key="navigationItem" title="飲食店検索" id="llp-TX-TCh"/>
                     <connections>
                         <outlet property="map" destination="jxr-VS-8qH" id="A7v-VV-bRf"/>
                         <outlet property="searchBar" destination="q4N-H4-HoF" id="Vfc-qR-Erd"/>
