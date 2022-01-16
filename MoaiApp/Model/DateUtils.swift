@@ -68,14 +68,17 @@ class DateUtils {
         var from = yyyymmdd.index(yyyymmdd.startIndex, offsetBy:0)
         var to = yyyymmdd.index(yyyymmdd.startIndex, offsetBy:4)
         let year = yyyymmdd[from..<to]
+        print(year)
         
-        from = yyyymmdd.index(yyyymmdd.startIndex, offsetBy:5)
+        from = yyyymmdd.index(yyyymmdd.startIndex, offsetBy:4)
         to = yyyymmdd.index(yyyymmdd.startIndex, offsetBy:6)
         let month = yyyymmdd[from..<to]
+        print(month)
         
-        from = yyyymmdd.index(yyyymmdd.startIndex, offsetBy:7)
+        from = yyyymmdd.index(yyyymmdd.startIndex, offsetBy:6)
         to = yyyymmdd.index(yyyymmdd.startIndex, offsetBy:8)
         let date = yyyymmdd[from..<to]
+        print(date)
         
         let dateString = year + "年" +  month + "月" + date + "日"
         return dateString
