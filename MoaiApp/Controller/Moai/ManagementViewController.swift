@@ -9,7 +9,7 @@ import UIKit
 import Firebase
 import PKHUD
 
-class ManagementViewController: standardViewController {
+class ManagementViewController: standardViewController, SendNewMembers {
     
     //pastMoaisButtonの横のアイコンで使用
     let downImage = UIImage(systemName: "arrowtriangle.down.fill")
@@ -49,6 +49,9 @@ class ManagementViewController: standardViewController {
     
     var newMembers:[ [String:Any] ] = []
     
+    // 画面遷移したかどうかを判定する値
+    var changedView:Bool = false
+    
     
     //viewが初めて呼ばれた１回目だけ呼ばれるメソッド
     override func viewDidLoad() {
@@ -77,18 +80,40 @@ class ManagementViewController: standardViewController {
             print("現在、ログインしているユーザー　\(self.user?.username)")
             print("self.moai.members -> \(self.moai?.members)")
             print("self.pastRecordArray -> \(self.pastRecordArray)")
-            
-            
-            //ユーザーの参加、不参加によって、ボタンのalpha値を変更
-            for i in 0...(self.moai?.members.count)! - 1 {
-                if self.moai?.members[i]["id"] as? String == self.userID {
-                    if self.moai?.members[i]["next"] as! Bool == true {
-                        self.entryButton.alpha = 0.5
-                        self.notEntryButton.alpha = 1.0
-                    }else {
-                        self.entryButton.alpha = 1.0
-                        self.notEntryButton.alpha = 0.5
+
+            //前の画面から値が渡ってきていない場合のみボタンのアルファ値の変更を行う
+            if self.changedView == false {
+                //ユーザーの参加、不参加によって、ボタンのalpha値を変更
+                for i in 0...(self.moai?.members.count)! - 1 {
+                    if self.moai?.members[i]["id"] as? String == self.userID {
+                        let bool = self.moai?.members[i]["next"] as! Bool
+                        print("ログインしているユーザーのnextは、\(bool)です！！！")
+                        self.entryButtonsAlpha(Bool: bool)
                     }
+                }
+            }
+        }
+    }
+    
+    //模合詳細から新しいメンバーを受け取る（画面遷移で戻ったら呼ばれる）
+    func SendNewMembers(newMembers: [[String : Any]]) {
+        print("詳細画面から戻ってきたよ〜")
+        // newMwmbersを更新
+        self.newMembers = newMembers
+        self.changedView = true
+    }
+    
+    //レイアウト処理終了後
+    override func viewDidLayoutSubviews() {
+        print("レイアウト処理終了後")
+        if self.changedView == true {
+            print("newMember --> \(newMembers)")
+            //参加、不参加ボタンのアルファ値を更新
+            for i in 0...(self.newMembers.count) - 1 {
+                if self.newMembers[i]["id"] as? String == self.userID {
+                    let bool = self.newMembers[i]["next"] as! Bool
+                    print("ログインしているユーザーのnextは、\(bool)です！！！")
+                    self.entryButtonsAlpha(Bool: bool)
                 }
             }
         }
@@ -120,8 +145,9 @@ class ManagementViewController: standardViewController {
         self.getMoneyPersonLabel.layer.borderColor = UIColor.textColor2().cgColor
         
         //詳細画面への画面遷移時に、参加不参加ボタンをタップしてないとnewMembersの値が空になってエラーが起きるため
-        self.newMembers = self.moai!.members
-        
+        if self.changedView == false {
+            self.newMembers = self.moai!.members
+        }
     }
     
     //getMoneyPeopleSVの高さを模合のメンバー数に応じて動的に処理
@@ -168,6 +194,7 @@ class ManagementViewController: standardViewController {
         detailsNextMoaiVC.moai = self.moai
         detailsNextMoaiVC.nextMoai = self.nextMoai
         detailsNextMoaiVC.newMembers = self.newMembers
+        detailsNextMoaiVC.delegate = self
 //        detailsNextMoaiVC.judgeEntryArray = self.nextMoaiEntryArray
 //        detailsNextMoaiVC.moaiMenbersNameList = self.moaiMembersNameList
         navigationController?.pushViewController(detailsNextMoaiVC, animated: true)
@@ -191,9 +218,10 @@ class ManagementViewController: standardViewController {
         
         self.newMembers = self.moai!.members
         
-        for i in 0..<(self.moai!.members.count) {
-            if self.moai?.members[i]["id"] as? String == userID {
-                let next = Bool ? 1 : 2
+        for i in 0..<(newMembers.count) {
+            if self.newMembers[i]["id"] as? String == userID {
+                let next = Bool ? true : false
+                print("next --> \(next)")
                 newMembers[i]["next"] = next
                 print("newMembers[\(i)][next]  -->  \(newMembers[i]["next"])")
             }
@@ -207,12 +235,18 @@ class ManagementViewController: standardViewController {
             print("entryOrNot完了")
         }
         
-        if Bool == true {
-            entryButton.alpha = 0.5
-            notEntryButton.alpha = 1.0
-        }else {
+        entryButtonsAlpha(Bool: Bool)
+    }
+    
+    private func entryButtonsAlpha(Bool: Bool) {
+        print("Bool --> \(Bool)")
+        let num = Bool ? 1 : 0
+        if num == 1 {
             entryButton.alpha = 1.0
-            notEntryButton.alpha = 0.5
+            notEntryButton.alpha = 0.4
+        }else {
+            entryButton.alpha = 0.4
+            notEntryButton.alpha = 1.0
         }
     }
     

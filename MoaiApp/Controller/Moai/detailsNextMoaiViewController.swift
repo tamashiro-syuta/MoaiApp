@@ -7,7 +7,14 @@
 
 import UIKit
 
-class detailsNextMoaiViewController: UIViewController {
+
+protocol SendNewMembers {
+
+    func SendNewMembers(newMembers: [ [String:Any] ])
+
+}
+
+class detailsNextMoaiViewController: UIViewController, UINavigationControllerDelegate {
     
     var moai:Moai?
     var nextMoai:MoaiRecord?
@@ -23,11 +30,13 @@ class detailsNextMoaiViewController: UIViewController {
     var selectedClass = ""
     var selectedPerson = ""
     
-    
-    
     let sections = ["日時","受け取り","場所","参加","不参加","備考"]
     //tableViewに表示するようの配列を要素に取る配列
     var nextDetailsArray = [cells]()
+    
+    //遷移元画面に値を渡す
+    var delegate:SendNewMembers?
+    
 
     @IBOutlet weak var DetailsTableView: UITableView!
     override func viewDidLoad() {
@@ -43,6 +52,7 @@ class detailsNextMoaiViewController: UIViewController {
         let unEntry: [String] = notEntryMenbersArray ?? ["なし"]
         let note = self.nextMoai!.note
         
+        self.navigationController?.delegate = self
         
         nextDetailsArray.append(cells(isShown: true, sectionName: "日時", rowArray: [data]))
         nextDetailsArray.append(cells(isShown: true, sectionName: "受取", rowArray: [getMoneyPerson] ))
@@ -63,7 +73,7 @@ class detailsNextMoaiViewController: UIViewController {
         for member in newMembers {
             //false -> 0, true -> 1
             print("member --> \(member)")
-            if member["next"] as! Int == 0 {
+            if member["next"] as! Bool == false {
                 print("\(member["name"])は、falseです。")
                 self.judgeEntryArray.append(false)
             }else {
@@ -91,6 +101,16 @@ class detailsNextMoaiViewController: UIViewController {
         }
         self.EntryMenbersArray = array1
         self.notEntryMenbersArray = array2
+    }
+    
+    // 画面遷移元に戻るときの走る処理
+    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+        if viewController is ManagementViewController {
+            //挿入したい処理
+            print("前の画面に戻るよ〜〜〜〜〜〜〜〜〜")
+            print("newMember --> \(newMembers)")
+            delegate?.SendNewMembers(newMembers: self.newMembers)
+        }
     }
 }
 
