@@ -28,9 +28,10 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
     
     var getMoneyPersonPickerView = UIPickerView()
     var menberIDArray:[String]?
-    var startTimePickerView = UIPickerView()
+    var startTimePickerView = UIDatePicker()
     //配列の初めを""にすることで、変更予定がないのに誤ってタッチしても変更せずにできる
     let sampleArray = ["","1","2","3","4","5","6","7","8","9","10"]
+    let startTimePickArrayHour = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
     
     let calendarView = UIView()
     var choiceDateCalendar: FSCalendar = FSCalendar()
@@ -77,8 +78,13 @@ class ChangeNextMoaiViewController: UIViewController, UITextFieldDelegate {
         getMoneyPersonTextField.delegate = self
         locationTextField.delegate = self
         
-        startTimePickerView.delegate = self
+//        startTimePickerView.delegate = self
         startTimePickerView.tag = 1
+        //startTimePickerViewの設定
+        startTimePickerView.datePickerMode = .countDownTimer
+        startTimePickerView.timeZone = NSTimeZone.local
+        startTimePickerView.locale = .current
+        startTimePickerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height / 3)
         
         getMoneyPersonPickerView.delegate = self
         getMoneyPersonPickerView.tag = 2

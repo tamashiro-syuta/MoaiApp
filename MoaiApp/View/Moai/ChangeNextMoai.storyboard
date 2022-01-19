@@ -99,7 +99,7 @@
                                                 <rect key="frame" x="100" y="0.0" width="100" height="68"/>
                                                 <color key="backgroundColor" red="0.0" green="0.72549019609999998" blue="0.0" alpha="0.84705882349999995" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                <state key="normal" title="Change">
+                                                <state key="normal" title="変更">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
