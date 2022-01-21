@@ -32,9 +32,11 @@ class ShowImageViewController: standardViewController, AVCapturePhotoCaptureDele
     private func setupNavBar() {
         let screenSize: CGRect = UIScreen.main.bounds
         let navBar = UINavigationBar(frame: CGRect(x: 0, y: 60, width: screenSize.width, height: 40))
-        let navItem = UINavigationItem(title: "今から設定する予定だよ♪")
+        let navItem = UINavigationItem(title: " ")
         
-        let closeButton = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(closeButtonPressed(_:)) )
+        let closeImage = UIImage(systemName: "xmark.circle")
+        let closeButton = UIBarButtonItem(image: closeImage, style: .done, target: self, action: #selector(closeButtonPressed(_:)))
+        closeButton.tintColor = .white
         
         let downloadButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(downLoadButtonPressed(_:)) )
         downloadButton.tintColor = .white
