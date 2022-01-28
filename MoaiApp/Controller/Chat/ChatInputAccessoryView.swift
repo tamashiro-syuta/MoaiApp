@@ -48,6 +48,7 @@ class ChatInputAccessoryView: UIView {
         sendButton.isEnabled = false
         
         chatTextView.text = ""
+        chatTextView.textColor = UIColor.textColor()
         chatTextView.delegate = self
     }
     
