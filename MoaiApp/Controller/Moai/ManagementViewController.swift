@@ -68,7 +68,7 @@ class ManagementViewController: standardViewController, SendNewMembers {
         
         self.navigationItem.rightBarButtonItem?.isEnabled = false
         
-        HUD.flash(.progress, onView: view, delay: 2) { _ in
+        HUD.flash(.progress, onView: view, delay: 0.5) { _ in
             //HUDを非表示にした後の処理
             self.setupView()
             self.addDateToMembers()
