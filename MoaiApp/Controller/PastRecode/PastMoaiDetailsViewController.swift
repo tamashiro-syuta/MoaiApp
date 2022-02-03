@@ -38,8 +38,10 @@ class PastMoaiDetailsViewController: UIViewController {
         let data = DateUtils.yyyyMMddEEEFromDate(date: (self.pastRecord?.date.dateValue())!)
         let getMoneyPerson = self.pastRecord!.getMoneyPerson["name"] as! String
         let location = self.pastRecord!.location["name"] as! String
-        let paid: [String] = self.pastRecord!.paid
-        let unpaid: [String] = self.pastRecord!.unpaid
+//        let paid: [String] = self.pastRecord!.paid
+        let paid: [String] = ["金城","大城","比嘉","國吉","新垣"]
+//        let unpaid: [String] = self.pastRecord!.unpaid
+        let unpaid: [String] = ["なし"]
         let note = self.pastRecord!.note
 //
 //        self.mySectionRows.append(("日時",[data] ) )

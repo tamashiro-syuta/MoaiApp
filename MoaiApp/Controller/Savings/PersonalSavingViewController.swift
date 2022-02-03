@@ -17,6 +17,8 @@ class PersonalSavingViewController: UIViewController {
     @IBOutlet weak var userIcon: UIImageView!
     @IBOutlet weak var userProfilesHeightConstraints: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var personalTotalAmountLabel: UILabel!
+    @IBOutlet weak var TVLabelSV: UIStackView!
     
     let db = Firestore.firestore()
     let storage = Storage.storage()
@@ -29,6 +31,7 @@ class PersonalSavingViewController: UIViewController {
     var personalSavingArray: [ [String:Any] ] = []
     //詳細を表示するメンバー
     var savingMember: [String:Any]?
+    var personalTotalAmount:Int = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +53,7 @@ class PersonalSavingViewController: UIViewController {
                     personalSavingData.updateValue(item["amount"], forKey: "amount")
                     personalSavingArray.append(personalSavingData)
                     print("追加するよ")
+                    personalTotalAmount += item["amount"] as! Int
                 }
             }
         }
@@ -65,6 +69,12 @@ class PersonalSavingViewController: UIViewController {
         userNameLabel.text = savingMember?["name"] as? String
         getIconFromFireStorage(userID: savingMember?["id"] as! String, imageView: userIcon)
         self.userIcon.layer.cornerRadius = userIcon.frame.size.height / 2
+        
+        self.personalTotalAmountLabel.text = "  個 人 合 計　　 " + String(personalTotalAmount) + "  　円  "
+//        self.TVLabelSV.addBorder(width: 1, color: .black, position: .bottom)
+        self.TVLabelSV.layer.cornerRadius = 10
+        self.TVLabelSV.layer.borderWidth = 4
+        self.TVLabelSV.layer.borderColor = UIColor.textColor2().cgColor
     }
 
     //アイコンをセット

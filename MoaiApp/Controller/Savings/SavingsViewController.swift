@@ -50,6 +50,14 @@ class SavingsViewController: standardViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.navigationItem.title = "積み立て"
         
+        let lastMonth = DateUtils.yyyyMMFromDate(date: self.moai!.finalMonth as Date)
+//        let totalSavingAmount = self.moai!.savingAmount * self.savingMember.count
+        
+        self.amountPerPersonLabel.text = " 1人当たり　\(String(self.moai!.savingAmount))円 / 回  "
+        self.allSavingsLabel.text = "積み立て合計 135000 円"
+        self.finalSavingLabel.text = "最終月  " + lastMonth
+        self.personInChargeLabel.text = "幹事 " +  savingOrganizer
+        
         amountPerPersonLabel.layer.borderWidth = 3
         amountPerPersonLabel.layer.borderColor = UIColor.textColor2().cgColor
         amountPerPersonLabel.layer.cornerRadius = 20
@@ -57,14 +65,6 @@ class SavingsViewController: standardViewController {
         allSavingsLabel.addBorder(width: 1.5, color: UIColor.textColor2(), position: .bottom)
         finalSavingLabel.addBorder(width: 1.5, color: UIColor.textColor2(), position: .bottom)
         personInChargeLabel.addBorder(width: 1.5, color: UIColor.textColor2(), position: .bottom)
-        
-        let lastMonth = DateUtils.yyyyMMFromDate(date: self.moai!.finalMonth as Date)
-        let totalSavingAmount = self.moai!.savingAmount * self.savingMember.count
-        
-        self.amountPerPersonLabel.text = " 1人当たり　\(String(self.moai!.savingAmount))円 / 回  "
-        self.allSavingsLabel.text = " 全体 " + String(totalSavingAmount) + "円 / 回"
-        self.finalSavingLabel.text = "最終月  " + lastMonth
-        self.personInChargeLabel.text = "幹事 " +  savingOrganizer
         
 //        memberLabel.layer.borderWidth = 1.5
 //        lastSavingLabel.layer.borderWidth = 1.5
@@ -124,7 +124,7 @@ extension SavingsViewController: UITableViewDelegate, UITableViewDataSource {
             label2.text = "×"
         default:
             let difference = self.moai!.savingAmount - amount!
-            label2.text = " ー " + String(difference) + " 円 "
+            label2.text = " 残り " + String(difference) + " 円 "
         }
         return cell
     }
